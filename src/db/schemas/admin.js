@@ -1,32 +1,27 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const productSchema = new Schema({
-  id: {
+const adminSchema = new Schema({
+  Id: {
     type: Number,
     required: true,
   },
-  productName: {
+  password: {
     type: String,
     required: true,
   },
-  price: {
-    type: Number,
-    required: true,
-  },
-  group: {
+  productId: {
     type: String,
     required: true,
   },
-  brandId: {
-    type: Number,
-    required: true,
+  name: {
+    type: String,
+    require: true,
   },
-
   CreateAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model('Admin', adminSchema);
