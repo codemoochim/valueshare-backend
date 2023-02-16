@@ -4,6 +4,7 @@ const imageUploadS3 = require("../../middleware/imageUploadS3");
 const productsController = require("../../controller/productsController");
 const categoryController = require("../../controller/categoryController");
 const brandController = require("../../controller/brandController");
+const orderManageController = require("../../controller/orderManageController");
 
 // /admin
 // 관리자 페이지
@@ -12,9 +13,16 @@ const brandController = require("../../controller/brandController");
 router.post("/product", productsController.addProductInfo);
 
 // 상품 이미지 낱개 업로드
+// router.post(
+// 	"/product/images", // 1차 업로드 하는 경로와 2차 업로드 하는 경로가 같을 수 있나?
+// 	imageUploadS3.single("file"),
+// 	productsController.imageUpload,
+// );
+
+// 상품 이미지 다중 업로드
 router.post(
 	"/product/images",
-	imageUploadS3.single("file"),
+	imageUploadS3.array("file"), // 여러개 이미지를 할 수 있도록 설정해 놓았는데, 1개만 하거나 아예 안하는 경우에는 어떻게되나?
 	productsController.imageUpload,
 );
 
@@ -22,7 +30,7 @@ router.post(
 router
 	.route("/product/:shortId")
 	.post(productsController.editProductInfo)
-	.delete(productsController.DeleteproductInfo);
+	.delete(productsController.deleteproductInfo);
 
 // 카테고리 관리
 router
@@ -44,6 +52,10 @@ router
 	.post(brandController.editBrand)
 	.delete(brandController.deleteBrand);
 
-router.get("/productLists");
-router.get("/productLists/:shortId");
+router.get("/orders", orderManageController.getOrderLists);
+router
+	.route("/orders/:shortId")
+	.get(orderManageController.getOrderDetails)
+	.post(orderManageController.editOrderDetails);
+// .delete(orderManageController.deleteOrderDetails);
 module.exports = router;

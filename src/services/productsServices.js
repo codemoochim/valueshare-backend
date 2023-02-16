@@ -1,10 +1,24 @@
 const { Image, Product } = require("../db/model/index");
 
+// 상품이미지 낱개 업로드
+// const imageUploadMongo = async (location) => {
+// 	try {
+// 		const imgUrl = location;
+// 		const savedImage = await Image.create({
+// 			image: imgUrl,
+// 		});
+// 		return savedImage;
+// 	} catch (err) {
+// 		throw new Error(err);
+// 	}
+// };
+
 const imageUploadMongo = async (location) => {
 	try {
-		const imgUrl = location;
+		// throw new Error("이미지를 첨부해주세요");
+		const imgUrlArray = location.map((img) => img.location);
 		const savedImage = await Image.create({
-			image: imgUrl,
+			image: imgUrlArray,
 		});
 		return savedImage;
 	} catch (err) {

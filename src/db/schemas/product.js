@@ -24,10 +24,10 @@ const productSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		// image: {
-		// 	type: Schema.Types.ObjectId,
-		// 	ref: "Image",
-		// },
+		image: {
+			type: Array,
+			required: true,
+		},
 		description: {
 			type: String,
 			default: "",

@@ -5,7 +5,7 @@ const imageSchema = new Schema(
 	{
 		shortId,
 		image: {
-			type: String,
+			type: Array,
 			required: true,
 		},
 	},

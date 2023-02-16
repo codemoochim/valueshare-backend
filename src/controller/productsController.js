@@ -1,10 +1,18 @@
-// const express = require("express");
 const productsServices = require("../services/productsServices");
-// const router = express.Router();
 
+// 상품이미지 낱개 업로드
+// const imageUpload = async (req, res, next) => {
+// 	try {
+// 		const location = req.file.location;
+// 		const savedImage = await productsServices.imageUploadMongo(location);
+// 		res.json({ data: savedImage.image }); // image url
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// };
 const imageUpload = async (req, res, next) => {
 	try {
-		const location = req.file.location;
+		const location = req.files;
 		const savedImage = await productsServices.imageUploadMongo(location);
 		res.json({ data: savedImage.image }); // image url
 	} catch (err) {
@@ -35,7 +43,7 @@ const editProductInfo = async (req, res, next) => {
 		next(err);
 	}
 };
-const DeleteproductInfo = async (req, res, next) => {
+const deleteproductInfo = async (req, res, next) => {
 	try {
 		const { shortId } = req.params;
 		await productsServices.productInfoDelete(shortId);
@@ -49,5 +57,5 @@ module.exports = {
 	imageUpload,
 	addProductInfo,
 	editProductInfo,
-	DeleteproductInfo,
+	deleteproductInfo,
 };
