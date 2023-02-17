@@ -1,4 +1,4 @@
-const { Image, Product, Brand, Category } = require("../db/model/index");
+const { Product, Brand, Category } = require("../db/model/index");
 
 const takeOutProductLists = async (productData) => {
 	try {

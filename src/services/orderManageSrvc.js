@@ -1,6 +1,6 @@
-const { Image, Product, Brand, Category, Order } = require("../db/model/index");
+const { Order } = require("../db/model/index");
 
-const orderListsTakeout = async () => {
+const findOrderList = async () => {
 	try {
 		const result = await Order.find({});
 		if (!result) {
@@ -12,7 +12,7 @@ const orderListsTakeout = async () => {
 	}
 };
 
-const orderDetailsGet = async (shortId) => {
+const findOrderDetail = async (shortId) => {
 	try {
 		const result = await Order.findOne({ shortId });
 		if (!result) {
@@ -24,10 +24,10 @@ const orderDetailsGet = async (shortId) => {
 	}
 };
 
-const orderDetilasEdit = async (shortId, newOrderDetails) => {
+const updateOrderDetail = async (shortId, newOrderDetail) => {
 	try {
 		const { userId, extraUserId, productId, shippingAddress, shippingStatus } =
-			newOrderDetails;
+			newOrderDetail;
 
 		const result = await Order.findOneAndUpdate(
 			{ shortId },
@@ -35,14 +35,29 @@ const orderDetilasEdit = async (shortId, newOrderDetails) => {
 			{ new: true },
 		);
 		if (!result) {
-			throw new Error("상품 정보 업데이트에 오류가 있습니다.");
+			throw new Error("주문 정보 업데이트에 오류가 있습니다.");
 		}
 		return result;
 	} catch (err) {
 		throw new Error(err);
 	}
 };
+
+const deleteOrderDetail = async (shortId) => {
+	try {
+		const result = await Order.findOneAndDelete({ shortId });
+		if (!result) {
+			throw new Error("상품 삭제에 오류가 있습니다.");
+		}
+		return result;
+	} catch (err) {
+		throw new Error(err);
+	}
+};
+
 module.exports = {
-	orderDetailsGet,
-	orderDetilasEdit,
+	findOrderList,
+	findOrderDetail,
+	updateOrderDetail,
+	deleteOrderDetail,
 };

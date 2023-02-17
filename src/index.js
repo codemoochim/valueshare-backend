@@ -4,7 +4,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const connect = () => {
-	if (process.env.NODE_ENV !== "production") mongoose.set("debug", true);
+	if (process.env.NODE_ENV !== "production") {
+		mongoose.set("debug", true);
+	}
 };
 //
 const { MongoDB_Root, MongoDB_Pwd, MongoDB_dbName } = process.env;

@@ -1,21 +1,17 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const shortId = require("../shortId.js");
-const productSchema = require("./product.js");
-const orderSchema = new Schema(
+const orderHistorySchema = new Schema(
 	{
+		// 전체 주문 목록
 		shortId,
 		userId: {
 			type: Schema.Types.ObjectId,
 			ref: "User",
 		},
-		extraUserId: {
-			type: Schema.Types.ObjectId,
-			ref: "ExtraUser",
-		},
-		productId: {
-			type: Schema.Types.ObjectId,
-			ref: "Product",
+		orderId: {
+			type: Number,
+			required: true,
 		},
 		shippingAddress: {
 			type: String,
@@ -25,14 +21,14 @@ const orderSchema = new Schema(
 			type: String,
 			reuqried: true,
 		},
-		// image: {
-		// 	type: Schema.Types.ObjectId,
-		// 	ref: "Product",
-		// },
+		image: {
+			type: Schema.Types.ObjectId,
+			ref: "Product",
+		},
 	},
 	{
 		timestamps: true,
 	},
 );
 
-module.exports = orderSchema;
+module.exports = orderHistorySchema;

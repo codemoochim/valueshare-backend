@@ -12,7 +12,7 @@ dotenv.config();
 const indexRouter = require("./src/controller/routes");
 const adminRouter = require("./src/controller/routes/admin");
 
-const mongooseConnect = require("./src/db/schemas");
+const mongooseConnect = require("./src/index");
 const app = express();
 mongooseConnect();
 
@@ -23,7 +23,7 @@ app.set("view engine", "pug");
 app.use(morgan("dev"));
 // 바디 파서 역할
 app.use(bodyParser.json());
-// app.use(fileupload());
+// app.use(fileupload()); // 이미지 데이터 파일 받아오기
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // JWT 토큰 구현 시 사용 예정

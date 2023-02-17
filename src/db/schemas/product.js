@@ -11,24 +11,23 @@ const productSchema = new Schema(
 		productStock: {
 			type: Number,
 			requried: true,
+			default: 0,
 		},
 		productPrice: {
 			type: Number,
 			requried: true,
 		},
 		productCategory: {
-			type: String,
-			default: "",
-			requried: true,
+			type: Schema.Types.ObjectId,
+			ref: "Category",
 		},
 		productBrand: {
-			type: String,
-			default: "",
-			required: true,
+			type: Schema.Types.ObjectId,
+			ref: "Brand",
 		},
 		productImage: {
 			type: Array,
-			// required: true,
+			required: true,
 		},
 		productDescription: {
 			type: String,
