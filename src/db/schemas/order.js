@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const shortId = require("../shortId.js");
+const productSchema = require("./product.js");
 const orderSchema = new Schema(
 	{
 		shortId,

@@ -14,7 +14,6 @@ const addBrand = async (req, res, next) => {
 		const brandData = req.body;
 		console.log(brandData);
 		const newBrand = await brandServices.brandAdd(brandData);
-
 		res.json({ data: newBrand });
 	} catch (err) {
 		next(err);

@@ -22,9 +22,20 @@ router.post("/product", productsController.addProductInfo);
 // 상품 이미지 다중 업로드
 router.post(
 	"/product/images",
-	imageUploadS3.array("file"), // 여러개 이미지를 할 수 있도록 설정해 놓았는데, 1개만 하거나 아예 안하는 경우에는 어떻게되나?
+	imageUploadS3.array("imageFile"),
+	// }, // 여러개 이미지를 할 수 있도록 설정해 놓았는데, 1개만 하거나 아예 안하는 경우에는 어떻게되나?
 	productsController.imageUpload,
 );
+// router.post(
+// 	"/product/images",
+// 	(req, res, next) => {
+// 		console.log(req.body);
+// next();
+// 	},
+// 	imageUploadS3.array("imageFile"),
+// 	// }, // 여러개 이미지를 할 수 있도록 설정해 놓았는데, 1개만 하거나 아예 안하는 경우에는 어떻게되나?
+// 	productsController.imageUpload,
+// );
 
 // 상품 정보 수정
 router

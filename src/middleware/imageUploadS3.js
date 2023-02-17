@@ -19,6 +19,9 @@ const storage = multerS3({
 	key(req, file, cb) {
 		cb(null, `images/${uuid()}_${file.originalname}`);
 	},
+	// acl: "public-read",
+	// contentType: multerS3.AUTO_CONTENT_TYPE,
+	// ContentEncoding: "base64", // required
 });
 // upload function
 const imageUploadS3 = multer({

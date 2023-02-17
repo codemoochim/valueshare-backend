@@ -2,6 +2,8 @@ const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const fileupload = require("express-fileupload");
 const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -20,13 +22,21 @@ app.set("view engine", "pug");
 
 app.use(morgan("dev"));
 // 바디 파서 역할
+app.use(bodyParser.json());
+// app.use(fileupload());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // JWT 토큰 구현 시 사용 예정
 // app.use(cookieParser());
 // 정적 파일
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors({ options: "localhost" }));
+app.use(
+	cors({
+		origin: "http://localhost:3000",
+		credentials: true,
+		// optionsSuccessStatus: 200,
+	}),
+);
 
 app.use("/", indexRouter); // 상품 목록 페이지 [메인페이지]
 app.use("/admin", adminRouter);

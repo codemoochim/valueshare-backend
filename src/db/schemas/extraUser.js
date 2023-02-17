@@ -9,9 +9,11 @@ const extraUserSchema = new Schema(
 			requried: true,
 		},
 		orderNumber: {
+			// ????? order 에 추적하면 address 있음
 			type: Number,
 		},
 		shippingAddress: {
+			// ????? extraUserOrder??
 			type: String,
 		},
 		name: {

@@ -4,31 +4,33 @@ const shortId = require("../shortId.js");
 const productSchema = new Schema(
 	{
 		shortId,
-		title: {
+		productTitle: {
 			type: String,
 			required: true,
 		},
-		stock: {
+		productStock: {
 			type: Number,
 			requried: true,
 		},
-		price: {
+		productPrice: {
 			type: Number,
 			requried: true,
 		},
-		category: {
+		productCategory: {
 			type: String,
+			default: "",
 			requried: true,
 		},
-		brand: {
+		productBrand: {
 			type: String,
+			default: "",
 			required: true,
 		},
-		image: {
+		productImage: {
 			type: Array,
-			required: true,
+			// required: true,
 		},
-		description: {
+		productDescription: {
 			type: String,
 			default: "",
 		},

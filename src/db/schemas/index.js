@@ -7,19 +7,14 @@ const connect = () => {
 	if (process.env.NODE_ENV !== "production") mongoose.set("debug", true);
 };
 //
-const {
-	MongoDB_Root,
-	MongoDB_Pwd,
-	MongoDB_Host,
-	MongoDB_Port,
-	MongoDB_dbName,
-} = process.env;
-
+const { MongoDB_Root, MongoDB_Pwd, MongoDB_dbName } = process.env;
+mongoose.set("strictQuery", false);
 mongoose.connect(
-	`mongodb://${MongoDB_Root}:${MongoDB_Pwd}@${MongoDB_Host}:${MongoDB_Port}/admin`,
+	`mongodb+srv://${MongoDB_Root}:${MongoDB_Pwd}@${MongoDB_dbName}.ywzx8pk.mongodb.net/test`,
 	{
 		dbName: `${MongoDB_dbName}`,
 		useNewUrlParser: true,
+		autoIndex: false, // diable autoIndex
 	},
 	(error) => {
 		if (error) {

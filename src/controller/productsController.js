@@ -12,9 +12,18 @@ const productsServices = require("../services/productsServices");
 // };
 const imageUpload = async (req, res, next) => {
 	try {
+		console.log("imageUpload 시작");
 		const location = req.files;
-		const savedImage = await productsServices.imageUploadMongo(location);
-		res.json({ data: savedImage.image }); // image url
+		const body = req.body;
+		// console.log(location);
+		// console.log(23);
+		// console.log(body);
+		const addedProduct = await productsServices.imageUploadMongo(
+			location,
+			body,
+		);
+		// console.log(addedProduct);
+		res.json({ addedProduct });
 	} catch (err) {
 		next(err);
 	}
