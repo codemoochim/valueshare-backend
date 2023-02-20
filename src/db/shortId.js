@@ -1,4 +1,4 @@
-const { nanoid } = require("nanoid");
+const { nanoid } = require("nanoid"); // 왜 uuid v4가 아닌 nanoid 를 선택했는지?
 
 const shortId = {
 	type: String,

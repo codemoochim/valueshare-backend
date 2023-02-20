@@ -37,7 +37,7 @@ const removeCategory = async (req, res, next) => {
 	try {
 		const { shortId } = req.params;
 		await categorySrvc.deleteCategory(shortId);
-		res.json({ result: "카테고리 삭제가 완료되었습니다." });
+		res.json({ message: "카테고리 삭제가 완료되었습니다." });
 	} catch (err) {
 		next(err);
 	}

@@ -1,4 +1,5 @@
-const productSrvc = require("../services/productSrvc");
+// const productSrvc = require("../services/productSrvc");
+const userSrvc = require("../services/userSrvc");
 
 const getProductList = async (req, res, next) => {
 	try {
@@ -9,12 +10,11 @@ const getProductList = async (req, res, next) => {
 	}
 };
 
-const addProduct = async (req, res, next) => {
+const addUser = async (req, res, next) => {
 	try {
-		const location = req.files;
 		const body = req.body;
-		const addedProduct = await productSrvc.createProduct(location, body);
-		res.json({ data: addedProduct });
+		const addedUser = await userSrvc.createUser(body);
+		res.json({ data: addedUser });
 	} catch (err) {
 		next(err);
 	}
@@ -74,8 +74,8 @@ const checkProduct = async (req, res, next) => {
 };
 
 module.exports = {
+	addUser,
 	getProductList,
-	addProduct,
 	getProduct,
 	editProduct,
 	removeProduct,

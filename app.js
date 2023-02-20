@@ -3,7 +3,8 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const fileupload = require("express-fileupload");
+const session = require("express-session");
+const qs = require("qs");
 const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -11,25 +12,36 @@ dotenv.config();
 
 const indexRouter = require("./src/controller/routes");
 const adminRouter = require("./src/controller/routes/admin");
+const userRouter = require("./src/controller/routes/user");
 
 const mongooseConnect = require("./src/index");
 const app = express();
 mongooseConnect();
 
 // view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "pug");
+// 정적 파일
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(morgan("dev"));
 // 바디 파서 역할
-app.use(bodyParser.json());
-// app.use(fileupload()); // 이미지 데이터 파일 받아오기
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-// JWT 토큰 구현 시 사용 예정
-// app.use(cookieParser());
-// 정적 파일
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser(process.env.SECRET_COOKIE));
+app.use(
+	session({
+		resave: false,
+		saveUninitialized: false,
+		secret: process.env.SECRET_SESSION,
+		cookie: {
+			httpOnly: true,
+			secure: false,
+		},
+		name: "session-cookie",
+	}),
+);
+
 app.use(
 	cors({
 		origin: "http://localhost:3000",
@@ -37,9 +49,9 @@ app.use(
 		// optionsSuccessStatus: 200,
 	}),
 );
-
 app.use("/", indexRouter); // 상품 목록 페이지 [메인페이지]
 app.use("/admin", adminRouter);
+app.use("/users", userRouter);
 
 // 유저의 잘못된 URI 경로 요청에 대한 에러 응답
 app.use((req, res, next) => {

@@ -33,7 +33,7 @@ const removeBrand = async (req, res, next) => {
 	try {
 		const { shortId } = req.params;
 		await brandSrvc.deleteBrand(shortId);
-		res.json({ message: "delete completed" });
+		res.json({ message: "브랜드 삭제가 완료되었습니다." });
 	} catch (err) {
 		next(err);
 	}

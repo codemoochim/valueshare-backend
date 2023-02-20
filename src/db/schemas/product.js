@@ -11,16 +11,25 @@ const productSchema = new Schema(
 		productStock: {
 			type: Number,
 			requried: true,
-			default: 0,
+			default: 10,
 		},
 		productPrice: {
 			type: Number,
 			requried: true,
+			default: () => Math.round(Math.random().toFixed(2) * 200000),
 		},
+		// productCategory: {
+		// 	type: String,
+		// 	required: true,
+		// },
 		productCategory: {
 			type: Schema.Types.ObjectId,
 			ref: "Category",
 		},
+		// productBrand: {
+		// 	type: String,
+		// 	required: true,
+		// },
 		productBrand: {
 			type: Schema.Types.ObjectId,
 			ref: "Brand",
