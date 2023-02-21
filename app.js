@@ -18,10 +18,6 @@ const mongooseConnect = require("./src/index");
 const app = express();
 mongooseConnect();
 
-// view engine setup
-// app.set("views", path.join(__dirname, "views"));
-// app.set("view engine", "pug");
-// 정적 파일
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(morgan("dev"));

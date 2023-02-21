@@ -5,8 +5,7 @@ const findProductList = async () => {
 		const productList = await Product.find({})
 			.populate("productBrand")
 			.populate("productCategory")
-			.limit(100)
-			.sort({ createdAt: -1 });
+			.limit(100);
 		// 무한 스크롤 해야함
 		if (!productList) {
 			throw new Error("상품의 목록을 불러올 수 없습니다.");
@@ -26,13 +25,15 @@ const createProduct = async (location, body) => {
 			productCategory,
 			productBrand,
 			productDescription,
+			productDetail,
 		} = body;
 		if (
 			!productTitle ||
 			!productPrice ||
 			!productCategory ||
 			!productBrand ||
-			!productDescription
+			!productDescription ||
+			!productDetail
 		) {
 			throw new Error("필수 입력 정보를 확인하세요");
 		}
@@ -69,6 +70,7 @@ const createProduct = async (location, body) => {
 			productBrand: isBrandExist,
 			productImage: imgUrlArray,
 			productDescription,
+			productDetail,
 		});
 		return createdProduct;
 	} catch (err) {
@@ -99,13 +101,15 @@ const updateProduct = async (_id, body, location) => {
 			productCategory,
 			productBrand,
 			productDescription,
+			productDetail,
 		} = body;
 		if (
 			!productTitle ||
 			!productPrice ||
 			!productCategory ||
 			!productBrand ||
-			!productDescription
+			!productDescription ||
+			!productDetail
 		) {
 			throw new Error("필수 입력 정보를 확인하세요");
 		}
@@ -143,7 +147,8 @@ const updateProduct = async (_id, body, location) => {
 				productCategory: isCategoryExist,
 				productBrand: isBrandExist,
 				productDescription,
-				productImage: location,
+				productDetail,
+				productImage: beUpdatedNewImage,
 			},
 			{ new: true },
 		);
@@ -153,6 +158,7 @@ const updateProduct = async (_id, body, location) => {
 				"상품을 업데이트 할 수 없습니다. 필수 입력 정보를 확인해주세요",
 			);
 		}
+		console.log(updatedProduct);
 		return updatedProduct;
 	} catch (err) {
 		throw new Error(err);

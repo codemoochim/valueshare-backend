@@ -41,6 +41,12 @@ const productSchema = new Schema(
 		productDescription: {
 			type: String,
 			default: "",
+			required: true,
+		},
+		productDetail: {
+			type: String,
+			default: "",
+			required: true,
 		},
 	},
 	{

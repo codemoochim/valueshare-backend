@@ -12,3 +12,6 @@ node_modules/
 
 # init raw json Data
 mock/
+
+# test
+index2.html
