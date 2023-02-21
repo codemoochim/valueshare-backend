@@ -1,19 +1,15 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const shortId = require("../shortId.js");
+const { v4: uuid } = require("uuid");
 const orderDetailSchema = new Schema(
 	{
-		shortId,
 		userId: {
 			type: Schema.Types.ObjectId,
 			ref: "User",
 			requreid: true,
 		},
 		orderNumber: {
-			// 왜 uuid v4 를 써야하는지 이유를 말할 수 있다.
-			// version 에 대한 이유 또한.
-			// 주문번호 생성 고민..
-			type: Number,
+			type: [String],
 			required: true,
 			index: true,
 		},
@@ -56,17 +52,17 @@ const orderDetailSchema = new Schema(
 				},
 			},
 		],
-		orderStatus: {
+		shipStatus: {
 			// 주문완료, 배송준비중, 배송중, 배송완료, 주문취소
 			type: String,
 			requird: true,
 		},
-		shippingAddress: {
+		shipAdr: {
 			// 배송지
 			type: String,
 			required: true,
 		},
-		shippingNote: String, // 배송 메모
+		shipNote: String, // 배송 메모
 	},
 	{
 		timestamps: true,

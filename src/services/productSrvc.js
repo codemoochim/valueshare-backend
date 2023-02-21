@@ -5,8 +5,9 @@ const findProductList = async () => {
 		const productList = await Product.find({})
 			.populate("productBrand")
 			.populate("productCategory")
-			.limit(100);
-		// 페이지네이션 코드리뷰 요구사항
+			.limit(100)
+			.sort({ createdAt: -1 });
+		// 무한 스크롤 해야함
 		if (!productList) {
 			throw new Error("상품의 목록을 불러올 수 없습니다.");
 		}
@@ -60,29 +61,26 @@ const createProduct = async (location, body) => {
 		if (isProductExist) {
 			throw new Error("동일한 상품명이 이미 등록되어 있습니다");
 		}
-		console.log(isBrandExist);
 		const createdProduct = await Product.create({
 			productTitle,
 			productStock,
 			productPrice,
-			productCategory: isCategoryExist, // 여기서 isCategoryExist._id 를 넣어야 하나?
+			productCategory: isCategoryExist,
 			productBrand: isBrandExist,
 			productImage: imgUrlArray,
 			productDescription,
-		}); // 여기다 .save() 이걸 해줘야하나? exec?
-		const setPopulate = await Product.findById(createdProduct._id)
-			.populate("productBrand")
-			.populate("productCategory");
-
-		return setPopulate;
+		});
+		return createdProduct;
 	} catch (err) {
 		throw new Error(err);
 	}
 };
 
-const findProduct = async (shortId) => {
+const findProduct = async (_id) => {
 	try {
-		const foundProduct = await Product.find({ shortId });
+		const foundProduct = await Product.findById({ _id })
+			.populate("productBrand")
+			.populate("productCategory");
 		if (!foundProduct) {
 			throw new Error("상품의 정보를 조회할 수 없습니다.");
 		}
@@ -92,7 +90,7 @@ const findProduct = async (shortId) => {
 	}
 };
 
-const updateProduct = async (shortId, productNewData, productNewImage) => {
+const updateProduct = async (_id, body, location) => {
 	try {
 		const {
 			productTitle,
@@ -101,7 +99,7 @@ const updateProduct = async (shortId, productNewData, productNewImage) => {
 			productCategory,
 			productBrand,
 			productDescription,
-		} = productNewData;
+		} = body;
 		if (
 			!productTitle ||
 			!productPrice ||
@@ -118,8 +116,8 @@ const updateProduct = async (shortId, productNewData, productNewImage) => {
 		if (isNaN(productStock) || parseInt(productStock) < 0) {
 			throw new Error("알맞은 수량을 입력해주세요");
 		}
-		const productNewImage = location.map((img) => img.location);
-		if (!productNewImage) {
+		const beUpdatedNewImage = location.map((img) => img.location);
+		if (!beUpdatedNewImage) {
 			throw new Error("상품의 이미지를 등록해주세요");
 		}
 		const isBrandExist = await Brand.findOne({ brandName: productBrand });
@@ -137,7 +135,7 @@ const updateProduct = async (shortId, productNewData, productNewImage) => {
 			throw new Error("동일한 상품명이 이미 등록되어 있습니다");
 		}
 		const updatedProduct = await Product.findOneAndUpdate(
-			{ shortId },
+			{ _id },
 			{
 				productTitle,
 				productStock,
@@ -145,7 +143,7 @@ const updateProduct = async (shortId, productNewData, productNewImage) => {
 				productCategory: isCategoryExist,
 				productBrand: isBrandExist,
 				productDescription,
-				productImage: productNewImage,
+				productImage: location,
 			},
 			{ new: true },
 		);
@@ -161,14 +159,15 @@ const updateProduct = async (shortId, productNewData, productNewImage) => {
 	}
 };
 
-const deleteProduct = async (shortId) => {
+const deleteProduct = async (_id) => {
 	try {
-		const deletedProduct = await Product.findOneAndDelete({ shortId });
+		const deletedProduct = await Product.findOneAndDelete({ _id });
 		if (!deletedProduct) {
 			throw new Error("상품 삭제에 오류가 있습니다.");
 		}
 		return deletedProduct;
-		// 상품을 삭제할것인가? 나머지 정보들을 초기화 시킨채 상품명 정도만 내비 둘것인가?
+		// 삭제 요청한 상품에 대해서 데이터를 남겨둘 필요성을 말해봐라
+		// deleted 로 메시지를 남겨두고 로그를 살릴것인가?
 	} catch (err) {
 		throw new Error(err);
 	}

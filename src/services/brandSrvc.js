@@ -28,11 +28,11 @@ const createBrand = async (brandNewData) => {
 	}
 };
 
-const updateBrand = async (shortId, brandNewData) => {
+const updateBrand = async (_id, brandNewData) => {
 	try {
 		const { brandName } = brandNewData;
 		const result = await Brand.findOneAndUpdate(
-			{ shortId },
+			{ _id },
 			{ brandName },
 			{ new: true },
 		);
@@ -45,9 +45,9 @@ const updateBrand = async (shortId, brandNewData) => {
 	}
 };
 
-const deleteBrand = async (shortId) => {
+const deleteBrand = async (_id) => {
 	try {
-		const result = await Brand.findOneAndDelete({ shortId });
+		const result = await Brand.findOneAndDelete({ _id });
 		if (!result) {
 			throw new Error("브랜드 삭제에 오류가 있습니다.");
 		}

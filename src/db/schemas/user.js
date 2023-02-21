@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const shortId = require("../shortId.js");
+const { v4: uuid } = require("uuid");
 const userSchema = new Schema(
 	{
-		shortId,
 		email: {
 			type: String,
 			requried: true,
@@ -24,8 +23,7 @@ const userSchema = new Schema(
 		},
 		orderNumber: {
 			// required true 가 아닌데 unique true 일 수가 있나?
-			type: Array,
-			default: [],
+			type: [String],
 			index: true,
 		},
 	},

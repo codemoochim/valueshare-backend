@@ -22,10 +22,10 @@ const addCategory = async (req, res, next) => {
 
 const editCategory = async (req, res, next) => {
 	try {
-		const { shortId } = req.params;
+		const { _id } = req.params;
 		const categoryNewData = req.body;
 		const editedCategory = await categorySrvc.updateCategory(
-			shortId,
+			_id,
 			categoryNewData,
 		);
 		res.json({ result: editedCategory });
@@ -35,8 +35,8 @@ const editCategory = async (req, res, next) => {
 };
 const removeCategory = async (req, res, next) => {
 	try {
-		const { shortId } = req.params;
-		await categorySrvc.deleteCategory(shortId);
+		const { _id } = req.params;
+		await categorySrvc.deleteCategory(_id);
 		res.json({ message: "카테고리 삭제가 완료되었습니다." });
 	} catch (err) {
 		next(err);

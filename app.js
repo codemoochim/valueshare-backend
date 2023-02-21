@@ -10,7 +10,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const indexRouter = require("./src/controller/routes");
+const indexRouter = require("./src/controller/routes/");
 const adminRouter = require("./src/controller/routes/admin");
 const userRouter = require("./src/controller/routes/user");
 
@@ -49,7 +49,7 @@ app.use(
 		// optionsSuccessStatus: 200,
 	}),
 );
-app.use("/", indexRouter); // 상품 목록 페이지 [메인페이지]
+app.use("/", indexRouter);
 app.use("/admin", adminRouter);
 app.use("/users", userRouter);
 

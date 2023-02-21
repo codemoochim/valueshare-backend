@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const shortId = require("../shortId.js");
 const productSchema = new Schema(
 	{
-		shortId,
 		productTitle: {
 			type: String,
 			required: true,
@@ -23,6 +21,7 @@ const productSchema = new Schema(
 		// 	required: true,
 		// },
 		productCategory: {
+			// prdCategoryId
 			type: Schema.Types.ObjectId,
 			ref: "Category",
 		},
@@ -31,6 +30,7 @@ const productSchema = new Schema(
 		// 	required: true,
 		// },
 		productBrand: {
+			// prodBrandId 이름변경 직관적
 			type: Schema.Types.ObjectId,
 			ref: "Brand",
 		},
