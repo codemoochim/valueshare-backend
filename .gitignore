@@ -1,8 +1,11 @@
 # default
 node_modules/
-bin
+bin/
 
 # node
 .env
 
 # code conventions
+.eslintrc.js
+.prettierrc
+.prettierrc.js
