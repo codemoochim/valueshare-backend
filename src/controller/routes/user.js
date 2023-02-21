@@ -3,19 +3,18 @@ const router = express.Router();
 const productCtrl = require("../productCtrl");
 const orderCtrl = require("../orderCtrl");
 
-// /user
+// /users
 // 사용자 입장
 
 // 전체 상품 목록 조회
-router.route("/products").get(productCtrl.getProductList);
-router.route("/products/:_id").get(productCtrl.getProduct);
+// router.route("/products").get(productCtrl.getProductList);
+// router.route("/products/:_id").get(productCtrl.getProduct);
 
-// 유주 주문관리
-router.route("orders").get(orderCtrl.getOrderList);
+// 유저 주문관리
 router
-	.route("orders/:_id")
+	.route("/orders/:_id")
 	.get(orderCtrl.getOrderDetail)
-	.patch(orderCtrl.editOrderDetail)
+	.patch(orderCtrl.editOrderDetailForUser)
 	.post(orderCtrl.cancelOrderDetail);
 
 module.exports = router;

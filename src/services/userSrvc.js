@@ -1,19 +1,20 @@
-const { v4: uuid } = require("uuid");
 const { Brand, Category, Product, User } = require("../db/model/index");
+const fromCheck = require("../utils/formCheck");
+const issueOrderNum = require("../utils/issueOrderNum");
 
 const createUser = async (body) => {
 	try {
-		const { email } = body;
-		const neworderNumber = uuid();
-		// 이메일 형식 검증
-		// const emailForm = new RegExp("/^[a-z0-9]+@[a-z]{2,3}");
-		// if (!emailForm.test(email) || !email) {
-		// 	throw new Error("이메일의 형식을 확인해주세요");
-		// }
-
+		const email = body.email;
+		const brandNewOrederNum = issueOrderNum();
+		if (!email) {
+			throw new Error("이메일을 입력해주세요");
+		}
+		if (!fromCheck.eamilFormCheck(email)) {
+			throw new Error("이메일의 형식을 확인하세요");
+		}
 		const createdUser = await User.create({
 			email,
-			orderNumber: [neworderNumber],
+			orderNumber: brandNewOrederNum,
 		});
 		return createdUser;
 	} catch (err) {
@@ -21,6 +22,14 @@ const createUser = async (body) => {
 	}
 };
 
+const createAccount = async () => {
+	try {
+	} catch (err) {
+		throw new Error("회원가입에 실패하였습니다");
+	}
+};
+
 module.exports = {
 	createUser,
+	createAccount,
 };

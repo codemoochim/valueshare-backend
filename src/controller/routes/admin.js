@@ -22,7 +22,7 @@ router
 	.delete(productCtrl.removeProduct);
 
 // 카테고리 관리
-// /admin/categories
+// admin/categories
 router
 	.route("/categories")
 	.get(categoryCtrl.getCategoryList)
@@ -34,7 +34,7 @@ router
 
 // 브랜드 관리
 // /brands
-router.route("/brands").get(brandCtrl.getBrand).post(brandCtrl.addBrand);
+router.route("/brands").get(brandCtrl.getBrandList).post(brandCtrl.addBrand);
 router
 	.route("/brands/:_id")
 	.patch(brandCtrl.editBrand)

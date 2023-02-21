@@ -15,16 +15,13 @@ const userSchema = new Schema(
 			type: String,
 		},
 		phone: {
-			type: Number,
+			type: String,
 		},
 		address: {
-			// 기본배송지?
 			type: String,
 		},
 		orderNumber: {
-			// required true 가 아닌데 unique true 일 수가 있나?
-			type: [String],
-			index: true,
+			type: String,
 		},
 	},
 	{

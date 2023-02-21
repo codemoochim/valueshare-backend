@@ -1,4 +1,4 @@
-const { Category } = require("../db/model/index");
+const { Category, Product } = require("../db/model/index");
 
 const findCategoryList = async () => {
 	try {
@@ -7,6 +7,37 @@ const findCategoryList = async () => {
 			throw new Error("카테고리 목록이 없습니다.");
 		}
 		return categoryList;
+	} catch (err) {
+		throw new Error(err);
+	}
+};
+
+const findProductByCategory = async (category) => {
+	try {
+		const targetCategory = await Category.find({ categoryName: category });
+		const productList = await Product.find({
+			productCategory: targetCategory,
+		})
+			.populate("productCategory")
+			.populate("productBrand")
+			.limit(100);
+
+		// 페이지 네이션
+		// const page = Number(parameter.page || 1);
+		// const perPage = Number(parameter.perPage || 100);
+		// const [total, productList] = await Promise.all([
+		// 	productList.countDocuments({}),
+		// 	productList.find({})
+		// 		.populate("productBrand")
+		// 		.skip(perPage * (page - 1))
+		// 		.limit(perPage),
+		// ]);
+		// const totalPage = Math.ceil(total / perPage);
+
+		if (!productList) {
+			throw new Error("해당 카테고리가 등록되어있지 않습니다");
+		}
+		return productList;
 	} catch (err) {
 		throw new Error(err);
 	}
@@ -67,6 +98,7 @@ const deleteCategory = async (_id) => {
 };
 module.exports = {
 	findCategoryList,
+	findProductByCategory,
 	createCategory,
 	updateCategory,
 	deleteCategory,

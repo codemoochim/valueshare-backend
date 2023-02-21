@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { v4: uuid } = require("uuid");
-const orderDetailSchema = new Schema(
+const orderSchema = new Schema(
 	{
 		userId: {
 			type: Schema.Types.ObjectId,
@@ -9,7 +8,7 @@ const orderDetailSchema = new Schema(
 			requreid: true,
 		},
 		orderNumber: {
-			type: [String],
+			type: String,
 			required: true,
 			index: true,
 		},
@@ -46,12 +45,16 @@ const orderDetailSchema = new Schema(
 					requried: true,
 				},
 				productImage: {
-					// 이미지 링크
-					type: Schema.Types.ObjectId,
-					ref: "Product",
+					// 이미지 링크,
+					type: Array,
+					default: ["이미지 정보가 없습니다"],
 				},
 			},
 		],
+		totalPrice: {
+			type: Number,
+			required: true,
+		},
 		shipStatus: {
 			// 주문완료, 배송준비중, 배송중, 배송완료, 주문취소
 			type: String,
@@ -63,10 +66,39 @@ const orderDetailSchema = new Schema(
 			required: true,
 		},
 		shipNote: String, // 배송 메모
+		cancelNote: String, // 취소 메모
 	},
 	{
 		timestamps: true,
 	},
 );
 
-module.exports = orderDetailSchema;
+module.exports = orderSchema;
+
+// 주문 예시
+// {"email": "happy@happy.com",
+// 		"name": "해피데이",
+// 		"phone": "010-3232-5252",
+// 		"products": [
+// 			{
+// 				"productName": "츄르1",
+// 				"productQuantity": 2,
+// 				"productPrice": 3000,
+// 				"productImage": ["고양이밥"]
+// 			},
+//             {
+// 				"productName": "츄르 디럭스 에디션",
+// 				"productQuantity": 5,
+// 				"productPrice": 12000,
+// 				"productImage": ["고양이간식"]
+// 			},
+//             {
+// 				"productName": "츄르 뷔페식",
+// 				"productQuantity": 2,
+// 				"productPrice": 7000,
+// 				"productImage": ["고양이사료"]
+// 			}
+// 		],
+// 		"totalPrice": 80000,
+// 		"shipAdr":"서울시 묘동"
+// }

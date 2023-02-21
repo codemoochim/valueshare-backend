@@ -11,6 +11,15 @@ const addUser = async (req, res, next) => {
 	}
 };
 
+const addAccount = async (req, res, nect) => {
+	try {
+		const { email, password } = req.body;
+	} catch (err) {
+		next(err);
+	}
+};
+
 module.exports = {
 	addUser,
+	addAccount,
 };

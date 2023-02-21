@@ -9,11 +9,20 @@ const getCategoryList = async (req, res, next) => {
 	}
 };
 
+const getProductByCategory = async (req, res, next) => {
+	try {
+		const { category } = req.query;
+		const foundProduct = await categorySrvc.findProductByCategory(category);
+		res.json({ result: foundProduct });
+	} catch (err) {
+		next(err);
+	}
+};
+
 const addCategory = async (req, res, next) => {
 	try {
 		const categoryNewData = req.body;
 		const newCategory = await categorySrvc.createCategory(categoryNewData);
-
 		res.json({ result: newCategory });
 	} catch (err) {
 		next(err);
@@ -45,6 +54,7 @@ const removeCategory = async (req, res, next) => {
 
 module.exports = {
 	getCategoryList,
+	getProductByCategory,
 	addCategory,
 	editCategory,
 	removeCategory,

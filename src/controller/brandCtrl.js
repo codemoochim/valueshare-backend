@@ -1,8 +1,18 @@
 const brandSrvc = require("../services/brandSrvc");
 
-const getBrand = async (req, res, next) => {
+const getBrandList = async (req, res, next) => {
 	try {
 		const brandList = await brandSrvc.findBrandList();
+		res.json({ result: brandList });
+	} catch (err) {
+		next(err);
+	}
+};
+
+const getProductByBrand = async (req, res, next) => {
+	try {
+		const { brand } = req.query;
+		const brandList = await brandSrvc.findProductByBrand(brand);
 		res.json({ result: brandList });
 	} catch (err) {
 		next(err);
@@ -40,7 +50,8 @@ const removeBrand = async (req, res, next) => {
 };
 
 module.exports = {
-	getBrand,
+	getBrandList,
+	getProductByBrand,
 	addBrand,
 	editBrand,
 	removeBrand,

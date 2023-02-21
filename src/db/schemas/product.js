@@ -21,7 +21,7 @@ const productSchema = new Schema(
 		// 	required: true,
 		// },
 		productCategory: {
-			// prdCategoryId
+			// prdCategoryId 프론트가 쓰고 있어서.. 나중에 바꿈
 			type: Schema.Types.ObjectId,
 			ref: "Category",
 		},

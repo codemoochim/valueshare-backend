@@ -2,6 +2,7 @@ const productSrvc = require("../services/productSrvc");
 
 const getProductList = async (req, res, next) => {
 	try {
+		// 페이지네이션 기능 쿼리/파리미터 받아와야함
 		const productList = await productSrvc.findProductList();
 		res.json({ result: productList });
 	} catch (err) {
@@ -14,7 +15,7 @@ const addProduct = async (req, res, next) => {
 		const location = req.files;
 		const body = req.body;
 		const addedProduct = await productSrvc.createProduct(location, body);
-		res.json({ data: addedProduct });
+		res.json({ data: addedProduct }); // 나중에 result 로 바꿀 수 있는지 물어보기
 	} catch (err) {
 		next(err);
 	}
