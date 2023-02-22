@@ -11,6 +11,13 @@ const findBrandList = async () => {
 
 const findProductByBrand = async (brand) => {
 	try {
+		if (brand === "all") {
+			const productList = await Product.find({})
+				.populate("productCategory")
+				.populate("productBrand")
+				.limit(100);
+			return productList;
+		}
 		const targetBrand = await Brand.find({ brandName: brand });
 		const productList = await Product.find({
 			productBrand: targetBrand,
@@ -63,15 +70,13 @@ const createBrand = async (brandNewData) => {
 const updateBrand = async (_id, brandNewData) => {
 	try {
 		const { brandName } = brandNewData;
-		const result = await Brand.findOneAndUpdate(
-			{ _id },
-			{ brandName },
-			{ new: true },
-		);
-		if (!result) {
-			throw new Error("브랜드 정보 업데이트에 오류가 있습니다.");
+		const isExist = await Brand.findById({ _id });
+		if (isExist.brandName === brandName) {
+			throw new Error("동일한 브랜드가 이미 존재합니다.");
 		}
-		return result;
+		isExist.brandName = brandName;
+		await isExist.save();
+		return isExist;
 	} catch (err) {
 		throw new Error(err);
 	}

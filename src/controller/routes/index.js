@@ -14,6 +14,7 @@ router.get("/", (req, res, next) => {
 
 // 유저 전체 상품 목록 조회
 // 유저 카테고리 필터링
+// swtich 전환 전에 구동 되던 것.
 router.get("/products", async (req, res, next) => {
 	const { categories, brand } = req.query;
 	if (categories) {

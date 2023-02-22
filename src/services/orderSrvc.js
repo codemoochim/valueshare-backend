@@ -120,27 +120,30 @@ const updateOrderDetailForUser = async (_id, newOrderDetail) => {
 		if (accessValid.email !== email) {
 			throw new Error("올바른 이메일을 입력해주세요");
 		}
+		console.log(accessValid);
+		console.log(orderNumber);
 		if (accessValid.orderNumber !== orderNumber) {
 			throw new Error("올바른 주문번호를 입력해주세요");
 		}
+		const updateInfo = new accessValid();
+		console.log(updateInfo);
+		// const updatedOrderDetail = await Order.findOneAndUpdate(
+		// 	{ _id },
+		// 	{
+		// 		email,
+		// 		name,
+		// 		phone,
+		// 		shipAdr,
+		// 		shipNote,
+		// 	},
+		// 	{ new: true },
+		// );
 
-		const updatedOrderDetail = await Order.findOneAndUpdate(
-			{ _id },
-			{
-				email,
-				name,
-				phone,
-				shipAdr,
-				shipNote,
-			},
-			{ new: true },
-		);
+		// if (!updatedOrderDetail) {
+		// 	throw new Error("주문 정보 업데이트에 오류가 있습니다.");
+		// }
 
-		if (!updatedOrderDetail) {
-			throw new Error("주문 정보 업데이트에 오류가 있습니다.");
-		}
-
-		return updatedOrderDetail;
+		// return updatedOrderDetail;
 	} catch (err) {
 		throw new Error(err);
 	}

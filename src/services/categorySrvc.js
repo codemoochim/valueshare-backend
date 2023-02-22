@@ -14,6 +14,13 @@ const findCategoryList = async () => {
 
 const findProductByCategory = async (categories) => {
 	try {
+		if (categories === "all") {
+			const productList = await Product.find({})
+				.populate("productCategory")
+				.populate("productBrand")
+				.limit(100);
+			return productList;
+		}
 		const targetCategory = await Category.find({ categoryName: categories });
 		const productList = await Product.find({
 			productCategory: targetCategory,
