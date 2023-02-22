@@ -31,9 +31,9 @@ const addBrand = async (req, res, next) => {
 
 const editBrand = async (req, res, next) => {
 	try {
-		const { _id } = req.params;
+		const { brandName } = req.params;
 		const brandNewData = req.body;
-		const editedBrand = await brandSrvc.updateBrand(_id, brandNewData);
+		const editedBrand = await brandSrvc.updateBrand(brandName, brandNewData);
 		res.json({ result: editedBrand });
 	} catch (err) {
 		next(err);
@@ -41,8 +41,8 @@ const editBrand = async (req, res, next) => {
 };
 const removeBrand = async (req, res, next) => {
 	try {
-		const { _id } = req.params;
-		await brandSrvc.deleteBrand(_id);
+		const { brandName } = req.params;
+		await brandSrvc.deleteBrand(brandName);
 		res.json({ message: "브랜드 삭제가 완료되었습니다." });
 	} catch (err) {
 		next(err);

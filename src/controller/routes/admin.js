@@ -29,15 +29,17 @@ router
 	.get(categoryCtrl.getCategoryList)
 	.post(categoryCtrl.addCategory);
 router
-	.route("/categories/:_id")
+	.route("/categories/:categoryName")
 	.patch(categoryCtrl.editCategory)
 	.delete(categoryCtrl.removeCategory);
 
 // 브랜드 관리
 // /brands
+// Balenciaga 63f250dda5cdc0fdb6f13e08
+// 봄 63f5e48e34313303639bb90f
 router.route("/brands").get(brandCtrl.getBrandList).post(brandCtrl.addBrand);
 router
-	.route("/brands/:_id")
+	.route("/brands/:brandName")
 	.patch(brandCtrl.editBrand)
 	.delete(brandCtrl.removeBrand);
 

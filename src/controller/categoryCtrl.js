@@ -32,10 +32,10 @@ const addCategory = async (req, res, next) => {
 
 const editCategory = async (req, res, next) => {
 	try {
-		const { _id } = req.params;
+		const { categoryName } = req.params;
 		const categoryNewData = req.body;
 		const editedCategory = await categorySrvc.updateCategory(
-			_id,
+			categoryName,
 			categoryNewData,
 		);
 		res.json({ result: editedCategory });

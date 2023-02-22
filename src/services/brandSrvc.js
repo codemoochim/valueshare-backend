@@ -67,14 +67,15 @@ const createBrand = async (brandNewData) => {
 	}
 };
 
-const updateBrand = async (_id, brandNewData) => {
+const updateBrand = async (brandName, brandNewData) => {
 	try {
-		const { brandName } = brandNewData;
-		const isExist = await Brand.findById({ _id });
-		if (isExist.brandName === brandName) {
+		const isExist = await Brand.findOne({
+			brandName: brandName,
+		});
+		if (isExist.brandName === brandNewData.brandName) {
 			throw new Error("동일한 브랜드가 이미 존재합니다.");
 		}
-		isExist.brandName = brandName;
+		isExist.brandName = brandNewData.brandName;
 		await isExist.save();
 		return isExist;
 	} catch (err) {
@@ -82,9 +83,9 @@ const updateBrand = async (_id, brandNewData) => {
 	}
 };
 
-const deleteBrand = async (_id) => {
+const deleteBrand = async (brandName) => {
 	try {
-		const result = await Brand.findOneAndDelete({ _id });
+		const result = await Brand.findOneAndDelete({ brandName });
 		if (!result) {
 			throw new Error("브랜드 삭제에 오류가 있습니다.");
 		}
