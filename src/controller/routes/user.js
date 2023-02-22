@@ -13,8 +13,8 @@ const orderCtrl = require("../orderCtrl");
 // 유저 주문관리
 router
 	.route("/orders/:_id")
-	.get(orderCtrl.getOrderDetail)
+	.get(orderCtrl.getOrderDetailForUser)
 	.patch(orderCtrl.editOrderDetailForUser)
-	.post(orderCtrl.cancelOrderDetail);
+	.post(orderCtrl.cancelOrderDetailForUser);
 
 module.exports = router;

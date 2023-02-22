@@ -19,7 +19,7 @@ const createOrder = async (orderData, newUser) => {
 			phone,
 			shipAdr,
 			ShipNote,
-			shipStatus: "주문 완료",
+			shipStatus,
 			products,
 			totalPrice,
 			cancelNote,
@@ -45,6 +45,18 @@ const findOrderList = async () => {
 };
 
 const findOrderDetail = async (_id, body) => {
+	try {
+		const oneOrder = await Order.findOne({ _id });
+		if (!oneOrder) {
+			throw new Error("해당하는 주문 정보가 없습니다.");
+		}
+		return oneOrder;
+	} catch (err) {
+		throw new Error(err);
+	}
+};
+
+const findOrderDetailForUser = async (_id, body) => {
 	try {
 		const oneOrder = await Order.findOne({ _id });
 		if (!oneOrder) {
@@ -141,6 +153,26 @@ const closedOrderDetail = async (_id, body) => {
 		if (!accessValid) {
 			throw new Error("해당하는 주문 정보가 없습니다.");
 		}
+		const orderClosingResult = await Order.findOneAndUpdate(
+			{ _id },
+			{
+				shipStatus: "주문 취소",
+			},
+		);
+		if (!orderClosingResult) {
+			throw new Error("주문 취소에 오류가 있습니다.");
+		}
+	} catch (err) {
+		throw new Error(err);
+	}
+};
+const closedOrderDetailForUser = async (_id, body) => {
+	try {
+		const accessValid = await Order.findById({ _id });
+
+		if (!accessValid) {
+			throw new Error("해당하는 주문 정보가 없습니다.");
+		}
 		if (accessValid.email !== body.email) {
 			throw new Error("올바른 이메일을 입력해주세요");
 		}
@@ -168,5 +200,7 @@ module.exports = {
 	findOrderDetail,
 	updateOrderDetail,
 	closedOrderDetail,
+	findOrderDetailForUser,
 	updateOrderDetailForUser,
+	closedOrderDetailForUser,
 };

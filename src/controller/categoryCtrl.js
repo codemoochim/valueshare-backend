@@ -1,4 +1,5 @@
 const categorySrvc = require("../services/categorySrvc");
+const { route } = require("./routes");
 
 const getCategoryList = async (req, res, next) => {
 	try {
@@ -11,8 +12,8 @@ const getCategoryList = async (req, res, next) => {
 
 const getProductByCategory = async (req, res, next) => {
 	try {
-		const { category } = req.query;
-		const foundProduct = await categorySrvc.findProductByCategory(category);
+		const { categories } = req.query;
+		const foundProduct = await categorySrvc.findProductByCategory(categories);
 		res.json({ result: foundProduct });
 	} catch (err) {
 		next(err);

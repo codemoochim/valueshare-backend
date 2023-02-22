@@ -8,3 +8,4 @@ const shipStatusSchema = new Schema({
 });
 
 module.exports = shipStatusSchema;
+// 주문 완료

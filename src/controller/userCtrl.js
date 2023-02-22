@@ -1,6 +1,6 @@
 const userSrvc = require("../services/userSrvc");
 
-const addUser = async (req, res, next) => {
+const addUserWhenOrder = async (req, res, next) => {
 	try {
 		const body = req.body;
 		const addedUser = await userSrvc.createUser(body);
@@ -11,15 +11,6 @@ const addUser = async (req, res, next) => {
 	}
 };
 
-const addAccount = async (req, res, nect) => {
-	try {
-		const { email, password } = req.body;
-	} catch (err) {
-		next(err);
-	}
-};
-
 module.exports = {
-	addUser,
-	addAccount,
+	addUserWhenOrder,
 };

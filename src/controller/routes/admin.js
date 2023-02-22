@@ -6,6 +6,7 @@ const productCtrl = require("../productCtrl");
 const categoryCtrl = require("../categoryCtrl");
 const brandCtrl = require("../brandCtrl");
 const orderCtrl = require("../orderCtrl");
+
 // /admin
 // 관리자 페이지
 

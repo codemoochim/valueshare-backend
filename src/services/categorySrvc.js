@@ -12,9 +12,9 @@ const findCategoryList = async () => {
 	}
 };
 
-const findProductByCategory = async (category) => {
+const findProductByCategory = async (categories) => {
 	try {
-		const targetCategory = await Category.find({ categoryName: category });
+		const targetCategory = await Category.find({ categoryName: categories });
 		const productList = await Product.find({
 			productCategory: targetCategory,
 		})

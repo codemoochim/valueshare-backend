@@ -4,22 +4,24 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const qs = require("qs");
 const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
-// const dayjs = require("dayjs");
+const passport = require("passport");
 dotenv.config();
 
 const indexRouter = require("./src/controller/routes/");
 const adminRouter = require("./src/controller/routes/admin");
 const userRouter = require("./src/controller/routes/user");
-
 const mongooseConnect = require("./src/index");
+const passportConfig = require("./src/passport");
+const { isLoggedIn, isNotLoggedIn } = require("./src/middleware/index");
+
 const app = express();
 mongooseConnect();
+passportConfig();
 
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
 app.use(morgan("dev"));
 // 바디 파서 역할
@@ -39,6 +41,9 @@ app.use(
 	}),
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(
 	cors({
 		origin: "http://localhost:3000",
@@ -48,6 +53,7 @@ app.use(
 );
 app.use("/", indexRouter);
 app.use("/admin", adminRouter);
+// app.use("/admin", isLoggedIn, adminRouter); // 로그인
 app.use("/users", userRouter);
 
 // 유저의 잘못된 URI 경로 요청에 대한 에러 응답

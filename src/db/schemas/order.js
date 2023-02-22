@@ -56,9 +56,10 @@ const orderSchema = new Schema(
 			required: true,
 		},
 		shipStatus: {
-			// 주문완료, 배송준비중, 배송중, 배송완료, 주문취소
+			// 주문 접수, 주문 완료, 배송 준비중, 배송중, 배송 완료, 주문 취소
 			type: String,
 			requird: true,
+			default: "주문 접수",
 		},
 		shipAdr: {
 			// 배송지
