@@ -35,8 +35,6 @@ router
 
 // 브랜드 관리
 // /brands
-// Balenciaga 63f250dda5cdc0fdb6f13e08
-// 봄 63f5e48e34313303639bb90f
 router.route("/brands").get(brandCtrl.getBrandList).post(brandCtrl.addBrand);
 router
 	.route("/brands/:brandName")

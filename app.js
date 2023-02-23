@@ -10,16 +10,17 @@ const dotenv = require("dotenv");
 const passport = require("passport");
 dotenv.config();
 
-const indexRouter = require("./src/controller/routes/");
+const indexRouter = require("./src/controller/routes/index");
 const adminRouter = require("./src/controller/routes/admin");
 const userRouter = require("./src/controller/routes/user");
+const authRouter = require("./src/controller/routes/auth");
 const mongooseConnect = require("./src/index");
 const passportConfig = require("./src/passport");
 const { isLoggedIn, isNotLoggedIn } = require("./src/middleware/index");
 
 const app = express();
 mongooseConnect();
-passportConfig();
+// passportConfig();
 
 // app.use(express.static(path.join(__dirname, "public")));
 
@@ -42,7 +43,7 @@ app.use(
 );
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.use(
 	cors({
@@ -53,8 +54,9 @@ app.use(
 );
 app.use("/", indexRouter);
 app.use("/admin", adminRouter);
-// app.use("/admin", isLoggedIn, adminRouter); // 로그인
+// app.use("/admin", isLoggedIn, adminRouter); // 어드민 로그인
 app.use("/users", userRouter);
+app.use("/auth", authRouter);
 
 // 유저의 잘못된 URI 경로 요청에 대한 에러 응답
 app.use((req, res, next) => {

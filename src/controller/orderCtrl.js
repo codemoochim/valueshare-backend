@@ -11,6 +11,17 @@ const addOrder = async (req, res, next) => {
 	}
 };
 
+const brandNewOrderInfo = async (req, res, next) => {
+	try {
+		const { _id } = req.params;
+		const orderDetail = await orderSrvc.findOrderDetail(_id);
+		res.json({ result: orderDetail });
+		res.json([orderDetail]);
+	} catch (err) {
+		next(err);
+	}
+};
+
 const getOrderList = async (req, res, next) => {
 	try {
 		const orderList = await orderSrvc.findOrderList();
@@ -91,6 +102,7 @@ const cancelOrderDetailForUser = async (req, res, next) => {
 };
 module.exports = {
 	addOrder,
+	brandNewOrderInfo,
 	getOrderList,
 	getOrderDetail,
 	editOrderDetail,

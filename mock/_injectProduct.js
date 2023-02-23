@@ -1,9 +1,9 @@
-const bag = require("./mock/bag");
-const bottom = require("./mock/bottom");
+// const bag = require("./mock/bag");
+// const bottom = require("./mock/bottom");
 const bottom2 = require("./mock/bottom2");
-const dress = require("./mock/dress");
-const outer = require("./mock/outer");
-const top = require("./mock/top");
+// const dress = require("./mock/dress");
+// const outer = require("./mock/outer");
+// const top = require("./mock/top");
 const twoPiece = require("./mock/twoPiece");
 
 const { Brand, Product, Category } = require("../src/db/model/index");
@@ -28,7 +28,7 @@ const setSrvc = async () => {
 			const result = Object.values(type).map((i) => {
 				return {
 					productBrand: i.brand_name,
-					productCategory: "Bag",
+					productCategory: "twoPiece",
 					productTitle: i.goods_name,
 					productImage: i.imgs,
 				};

@@ -4,7 +4,10 @@ const issueOrderNum = require("../utils/issueOrderNum");
 
 const createUser = async (body) => {
 	try {
+		console.log(2);
 		const email = body.email;
+		console.log(email);
+		console.log(3);
 		const brandNewOrederNum = issueOrderNum();
 		if (!email) {
 			throw new Error("이메일을 입력해주세요");

@@ -47,19 +47,18 @@ const orderSchema = new Schema(
 				productImage: {
 					// 이미지 링크,
 					type: Array,
-					default: ["이미지 정보가 없습니다"],
+					// default: ["이미지 정보가 없습니다"],
 				},
 			},
 		],
 		totalPrice: {
-			type: Number,
+			type: String,
 			required: true,
 		},
 		shipStatus: {
 			// 주문 접수, 주문 완료, 배송 준비중, 배송중, 배송 완료, 주문 취소
 			type: String,
 			requird: true,
-			default: "주문 접수",
 		},
 		shipAdr: {
 			// 배송지
@@ -102,4 +101,33 @@ module.exports = orderSchema;
 // 		],
 // 		"totalPrice": 80000,
 // 		"shipAdr":"서울시 묘동"
+// }
+
+// 주문 예시 2
+// {"email": "chulsoo@chulsoo.com",
+// 		"name": "김철수",
+// 		"phone": "010-0000-0000",
+// 		"products": [
+// 			{
+// 				"productName": "츄르1",
+// 				"productQuantity": 2,
+// 				"productPrice": 3000,
+// 				"productImage": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.costco.co.kr%2FBabyKidsToysPets%2FPet-Supplies%2FCat-Food%2FInaba-Ciao-Churu-Cat-Treats-Variety-Pack-14g-x-90%2Fp%2F652048&psig=AOvVaw01-NzIk5BMtDT4P36RzJqi&ust=1677203818427000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCODynKHFqv0CFQAAAAAdAAAAABAD", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.lotteon.com%2Fm%2Fproduct%2FPD85348%3FsitmNo%3DLD663414163_0%26dp_infw_cd%3DSSTLD476109&psig=AOvVaw01-NzIk5BMtDT4P36RzJqi&ust=1677203818427000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCODynKHFqv0CFQAAAAAdAAAAABAH"]
+// 			},
+//             {
+// 				"productName": "츄르 디럭스 에디션",
+// 				"productQuantity": 5,
+// 				"productPrice": 12000,
+// 				"productImage": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.hani.co.kr%2Farti%2FPRINT%2F890019.html&psig=AOvVaw01-NzIk5BMtDT4P36RzJqi&ust=1677203818427000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCODynKHFqv0CFQAAAAAdAAAAABAP"]
+// 			},
+//             {
+// 				"productName": "츄르 뷔페식",
+// 				"productQuantity": 2,
+// 				"productPrice": 7000,
+// 				"productImage": ["https://www.google.com/url?sa=i&url=https%3A%2F%2Fm.post.naver.com%2Fviewer%2FpostView.naver%3FvolumeNo%3D30309855%26memberNo%3D2247263&psig=AOvVaw01-NzIk5BMtDT4P36RzJqi&ust=1677203818427000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCODynKHFqv0CFQAAAAAdAAAAABAX", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbbosiraegi.kr%2Fproduct%2F%25EB%25BD%2580%25EC%258B%259C%25EB%259E%2598%25EA%25B8%25B0-%25EA%25B3%25A0%25EC%2596%2591%25EC%259D%25B4-%25EC%25A0%2580%25EC%2597%25BC-%25EA%25B0%2584%25EC%258B%259D-%25EC%25B4%2589%25EC%25B4%2589%25EC%25B8%2584%25EB%25A5%25B4-1%25ED%258C%25A9-5%25EA%25B0%259C%25EC%259E%2585%2F63%2F&psig=AOvVaw01-NzIk5BMtDT4P36RzJqi&ust=1677203818427000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCODynKHFqv0CFQAAAAAdAAAAABAf", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.animalplanet.co.kr%2Fcontents%2F%3FartNo%3D3125&psig=AOvVaw01-NzIk5BMtDT4P36RzJqi&ust=1677203818427000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCODynKHFqv0CFQAAAAAdAAAAABAn", "https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.gjdream.com%2Fnews%2FarticleView.html%3Fidxno%3D438433&psig=AOvVaw3hLlZE5IAlrOlcPzgwRUko&ust=1677203950666000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCJCq79_Fqv0CFQAAAAAdAAAAABAI"]
+// 			}
+// 		],
+// 		"totalPrice": 80000,
+// 		"shipAdr":"서울시 묘동",
+//         "shipNote": "배송 빨리줘잉~"
 // }

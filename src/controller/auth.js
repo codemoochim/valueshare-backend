@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const formCheck = require("../utils/formCheck");
 const { User } = require("../db/model/index");
+const passport = require("passport");
 
 const register = async (req, res, next) => {
 	try {
@@ -32,4 +33,34 @@ const register = async (req, res, next) => {
 	}
 };
 
-module.exports = { register };
+const login = async (req, res, next) => {
+	passport.authenticate(
+		"local",
+		{ session: false },
+		(authError, user, info) => {
+			if (authError) {
+				console.error(authError);
+				return next(authError);
+			}
+			if (!user) {
+				return next(`${info.message}`);
+			}
+			return req.login(user, (loginError) => {
+				if (loginError) {
+					console.error(loginError);
+					return next(loginError);
+				}
+				return res.redirect("/");
+			});
+		},
+	)(req, res, next);
+};
+// setUserToken(res, req.user);
+
+const logout = (req, res) => {
+	req.logout(() => {
+		res.redirect("/");
+	});
+};
+
+module.exports = { register, login, logout };

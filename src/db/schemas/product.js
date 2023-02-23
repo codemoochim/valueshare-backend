@@ -16,21 +16,11 @@ const productSchema = new Schema(
 			requried: true,
 			default: () => Math.round(Math.random().toFixed(2) * 200000),
 		},
-		// productCategory: {
-		// 	type: String,
-		// 	required: true,
-		// },
 		productCategory: {
-			// prdCategoryId 프론트가 쓰고 있어서.. 나중에 바꿈
 			type: Schema.Types.ObjectId,
 			ref: "Category",
 		},
-		// productBrand: {
-		// 	type: String,
-		// 	required: true,
-		// },
 		productBrand: {
-			// prodBrandId 이름변경 직관적
 			type: Schema.Types.ObjectId,
 			ref: "Brand",
 		},

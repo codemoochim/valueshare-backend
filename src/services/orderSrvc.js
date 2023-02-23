@@ -10,6 +10,7 @@ const createOrder = async (orderData, newUser) => {
 			ShipNote,
 			products,
 			totalPrice,
+			shipStatus,
 			cancelNote,
 		} = orderData;
 
@@ -44,9 +45,9 @@ const findOrderList = async () => {
 	}
 };
 
-const findOrderDetail = async (_id, body) => {
+const findOrderDetail = async (_id) => {
 	try {
-		const oneOrder = await Order.findOne({ _id });
+		const oneOrder = await Order.findById({ _id });
 		if (!oneOrder) {
 			throw new Error("해당하는 주문 정보가 없습니다.");
 		}
@@ -58,7 +59,7 @@ const findOrderDetail = async (_id, body) => {
 
 const findOrderDetailForUser = async (_id, body) => {
 	try {
-		const oneOrder = await Order.findOne({ _id });
+		const oneOrder = await Order.findById({ _id });
 		if (!oneOrder) {
 			throw new Error("해당하는 주문 정보가 없습니다.");
 		}
