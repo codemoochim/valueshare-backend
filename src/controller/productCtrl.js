@@ -47,10 +47,15 @@ const getProductByQuery = async (req, res, next) => {
 		// console.log(req.query);
 		const { categories } = req.query;
 		req.query.brand = req.query.brand.split(",");
-		// console.log("브랜드투투투투");
-		// console.log(req.query.brand);
-		// console.log("브랜드투투투투");
+		console.log("브랜드투투투투");
+		console.log(req.query.brand);
+		console.log("브랜드투투투투");
+
+		// console.log("갈가라가라가라");
+		// req.query.brand = [...new Set(req.query.brand)];
 		const { brand } = req.query;
+		// console.log(brand);
+		// console.log("갈가라가라가라");
 		const foundProdcut = await productSrvc.findProductListByQuery(
 			categories,
 			brand,
