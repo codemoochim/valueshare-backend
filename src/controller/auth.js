@@ -34,26 +34,16 @@ const register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-	passport.authenticate(
-		"local",
-		{ session: false },
-		(authError, user, info) => {
-			if (authError) {
-				console.error(authError);
-				return next(authError);
-			}
-			if (!user) {
-				return next(`${info.message}`);
-			}
-			return req.login(user, (loginError) => {
-				if (loginError) {
-					console.error(loginError);
-					return next(loginError);
-				}
-				return res.redirect("/");
-			});
-		},
-	)(req, res, next);
+	try {
+		const { email, pwd } = req.body;
+		const checkEmail = await User.findOne({ email });
+		if (!checkEmail) throw new Error("이메일이 일치하지 않습니다");
+		const checkPwd = bcrypt.compare(pwd, checkEmail.password);
+		if (!checkPwd) throw new Error("비밀번호를 확인해주세요");
+		next();
+	} catch (err) {
+		next(err);
+	}
 };
 // setUserToken(res, req.user);
 

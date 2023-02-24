@@ -21,5 +21,3 @@ module.expots = () => {
 	// });
 	// local();
 };
-
-// https://valueshare3.s3.ap-northeast-2.amazonaws.com/images/ed55651b-3bf6-4fc7-ac28-071e319c448a_scaled-800-%5B1612235046394%5Dba-00092_front.jpg

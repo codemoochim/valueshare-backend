@@ -19,6 +19,7 @@ const createUser = async (body) => {
 			email,
 			orderNumber: brandNewOrederNum,
 		});
+		console.log(40);
 		return createdUser;
 	} catch (err) {
 		throw new Error(err);

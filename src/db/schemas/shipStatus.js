@@ -1,0 +1,12 @@
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
+const shipStatusSchema = new Schema({
+	shipStatus: {
+		type: Schema.Types.ObjectId,
+		ref: "Order",
+		required: true,
+	},
+});
+
+module.exports = shipStatusSchema;

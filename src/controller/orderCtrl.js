@@ -1,9 +1,14 @@
 const orderSrvc = require("../services/orderSrvc");
 
+// 유저 주문 완료 버튼 - 유저 객체 생성 - 주문 생성
 const addOrder = async (req, res, next) => {
 	try {
+		console.log(req.body.products[0].productTitle);
+		console.log(req.body.products[0].productBrand);
+		console.log(req.body.products[0].productPrice);
 		const orderData = req.body;
 		const newUser = res.locals.user;
+		console.log(newUser);
 		const addedOrder = await orderSrvc.createOrder(orderData, newUser);
 		res.json({ result: addedOrder });
 	} catch (err) {
@@ -11,17 +16,18 @@ const addOrder = async (req, res, next) => {
 	}
 };
 
+// 유저 주문 완료 후 바로 주문 내역 응답
 const brandNewOrderInfo = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
 		const orderDetail = await orderSrvc.findOrderDetail(_id);
-		res.json({ result: orderDetail });
 		res.json([orderDetail]);
 	} catch (err) {
 		next(err);
 	}
 };
 
+// 어드민 주문 목록 조회
 const getOrderList = async (req, res, next) => {
 	try {
 		const orderList = await orderSrvc.findOrderList();
@@ -31,16 +37,19 @@ const getOrderList = async (req, res, next) => {
 	}
 };
 
+// 어드민 주문 상세 조회
 const getOrderDetail = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
-		const body = req.body;
-		const orderDetail = await orderSrvc.findOrderDetail(_id, body);
+		// const body = req.body;
+		const orderDetail = await orderSrvc.findOrderDetail(_id);
 		res.json({ result: orderDetail });
 	} catch (err) {
 		next(err);
 	}
 };
+
+// 비회원 주문내역 보기 조회
 const getOrderDetailForUser = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -52,6 +61,7 @@ const getOrderDetailForUser = async (req, res, next) => {
 	}
 };
 
+// 어드민 주문 내역 수정
 const editOrderDetail = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -66,6 +76,7 @@ const editOrderDetail = async (req, res, next) => {
 	}
 };
 
+// 비회원 주문 내역 수정
 const editOrderDetailForUser = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -80,6 +91,23 @@ const editOrderDetailForUser = async (req, res, next) => {
 	}
 };
 
+// 주문 후 즉시 주문 내역 수정 및 취소
+const editOrderRightASec = async (req, res, next) => {
+	try {
+		const { _id } = req.params;
+		const body = req.body;
+		if (body.shipStatus !== "주문 취소") {
+			const editOrderResult = await orderSrvc.editOrder(_id, body);
+			res.json({ result: editOrderResult });
+		}
+		const cancelOrderResult = await orderSrvc.cancelOrder(_id);
+		res.json({ result: cancelOrderResult });
+	} catch (err) {
+		next(err);
+	}
+};
+
+// 어드민 주문 취소
 const cancelOrderDetail = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -90,6 +118,8 @@ const cancelOrderDetail = async (req, res, next) => {
 		next(err);
 	}
 };
+
+// 비회원 주문 취소
 const cancelOrderDetailForUser = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -100,6 +130,7 @@ const cancelOrderDetailForUser = async (req, res, next) => {
 		next(err);
 	}
 };
+
 module.exports = {
 	addOrder,
 	brandNewOrderInfo,
@@ -110,4 +141,24 @@ module.exports = {
 	getOrderDetailForUser,
 	editOrderDetailForUser,
 	cancelOrderDetailForUser,
+	editOrderRightASec,
 };
+
+// router.get("/products", productCtrl.getProductByQuery);
+
+// 코치님
+// const findProduct = async ({brand, product} ) => {
+// 	const productList = await Product.find ({
+// 	}
+
+// 유저 카테고리, 브랜드 필터링
+// router.get("/products", async (req, res, next) => {
+// 	const { categories, brand } = req.query;
+// 	if (categories) {
+// 		await productCtrl.getProductByCategory(req, res, next);
+// 	} else if (brand) {
+// 		await productCtrl.getProductByBrand(req, res, next);
+// 	} else {
+// 		await productCtrl.getProductList(req, res, next);
+// 	}
+// });

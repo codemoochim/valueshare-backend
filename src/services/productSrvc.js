@@ -1,20 +1,9 @@
 const { Brand, Category, Product } = require("../db/model/index");
+const asideFilter = require("../utils/asideFilter");
 
+// 유저, 어드민 페이지 목록 조회
 const findProductList = async () => {
 	try {
-		// 무한 스크롤. 페이지네이션
-		// const page = Number(parameter.page || 1);
-		// const perPage = Number(parameter.perPage || 100);
-		// const [total, productList] = await Promise.all([
-		// 	Product.countDocuments({}),
-		// 	Product.find({})
-		// 		.populate("productBrand")
-		// 		.populate("productCategory")
-		// 		.skip(perPage*(page-1))
-		// 		.limit(perPage)
-		// ]);
-		// const totalPage = Math.ceil(total / perPage);
-
 		const productList = await Product.find({})
 			.populate("productBrand")
 			.populate("productCategory")
@@ -29,6 +18,93 @@ const findProductList = async () => {
 	}
 };
 
+const findProductListByQuery = async (categories, brand) => {
+	try {
+		if (categories === "all") {
+			if (brand !== "all") {
+				if (!Array.isArray(brand)) {
+					brand = [brand];
+				}
+				const brandId = await Promise.all(
+					brand.map(async (i) => {
+						const findProduct = await Brand.findOne({ brandName: i });
+						const id = findProduct._id;
+						return id;
+					}),
+				);
+				console.log(brandId); // {id, id}
+				const productResult = await Product.find({
+					productBrand: {
+						// $in: ["63f250dda5cdc0fdb6f13e1a", "63f250dda5cdc0fdb6f13e0e"],
+						$in: brandId,
+					},
+				})
+					.populate("productBrand")
+					.populate("productCategory")
+					.limit(100);
+				console.log("여기2 all/brand"); // 성공
+				return productResult;
+			}
+			const allProduct = await Product.find({})
+				.populate("productCategory")
+				.populate("productBrand")
+				.limit(100);
+			console.log("여기1 all/all"); // 성공
+			return allProduct;
+		}
+		// categories !== all
+		// console.log("카테고리스 입력");
+		// console.log(categories); // outer
+		// console.log("카테고리스 입력");
+		const categoryId = await Category.findOne({ categoryName: categories });
+		// console.log("카테고리아디");
+		// console.log(categoryId);
+		// console.log("카테고리아디");
+		const foundProduct = await Product.find({
+			productCategory: categoryId._id,
+		})
+			.populate("productCategory")
+			.populate("productBrand")
+			.limit(100);
+		// console.log("파운드프로덕트");
+		// console.log(foundProduct);
+		// console.log("파운드프로덕트");
+		if (brand !== "all") {
+			if (!Array.isArray(brand)) {
+				brand = [brand];
+			}
+			// console.log("브랜드 입력?");
+			// console.log(brand); //[ 'Dior' ]
+			// console.log("브랜드 입력?");
+			const brandId = await Promise.all(
+				brand.map(async (i) => {
+					const findProduct = await Brand.findOne({ brandName: i });
+					const id = findProduct._id;
+					return id;
+				}),
+			);
+			// console.log("브랜드아이디");
+			// console.log(brandId); //[ new ObjectId("63f250dda5cdc0fdb6f13e1a") ]
+			// console.log("브랜드아이디");
+			const productResult = await Product.find({
+				productBrand: { $in: brandId },
+				// productCategory: { $in: foundProduct },
+				productCategory: { $in: categoryId._id },
+			})
+				.populate("productBrand")
+				.populate("productCategory")
+				.limit(100);
+			console.log("여기3 cat/bran");
+			return productResult;
+		}
+		console.log("여기4 cat/all"); // 성공
+		return foundProduct;
+	} catch (err) {
+		throw new Error(err);
+	}
+};
+
+// 어드민 상품 목록 추가
 const createProduct = async (location, body) => {
 	try {
 		const {
@@ -91,6 +167,7 @@ const createProduct = async (location, body) => {
 	}
 };
 
+// 유저, 어드민 상품 상세 조회
 const findProduct = async (_id) => {
 	try {
 		const foundProduct = await Product.findById({ _id })
@@ -105,6 +182,7 @@ const findProduct = async (_id) => {
 	}
 };
 
+// 어드민 상품 상세 수정
 const updateProduct = async (_id, body, location) => {
 	try {
 		const {
@@ -177,6 +255,7 @@ const updateProduct = async (_id, body, location) => {
 	}
 };
 
+// 어드민 상품 삭제
 const deleteProduct = async (_id) => {
 	try {
 		const deletedProduct = await Product.findOneAndDelete({ _id });
@@ -190,10 +269,24 @@ const deleteProduct = async (_id) => {
 		throw new Error(err);
 	}
 };
+
 module.exports = {
 	findProductList,
 	createProduct,
 	findProduct,
 	updateProduct,
 	deleteProduct,
+	findProductListByQuery,
 };
+
+// 페이지 네이션
+// const page = Number(parameter.page || 1);
+// const perPage = Number(parameter.perPage || 100);
+// const [total, productList] = await Promise.all([
+// 	ProductList.countDocuments({}),
+// 	ProductList.find({})
+// 		.populate("productCategory")
+// 		.skip(perPage * (page - 1))
+// 		.limit(perPage),
+// ]);
+// const totalPage = Math.ceil(total / perPage);

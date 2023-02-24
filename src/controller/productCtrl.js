@@ -1,5 +1,8 @@
 const productSrvc = require("../services/productSrvc");
+const categorySrvc = require("../services/categorySrvc");
+const brandSrvc = require("../services/brandSrvc");
 
+// 유저, 어드민 페이지 목록 조회
 const getProductList = async (req, res, next) => {
 	try {
 		// 페이지네이션 기능 쿼리/파리미터 받아와야함
@@ -10,6 +13,7 @@ const getProductList = async (req, res, next) => {
 	}
 };
 
+// 어드민 상품 목록 추가
 const addProduct = async (req, res, next) => {
 	try {
 		const location = req.files;
@@ -21,6 +25,7 @@ const addProduct = async (req, res, next) => {
 	}
 };
 
+// 유저, 어드민 상품 상세 조회
 const getProduct = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -31,6 +36,21 @@ const getProduct = async (req, res, next) => {
 	}
 };
 
+// 유저 쿼리 필터링
+const getProductByQuery = async (req, res, next) => {
+	try {
+		const { categories, brand } = req.query;
+		const foundProdcut = await productSrvc.findProductListByQuery(
+			categories,
+			brand,
+		);
+		res.json({ result: foundProdcut });
+	} catch (err) {
+		next(err);
+	}
+};
+
+// 어드민 상품 상세 수정
 const editProduct = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -42,6 +62,8 @@ const editProduct = async (req, res, next) => {
 		next(err);
 	}
 };
+
+// 어드민 상품 삭제
 const removeProduct = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
@@ -58,4 +80,28 @@ module.exports = {
 	getProduct,
 	editProduct,
 	removeProduct,
+	// getProductByCategory,
+	// getProductByBrand,
+	getProductByQuery,
 };
+// // 유저 카테고리만 고려
+// const getProductByCategory = async (req, res, next) => {
+// 	try {
+// 		const { categories } = req.query;
+// 		const foundProduct = await categorySrvc.findProductByCategory(categories);
+// 		res.json({ result: foundProduct });
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// };
+
+// // 유저 브랜드만 고려
+// const getProductByBrand = async (req, res, next) => {
+// 	try {
+// 		const { brand } = req.query;
+// 		const brandList = await brandSrvc.findProductByBrand(brand);
+// 		res.json({ result: brandList });
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// };

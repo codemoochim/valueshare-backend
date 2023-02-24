@@ -9,16 +9,6 @@ const getBrandList = async (req, res, next) => {
 	}
 };
 
-const getProductByBrand = async (req, res, next) => {
-	try {
-		const { brand } = req.query;
-		const brandList = await brandSrvc.findProductByBrand(brand);
-		res.json({ result: brandList });
-	} catch (err) {
-		next(err);
-	}
-};
-
 const addBrand = async (req, res, next) => {
 	try {
 		const brandNewData = req.body;
@@ -51,7 +41,6 @@ const removeBrand = async (req, res, next) => {
 
 module.exports = {
 	getBrandList,
-	getProductByBrand,
 	addBrand,
 	editBrand,
 	removeBrand,
