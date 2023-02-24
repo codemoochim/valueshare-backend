@@ -39,7 +39,18 @@ const getProduct = async (req, res, next) => {
 // 유저 쿼리 필터링
 const getProductByQuery = async (req, res, next) => {
 	try {
-		const { categories, brand } = req.query;
+		console.log("리퀘스트 쿼리");
+		// console.log(req);
+		console.log(req.query);
+		//{ categories: 'all', brand: 'Gucci,Chanel' }
+		console.log("리퀘스트 쿼리");
+		// console.log(req.query);
+		const { categories } = req.query;
+		req.query.brand = req.query.brand.split(",");
+		// console.log("브랜드투투투투");
+		// console.log(req.query.brand);
+		// console.log("브랜드투투투투");
+		const { brand } = req.query;
 		const foundProdcut = await productSrvc.findProductListByQuery(
 			categories,
 			brand,

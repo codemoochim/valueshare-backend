@@ -5,9 +5,14 @@ const categoryCtrl = require("../categoryCtrl");
 const brandCtrl = require("../brandCtrl");
 const userCtrl = require("../userCtrl");
 const orderCtrl = require("../orderCtrl");
-const { register } = require("../auth");
+const { register, login } = require("../auth");
 
 /* 메인페이지 */
+// router.get("/:products", (req, res) => {
+// 	// console.log(req);
+// 	// res.send("dd");
+// });
+
 router.get("/", (req, res, next) => {
 	res.send("main page rendering complete");
 });
@@ -28,4 +33,5 @@ router.patch("/myorder/:_id", orderCtrl.editOrderRightASec);
 // 회원가입
 router.post("/register", register);
 
+router.post("/login", login);
 module.exports = router;

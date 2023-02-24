@@ -40,7 +40,6 @@ const login = async (req, res, next) => {
 		if (!checkEmail) throw new Error("이메일이 일치하지 않습니다");
 		const checkPwd = bcrypt.compare(pwd, checkEmail.password);
 		if (!checkPwd) throw new Error("비밀번호를 확인해주세요");
-		next();
 	} catch (err) {
 		next(err);
 	}

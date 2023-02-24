@@ -29,7 +29,7 @@ const createOrder = async (orderData, newUser) => {
 		console.log(products);
 		console.log("찍어보자");
 		console.log("2개를 담았습니다.");
-		console.log(brandObjToStatic);
+		// console.log(brandObjToStatic);
 		// [
 		// 	{
 		// 		_id: '63f250dda5cdc0fdb6f13e09',
@@ -97,7 +97,7 @@ const findOrderDetail = async (_id) => {
 		console.log(oneOrder.products[0].productTitle);
 		console.log("프로덕트");
 		console.log(oneOrder.products[0]);
-		const brandProdArr = oneOrder.products[0].console.log("구분선선선선선");
+		// const brandProdArr = oneOrder.products[0].console.log("구분선선선선선");
 		console.log(oneOrder.products.map((i) => i.productBrand));
 		console.log("구분선선선선선");
 

@@ -20,11 +20,15 @@ const findProductList = async () => {
 
 const findProductListByQuery = async (categories, brand) => {
 	try {
+		// category는 문자열, 브랜드는 배열
 		if (categories === "all") {
-			if (brand !== "all") {
+			if (brand[0] !== "all") {
 				if (!Array.isArray(brand)) {
 					brand = [brand];
 				}
+				console.log("브랜드");
+				console.log(brand);
+				console.log("브랜드");
 				const brandId = await Promise.all(
 					brand.map(async (i) => {
 						const findProduct = await Brand.findOne({ brandName: i });
@@ -32,7 +36,9 @@ const findProductListByQuery = async (categories, brand) => {
 						return id;
 					}),
 				);
+				console.log("브랜드아디"); // {id, id}
 				console.log(brandId); // {id, id}
+				console.log("브랜드아디"); // {id, id}
 				const productResult = await Product.find({
 					productBrand: {
 						// $in: ["63f250dda5cdc0fdb6f13e1a", "63f250dda5cdc0fdb6f13e0e"],
@@ -69,7 +75,7 @@ const findProductListByQuery = async (categories, brand) => {
 		// console.log("파운드프로덕트");
 		// console.log(foundProduct);
 		// console.log("파운드프로덕트");
-		if (brand !== "all") {
+		if (brand[0] !== "all") {
 			if (!Array.isArray(brand)) {
 				brand = [brand];
 			}
