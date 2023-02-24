@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const formCheck = require("../utils/formCheck");
 const { User } = require("../db/model/index");
-const passport = require("passport");
 
 const register = async (req, res, next) => {
 	try {

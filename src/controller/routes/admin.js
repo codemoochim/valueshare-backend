@@ -8,9 +8,9 @@ const brandCtrl = require("../brandCtrl");
 const orderCtrl = require("../orderCtrl");
 
 // /admin
-// 관리자 페이지
+// 어드민 페이지
 
-// 상품 관리
+// 어드민 상품 관리
 // admin/products
 router
 	.route("/products")
@@ -22,7 +22,7 @@ router
 	.patch(imageUploadS3.array("productImage", 5), productCtrl.editProduct)
 	.delete(productCtrl.removeProduct);
 
-// 카테고리 관리
+// 어드민 카테고리 관리
 // admin/categories
 router
 	.route("/categories")
@@ -33,15 +33,15 @@ router
 	.patch(categoryCtrl.editCategory)
 	.delete(categoryCtrl.removeCategory);
 
-// 브랜드 관리
-// /brands
+// 어드민 브랜드 관리
+// admin/brands
 router.route("/brands").get(brandCtrl.getBrandList).post(brandCtrl.addBrand);
 router
 	.route("/brands/:brandName")
 	.patch(brandCtrl.editBrand)
 	.delete(brandCtrl.removeBrand);
 
-// 주문 관리
+// 어드민 주문 관리
 // /orders
 router.get("/orders", orderCtrl.getOrderList);
 router

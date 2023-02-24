@@ -36,7 +36,7 @@ const productSchema = new Schema(
 		productDetail: {
 			type: String,
 			default: "",
-			required: true,
+			// required: true,
 		},
 	},
 	{

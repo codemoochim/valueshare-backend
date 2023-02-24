@@ -1,13 +1,10 @@
 const createError = require("http-errors");
 const express = require("express");
-const path = require("path");
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const session = require("express-session");
 const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const passport = require("passport");
 dotenv.config();
 
 const indexRouter = require("./src/controller/routes/index");
@@ -15,14 +12,10 @@ const adminRouter = require("./src/controller/routes/admin");
 const userRouter = require("./src/controller/routes/user");
 const authRouter = require("./src/controller/routes/auth");
 const mongooseConnect = require("./src/index");
-const passportConfig = require("./src/passport");
-const { isLoggedIn, isNotLoggedIn } = require("./src/middleware/index");
 
 const app = express();
 mongooseConnect();
 // passportConfig();
-
-// app.use(express.static(path.join(__dirname, "public")));
 
 app.use(morgan("dev"));
 // 바디 파서 역할
@@ -42,9 +35,6 @@ app.use(
 	}),
 );
 
-app.use(passport.initialize());
-// app.use(passport.session());
-
 app.use(
 	cors({
 		origin: "http://localhost:3000",
@@ -54,22 +44,18 @@ app.use(
 );
 app.use("/", indexRouter);
 app.use("/admin", adminRouter);
-// app.use("/admin", isLoggedIn, adminRouter); // 어드민 로그인
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 
-// 유저의 잘못된 URI 경로 요청에 대한 에러 응답
 app.use((req, res, next) => {
 	next(createError(404));
 });
 
 // 오류처리 미들웨어
 app.use((err, req, res, next) => {
-	// 개발 단계에서만 에러를 화면에 보여줌
 	res.locals.message = err.message;
 	res.locals.error = req.app.get("env") === "development" ? err : {};
 
-	// 배포 후 에러 발생 시, 에러 페이지를 렌더링 해줍니다. 파일 및 폴더구조 노출 방지 목적
 	res.status(err.status || 500);
 	res.send(err.message);
 });

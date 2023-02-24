@@ -1,4 +1,4 @@
-const { Order, ShipStatus } = require("../db/model/index");
+const { Order } = require("../db/model/index");
 
 // 유저 주문 내역 생성
 const createOrder = async (orderData, newUser) => {
@@ -8,53 +8,23 @@ const createOrder = async (orderData, newUser) => {
 			name,
 			phone,
 			shipAdr,
-			ShipNote,
+			shipNote,
 			products,
 			totalPrice,
 			shipStatus,
 			cancelNote,
 		} = orderData;
 
-		// const brandObjToStatic = orderData.products.map((i) => {
-		// 	// return i.productBrand;
-		// 	return i.productBrand;
-		// 	// const brandName = await Brand.findById({ _id: i.productBrand });
-		// });
-
 		products.forEach((i) => {
 			i.productBrand = i.productBrand.brandName;
 		});
-
-		console.log("찍어보자");
-		console.log(products);
-		console.log("찍어보자");
-		console.log("2개를 담았습니다.");
-		// console.log(brandObjToStatic);
-		// [
-		// 	{
-		// 		_id: '63f250dda5cdc0fdb6f13e09',
-		// 		brandName: 'Prada',
-		// 		shortId: '6OGmxmGUva7tF-9tf2s1W',
-		// 		__v: 0
-		// 	},
-		// 	{
-		// 		_id: '63f250dda5cdc0fdb6f13e0d',
-		// 		brandName: 'Chloe',
-		// 		shortId: 'Ye7AONwFfCEKkkY0JEAeC',
-		// 		__v: 0
-		// 	}
-		// ]
-		console.log("2개를 담았습니다.");
-		console.log("오다데이터");
-		console.log(orderData);
-		console.log("오다데이터");
 
 		const newOrder = await Order.create({
 			email,
 			name,
 			phone,
 			shipAdr,
-			ShipNote,
+			shipNote,
 			shipStatus,
 			products,
 			totalPrice,
@@ -62,17 +32,7 @@ const createOrder = async (orderData, newUser) => {
 			userId: newUser,
 			orderNumber: newUser.orderNumber,
 		});
-		console.log("뉴데이타");
-		console.log(newOrder);
-		console.log("뉴데이타");
 
-		const shipSt = await ShipStatus.create({
-			shipStatus: newOrder._id,
-		});
-
-		console.log("어떻게 들어가는가?");
-		console.log(newOrder);
-		console.log("어떻게 들어가는가?");
 		return newOrder;
 	} catch (err) {
 		throw new Error(err);
@@ -87,19 +47,12 @@ const findOrderDetail = async (_id) => {
 		if (!oneOrder) {
 			throw new Error("해당하는 주문 정보가 없습니다.");
 		}
-		// oneOrder.products
-
-		console.log("원오더");
-		console.log(oneOrder);
-		console.log("원오더");
-
-		console.log("프로덕트");
-		console.log(oneOrder.products[0].productTitle);
-		console.log("프로덕트");
-		console.log(oneOrder.products[0]);
-		// const brandProdArr = oneOrder.products[0].console.log("구분선선선선선");
-		console.log(oneOrder.products.map((i) => i.productBrand));
-		console.log("구분선선선선선");
+		const imageArr = oneOrder.products
+			.map((i) => i.productImage)
+			.flat(Infinity);
+		// 주문 상품 이미지
+		// 같이 응답해야함
+		// console.log(imageArr);
 
 		return oneOrder;
 	} catch (err) {
@@ -217,7 +170,7 @@ const updateOrderDetailForUser = async (_id, newOrderDetail) => {
 };
 
 // 주문 후 즉시 주문 내역 수정
-const editOrder = async (body, _id) => {
+const editOrder = async (_id, body) => {
 	try {
 		const { email, name, phone, shipAdr, shipNote } = body;
 		const targetOrder = await Order.findOneAndUpdate(
@@ -247,6 +200,7 @@ const cancelOrder = async (_id) => {
 			},
 			{ new: true },
 		);
+		console.log(targetOrder);
 		return targetOrder;
 	} catch (err) {
 		throw new Error("주문을 수정할 수 없습니다");

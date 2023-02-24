@@ -2,10 +2,9 @@ const productSrvc = require("../services/productSrvc");
 const categorySrvc = require("../services/categorySrvc");
 const brandSrvc = require("../services/brandSrvc");
 
-// 유저, 어드민 페이지 목록 조회
+// 유저, 어드민 페이지 상품 목록 조회
 const getProductList = async (req, res, next) => {
 	try {
-		// 페이지네이션 기능 쿼리/파리미터 받아와야함
 		const productList = await productSrvc.findProductList();
 		res.json({ result: productList });
 	} catch (err) {
@@ -13,11 +12,12 @@ const getProductList = async (req, res, next) => {
 	}
 };
 
-// 어드민 상품 목록 추가
+// 어드민 상품 추가
 const addProduct = async (req, res, next) => {
 	try {
 		const location = req.files;
 		const body = req.body;
+		console.log(location);
 		const addedProduct = await productSrvc.createProduct(location, body);
 		res.json({ data: addedProduct }); // 나중에 result 로 바꿀 수 있는지 물어보기
 	} catch (err) {
@@ -96,28 +96,5 @@ module.exports = {
 	getProduct,
 	editProduct,
 	removeProduct,
-	// getProductByCategory,
-	// getProductByBrand,
 	getProductByQuery,
 };
-// // 유저 카테고리만 고려
-// const getProductByCategory = async (req, res, next) => {
-// 	try {
-// 		const { categories } = req.query;
-// 		const foundProduct = await categorySrvc.findProductByCategory(categories);
-// 		res.json({ result: foundProduct });
-// 	} catch (err) {
-// 		next(err);
-// 	}
-// };
-
-// // 유저 브랜드만 고려
-// const getProductByBrand = async (req, res, next) => {
-// 	try {
-// 		const { brand } = req.query;
-// 		const brandList = await brandSrvc.findProductByBrand(brand);
-// 		res.json({ result: brandList });
-// 	} catch (err) {
-// 		next(err);
-// 	}
-// };

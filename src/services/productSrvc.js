@@ -1,7 +1,6 @@
 const { Brand, Category, Product } = require("../db/model/index");
-const asideFilter = require("../utils/asideFilter");
 
-// 유저, 어드민 페이지 목록 조회
+// 유저, 어드민 페이지 상품 목록 조회
 const findProductList = async () => {
 	try {
 		const productList = await Product.find({})
@@ -110,7 +109,7 @@ const findProductListByQuery = async (categories, brand) => {
 	}
 };
 
-// 어드민 상품 목록 추가
+// 어드민 상품 추가
 const createProduct = async (location, body) => {
 	try {
 		const {
@@ -120,15 +119,13 @@ const createProduct = async (location, body) => {
 			productCategory,
 			productBrand,
 			productDescription,
-			productDetail,
 		} = body;
 		if (
 			!productTitle ||
 			!productPrice ||
 			!productCategory ||
 			!productBrand ||
-			!productDescription ||
-			!productDetail
+			!productDescription
 		) {
 			throw new Error("필수 입력 정보를 확인하세요");
 		}
@@ -165,7 +162,6 @@ const createProduct = async (location, body) => {
 			productBrand: isBrandExist,
 			productImage: imgUrlArray,
 			productDescription,
-			productDetail,
 		});
 		return createdProduct;
 	} catch (err) {
@@ -198,15 +194,13 @@ const updateProduct = async (_id, body, location) => {
 			productCategory,
 			productBrand,
 			productDescription,
-			productDetail,
 		} = body;
 		if (
 			!productTitle ||
 			!productPrice ||
 			!productCategory ||
 			!productBrand ||
-			!productDescription ||
-			!productDetail
+			!productDescription
 		) {
 			throw new Error("필수 입력 정보를 확인하세요");
 		}
@@ -244,7 +238,6 @@ const updateProduct = async (_id, body, location) => {
 				productCategory: isCategoryExist,
 				productBrand: isBrandExist,
 				productDescription,
-				productDetail,
 				productImage: beUpdatedNewImage,
 			},
 			{ new: true },
@@ -269,8 +262,6 @@ const deleteProduct = async (_id) => {
 			throw new Error("상품 삭제에 오류가 있습니다.");
 		}
 		return deletedProduct;
-		// 삭제 요청한 상품에 대해서 데이터를 남겨둘 필요성을 말해봐라
-		// deleted 로 메시지를 남겨두고 로그를 살릴것인가?
 	} catch (err) {
 		throw new Error(err);
 	}
