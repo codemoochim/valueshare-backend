@@ -3,7 +3,6 @@ const router = express.Router();
 const productCtrl = require("../productCtrl");
 const userCtrl = require("../userCtrl");
 const orderCtrl = require("../orderCtrl");
-const { register, login } = require("../auth");
 
 /* 메인페이지 */
 router.get("/", (req, res, next) => {

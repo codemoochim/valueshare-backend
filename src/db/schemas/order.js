@@ -32,12 +32,9 @@ const orderSchema = new Schema(
 				productTitle: {
 					// 상품명 스냅샷
 					type: String,
-					// requried: true,
 				},
 				productBrand: {
 					// 상품명 스냅샷
-					// type: Schema.Types.ObjectId,
-					// ref: "Brand",
 					type: String,
 					requried: true,
 				},
@@ -80,34 +77,6 @@ const orderSchema = new Schema(
 );
 
 module.exports = orderSchema;
-
-// 주문 예시
-// {"email": "happy@happy.com",
-// 		"name": "해피데이",
-// 		"phone": "010-3232-5252",
-// 		"products": [
-// 			{
-// 				"productTitle": "츄르1",
-// 				"productQuantity": 2,
-// 				"productPrice": 3000,
-// 				"productImage": ["고양이밥"]
-// 			},
-//             {
-// 				"productTitle": "츄르 디럭스 에디션",
-// 				"productQuantity": 5,
-// 				"productPrice": 12000,
-// 				"productImage": ["고양이간식"]
-// 			},
-//             {
-// 				"productTitle": "츄르 뷔페식",
-// 				"productQuantity": 2,
-// 				"productPrice": 7000,
-// 				"productImage": ["고양이사료"]
-// 			}
-// 		],
-// 		"totalPrice": 80000,
-// 		"shipAdr":"서울시 묘동"
-// }
 
 // 주문 예시 2
 // {"email": "chulsoo@chulsoo.com",

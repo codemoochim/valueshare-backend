@@ -7,9 +7,9 @@ const orderCtrl = require("../orderCtrl");
 
 // 유저 비회원 주문관리
 router
-	.route("/orders/:_id")
-	.get(orderCtrl.getOrderDetailForUser)
+	.route("/orders/:orderNumber")
+	.post(orderCtrl.getOrderDetailForUser)
 	.patch(orderCtrl.editOrderDetailForUser)
-	.post(orderCtrl.cancelOrderDetailForUser);
+	.put(orderCtrl.cancelOrderDetailForUser);
 
 module.exports = router;
