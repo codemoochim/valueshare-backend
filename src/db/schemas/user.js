@@ -1,33 +1,26 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const shortId = require("../shortId.js");
+const { v4: uuid } = require("uuid");
 const userSchema = new Schema(
 	{
-		shortId,
 		email: {
 			type: String,
 			requried: true,
+			index: true,
 		},
 		password: {
-			type: String,
-			requried: true,
-		},
-		token: {
-			type: String,
-		},
-		shippingAddress: {
 			type: String,
 		},
 		name: {
 			type: String,
 		},
 		phone: {
-			type: Number,
-		},
-		birthday: {
 			type: String,
 		},
-		gender: {
+		address: {
+			type: String,
+		},
+		orderNumber: {
 			type: String,
 		},
 	},
@@ -37,3 +30,4 @@ const userSchema = new Schema(
 );
 
 module.exports = userSchema;
+// 회원의 주문 검색 시 오더로 쿼리. 비회원은 이메일로 쿼리

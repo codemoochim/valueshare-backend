@@ -1,11 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const productForUserController = require("../productForUserController");
+const orderCtrl = require("../orderCtrl");
 
-// /user
-// 사용자 페이지
+// /users
+// 사용자 입장
 
-// 상품 정보 수정
-router.get("/product", productForUserController);
+// 유저 비회원 주문관리
+router
+	.route("/orders/:_id")
+	.get(orderCtrl.getOrderDetailForUser)
+	.patch(orderCtrl.editOrderDetailForUser)
+	.post(orderCtrl.cancelOrderDetailForUser);
 
 module.exports = router;

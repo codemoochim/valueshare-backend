@@ -1,6 +1,6 @@
 const brandSrvc = require("../services/brandSrvc");
 
-const getBrand = async (req, res, next) => {
+const getBrandList = async (req, res, next) => {
 	try {
 		const brandList = await brandSrvc.findBrandList();
 		res.json({ result: brandList });
@@ -21,9 +21,9 @@ const addBrand = async (req, res, next) => {
 
 const editBrand = async (req, res, next) => {
 	try {
-		const { shortId } = req.params;
+		const { brandName } = req.params;
 		const brandNewData = req.body;
-		const editedBrand = await brandSrvc.updateBrand(shortId, brandNewData);
+		const editedBrand = await brandSrvc.updateBrand(brandName, brandNewData);
 		res.json({ result: editedBrand });
 	} catch (err) {
 		next(err);
@@ -31,16 +31,16 @@ const editBrand = async (req, res, next) => {
 };
 const removeBrand = async (req, res, next) => {
 	try {
-		const { shortId } = req.params;
-		await brandSrvc.deleteBrand(shortId);
-		res.json({ message: "delete completed" });
+		const { brandName } = req.params;
+		await brandSrvc.deleteBrand(brandName);
+		res.json({ message: "브랜드 삭제가 완료되었습니다." });
 	} catch (err) {
 		next(err);
 	}
 };
 
 module.exports = {
-	getBrand,
+	getBrandList,
 	addBrand,
 	editBrand,
 	removeBrand,

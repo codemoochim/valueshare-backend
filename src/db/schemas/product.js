@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const shortId = require("../shortId.js");
 const productSchema = new Schema(
 	{
-		shortId,
 		productTitle: {
 			type: String,
 			required: true,
@@ -11,11 +9,12 @@ const productSchema = new Schema(
 		productStock: {
 			type: Number,
 			requried: true,
-			default: 0,
+			default: 10,
 		},
 		productPrice: {
 			type: Number,
 			requried: true,
+			default: () => Math.round(Math.random().toFixed(2) * 200000),
 		},
 		productCategory: {
 			type: Schema.Types.ObjectId,
@@ -32,6 +31,12 @@ const productSchema = new Schema(
 		productDescription: {
 			type: String,
 			default: "",
+			required: true,
+		},
+		productDetail: {
+			type: String,
+			default: "",
+			// required: true,
 		},
 	},
 	{

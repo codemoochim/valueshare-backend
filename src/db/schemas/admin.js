@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const shortId = require("../shortId.js");
 const adminSchema = new Schema(
 	{
-		shortId,
-		name: {
+		email: {
 			type: String,
 			required: true,
 		},

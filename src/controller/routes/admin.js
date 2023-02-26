@@ -5,48 +5,49 @@ const imageUploadS3 = require("../../middleware/imageUploadS3");
 const productCtrl = require("../productCtrl");
 const categoryCtrl = require("../categoryCtrl");
 const brandCtrl = require("../brandCtrl");
-const orderManageCtrl = require("../orderManageCtrl");
+const orderCtrl = require("../orderCtrl");
 
 // /admin
-// 관리자 페이지
+// 어드민 페이지
 
-// 상품 관리
+// 어드민 상품 관리
 // admin/products
 router
 	.route("/products")
 	.get(productCtrl.getProductList)
-	.post(imageUploadS3.array("imageFile"), productCtrl.addProduct);
+	.post(imageUploadS3.array("productImage", 5), productCtrl.addProduct);
 router
-	.route("/products/:shortId")
+	.route("/products/:_id")
 	.get(productCtrl.getProduct)
-	.post(productCtrl.editProduct)
+	.patch(imageUploadS3.array("productImage", 5), productCtrl.editProduct)
 	.delete(productCtrl.removeProduct);
 
-// 카테고리 관리
-// /admin/categories
+// 어드민 카테고리 관리
+// admin/categories
 router
 	.route("/categories")
 	.get(categoryCtrl.getCategoryList)
 	.post(categoryCtrl.addCategory);
 router
-	.route("/categories/:shortId")
-	.post(categoryCtrl.editCategory)
+	.route("/categories/:categoryName")
+	.patch(categoryCtrl.editCategory)
 	.delete(categoryCtrl.removeCategory);
 
-// 브랜드 관리
-// /brands
-router.route("/brands").get(brandCtrl.getBrand).post(brandCtrl.addBrand);
+// 어드민 브랜드 관리
+// admin/brands
+router.route("/brands").get(brandCtrl.getBrandList).post(brandCtrl.addBrand);
 router
-	.route("/brands/:shortId")
-	.post(brandCtrl.editBrand)
+	.route("/brands/:brandName")
+	.patch(brandCtrl.editBrand)
 	.delete(brandCtrl.removeBrand);
 
-// 주문 관리
+// 어드민 주문 관리
 // /orders
-router.get("/orders", orderManageCtrl.getOrderList);
+router.get("/orders", orderCtrl.getOrderList);
 router
-	.route("/orders/:shortId")
-	.get(orderManageCtrl.getOrderDetail)
-	.post(orderManageCtrl.editOrderDetail)
-	.delete(orderManageCtrl.removeOrderDetail);
+	.route("/orders/:_id")
+	.get(orderCtrl.getOrderDetail)
+	.patch(orderCtrl.editOrderDetail)
+	.post(orderCtrl.cancelOrderDetail);
+
 module.exports = router;

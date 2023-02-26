@@ -4,7 +4,7 @@ const multerS3 = require("multer-s3");
 const { v4: uuid } = require("uuid");
 const dotenv = require("dotenv");
 dotenv.config();
-// aws s3 account setting
+// aws s3 account
 const s3 = new S3Client({
 	credentials: {
 		accessKeyId: process.env.S3_ACCESS_KEY,
@@ -23,7 +23,7 @@ const storage = multerS3({
 	// contentType: multerS3.AUTO_CONTENT_TYPE,
 	// ContentEncoding: "base64", // required
 });
-// upload function
+// imgUpload
 const imageUploadS3 = multer({
 	storage,
 	limits: { fileSize: 5 * 1024 * 1024 },
