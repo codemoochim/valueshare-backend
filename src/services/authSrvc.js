@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const formCheck = require("../utils/formCheck");
-const { User } = require("../db/model/index");
+const jwtMdw = require("../middleware/jwtMdw");
+const { Admin, User } = require("../db/model/index");
 
 const registerUser = async (userInfo) => {
 	try {
@@ -34,6 +35,17 @@ const registerUser = async (userInfo) => {
 const loginUser = async (userInfo) => {
 	try {
 		const { email, password } = userInfo;
+		const isAdmin = await Admin.findOne({ email });
+		if (isAdmin) {
+			const checkAdminPwd = await bcrypt.compare(password, isAdmin.password);
+			if (!checkAdminPwd) {
+				throw new Error("비밀번호를 확인해주세요");
+			}
+
+			const accessToken = jwtMdw.generateToken(isAdmin._id, "1h", true);
+			return accessToken;
+		}
+
 		const targetUser = await User.findOne({ email });
 
 		if (!targetUser) {
@@ -43,7 +55,10 @@ const loginUser = async (userInfo) => {
 		if (!checkPwd) {
 			throw new Error("비밀번호를 확인해주세요");
 		}
-		return targetUser;
+
+		const accessToken = jwtMdw.generateToken(targetUser._id, "1h", false);
+
+		return accessToken;
 	} catch (err) {
 		throw new Error(err);
 	}

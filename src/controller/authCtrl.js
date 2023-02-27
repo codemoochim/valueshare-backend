@@ -28,11 +28,11 @@ const login = async (req, res, next) => {
 	try {
 		const userInfo = req.body;
 		const user = await authSrvc.loginUser(userInfo);
-		const accessToken = jwtMdw.generateToken(user.email, "1h");
+		// const accessToken = jwtMdw.generateToken(user.email, "1h");
 
 		// 쿠키
-		res.cookie("accessToken", accessToken, jwtMdw.cookieOpt);
-		res.json({ accessToken });
+		// res.cookie("accessToken", accessToken, jwtMdw.cookieOpt);
+		res.json({ user });
 	} catch (err) {
 		next(err);
 	}

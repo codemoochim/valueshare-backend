@@ -63,13 +63,23 @@ const cancelOrderDetail = async (req, res, next) => {
 const addOrder = async (req, res, next) => {
 	try {
 		const orderData = req.body;
-		const newUser = res.locals.user;
-		const addedOrder = await orderSrvc.createOrder(orderData, newUser);
+		const addedOrder = await orderSrvc.createOrder(orderData);
 		res.json({ result: addedOrder });
 	} catch (err) {
 		next(err);
 	}
 };
+// const addOrder = async (req, res, next) => {
+// 	try {
+// 		const orderData = req.body;
+// 		const newUser = res.locals.user;
+// 		const newUser = res.locals.user;
+// 		const addedOrder = await orderSrvc.createOrder(orderData, newUser);
+// 		res.json({ result: addedOrder });
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// };
 
 // 유저 주문 완료 후 바로 주문 내역 응답
 const brandNewOrderInfo = async (req, res, next) => {
@@ -87,7 +97,8 @@ const editOrderRightASec = async (req, res, next) => {
 	try {
 		const { _id } = req.params;
 		const body = req.body;
-		if (body.cancelNote) {
+		if (body.cancelNote || body.cancelNote === "") {
+			// if (body.cancelNote) {
 			const cancelOrderResult = await orderSrvc.cancelOrder(_id, body);
 			res.json({ result: cancelOrderResult });
 		} else {
