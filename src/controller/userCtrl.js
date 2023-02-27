@@ -2,8 +2,7 @@ const userSrvc = require("../services/userSrvc");
 
 const getMypage = async (req, res, next) => {
 	try {
-		const { userId } = req.query;
-
+		const { userId } = req.params;
 		const userInfo = await userSrvc.findUserInfo(userId);
 		res.json(userInfo);
 	} catch (err) {
@@ -11,11 +10,22 @@ const getMypage = async (req, res, next) => {
 	}
 };
 
-const editUserInfo = async (req, res, next) => {
+const editUserEmail = async (req, res, next) => {
 	try {
-		const { userId } = req.query;
+		const { userId } = req.params;
 		const body = req.body;
-		const newUserInfo = await userSrvc.updateUserInfo(userId, body);
+		const newUserInfo = await userSrvc.updateUserEmail(userId, body);
+		res.json(newUserInfo);
+	} catch (err) {
+		next(err);
+	}
+};
+
+const editUserAddress = async (req, res, next) => {
+	try {
+		const { userId } = req.params;
+		const body = req.body;
+		const newUserInfo = await userSrvc.updateUserAddress(userId, body);
 		res.json(newUserInfo);
 	} catch (err) {
 		next(err);
@@ -24,7 +34,8 @@ const editUserInfo = async (req, res, next) => {
 
 module.exports = {
 	getMypage,
-	editUserInfo,
+	editUserEmail,
+	editUserAddress,
 };
 
 //안쓰는 함수 orderCtrl 에서 대체

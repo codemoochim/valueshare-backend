@@ -14,7 +14,8 @@ router
 	.put(orderCtrl.cancelOrderDetailForUser);
 
 // 회원 마이페이지
-router.get("/mypage", userCtrl.getMypage);
-router.post("/mypage", userCtrl.editUserInfo);
+router.get("/mypage/:userId", userCtrl.getMypage);
+router.post("/mypage/:userId/email", userCtrl.editUserEmail);
+router.post("/mypage/:userId/address", userCtrl.editUserAddress);
 
 module.exports = router;
