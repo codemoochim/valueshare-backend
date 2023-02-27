@@ -6,7 +6,11 @@ const orderCtrl = require("../orderCtrl");
 
 /* 메인페이지 */
 router.get("/", (req, res, next) => {
-	res.send("main page rendering complete");
+	res.send(
+		`hello world 헬로우 1팀 
+		shout out to 정선민 
+		shout out to 김여진`,
+	);
 });
 
 // 유저 상품 목록 조회

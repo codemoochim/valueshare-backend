@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"start": "nodemon ./bin/www",
+		"start:dev": "pm2 --name express start npm -- run start",
 		"format": "prettier --check --ignore-path .gitignore .",
 		"format:fix": "prettier --write --ignore-path .gitignore ."
 	},

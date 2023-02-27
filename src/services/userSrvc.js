@@ -1,5 +1,5 @@
 const { Brand, Category, Product, User, Order } = require("../db/model/index");
-const formCheck = require("../utils/formCheck");
+const { emailFormCheck } = require("../utils/formCheck");
 
 const findUserInfo = async (userId) => {
 	try {
@@ -17,18 +17,16 @@ const findUserInfo = async (userId) => {
 const updateUserEmail = async (userId, body) => {
 	try {
 		const userInfo = await User.findById({ _id: userId });
-		const userEmail = body?.email;
-		if (userEmail) {
-			if (!formCheck(userEmail)) {
-				throw new Error("올바른 이메일을 입력해주세요");
-			}
-			userInfo.email = userEmail;
-			await userInfo.save();
+		const email = body?.email;
+		if (!emailFormCheck(email)) {
+			throw new Error("올바른 이메일을 입력해주세요");
 		}
+		userInfo.email = email;
 
+		await userInfo.save();
 		return userInfo;
 	} catch (err) {
-		throw new Error("회원 정보를 찾을 수 없습니다.");
+		throw new Error(err + "회원 정보를 찾을 수 없습니다.");
 	}
 };
 
@@ -37,14 +35,14 @@ const updateUserAddress = async (userId, body) => {
 		const userInfo = await User.findById({ _id: userId });
 
 		const userAdr = body?.address;
-		if (userAdr) {
-			userInfo.address = userAdr;
-			await userInfo.save();
+		if (!userAdr) {
+			throw new Error("주소를 입력하세요");
 		}
-
+		userInfo.address = userAdr;
+		await userInfo.save();
 		return userInfo;
 	} catch (err) {
-		throw new Error("회원 정보를 찾을 수 없습니다.");
+		throw new Error(err + "회원 정보를 찾을 수 없습니다.");
 	}
 };
 
