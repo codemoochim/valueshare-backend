@@ -39,23 +39,9 @@ const getProduct = async (req, res, next) => {
 // 유저 쿼리 필터링
 const getProductByQuery = async (req, res, next) => {
 	try {
-		console.log("리퀘스트 쿼리");
-		// console.log(req);
-		console.log(req.query);
-		//{ categories: 'all', brand: 'Gucci,Chanel' }
-		console.log("리퀘스트 쿼리");
-		// console.log(req.query);
 		const { categories } = req.query;
 		req.query.brand = req.query.brand.split(",");
-		console.log("브랜드투투투투");
-		console.log(req.query.brand);
-		console.log("브랜드투투투투");
-
-		// console.log("갈가라가라가라");
-		// req.query.brand = [...new Set(req.query.brand)];
 		const { brand } = req.query;
-		// console.log(brand);
-		// console.log("갈가라가라가라");
 		const foundProdcut = await productSrvc.findProductListByQuery(
 			categories,
 			brand,

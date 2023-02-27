@@ -1,20 +1,18 @@
 const express = require("express");
-
-const { isLoggedIn, isNotLoggedIn } = require("../../middleware/checkLogin");
-const { register, login, logout } = require("../auth");
-
 const router = express.Router();
+const authCtrl = require("../authCtrl");
+const { jwt: generateToken } = require("../../middleware/jwtMdw");
 
 // /auth/register
 // 회원가입
-router.post("/register", isNotLoggedIn, register);
+router.post("/register", authCtrl.register);
 
 // /auth/login
 // 로그인
-router.post("/login", isNotLoggedIn, login);
+router.post("/login", authCtrl.login);
 
 // /auth/logout
 // 로그아웃
-router.get("/logout", isLoggedIn, logout);
+router.get("/logout", authCtrl.logout);
 
 module.exports = router;

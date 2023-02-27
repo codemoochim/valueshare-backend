@@ -1,7 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const session = require("express-session");
 const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -15,25 +14,12 @@ const mongooseConnect = require("./src/index");
 
 const app = express();
 mongooseConnect();
-// passportConfig();
 
 app.use(morgan("dev"));
 // 바디 파서 역할
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SECRET_COOKIE));
-app.use(
-	session({
-		resave: false,
-		saveUninitialized: false,
-		secret: process.env.SECRET_SESSION,
-		cookie: {
-			httpOnly: true,
-			secure: false,
-		},
-		name: "session-cookie",
-	}),
-);
 
 app.use(
 	cors({

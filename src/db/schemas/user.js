@@ -21,7 +21,7 @@ const userSchema = new Schema(
 			type: String,
 		},
 		orderNumber: {
-			type: String,
+			type: [String],
 		},
 	},
 	{
