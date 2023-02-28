@@ -26,7 +26,17 @@ const editUserAddress = async (req, res, next) => {
 		const { userId } = req.params;
 		const body = req.body;
 		const newUserInfo = await userSrvc.updateUserAddress(userId, body);
-		res.json(newUserInfo);
+		res.json({ newUserInfo });
+	} catch (err) {
+		next(err);
+	}
+};
+
+const closeAccount = async (req, res, next) => {
+	try {
+		const { userId } = req.params;
+		const result = await userSrvc.deleteAccount(userId);
+		res.json({ result });
 	} catch (err) {
 		next(err);
 	}
@@ -36,6 +46,7 @@ module.exports = {
 	getMypage,
 	editUserEmail,
 	editUserAddress,
+	closeAccount,
 };
 
 //안쓰는 함수 orderCtrl 에서 대체

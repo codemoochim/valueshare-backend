@@ -5,11 +5,17 @@ const { Admin, User } = require("../db/model/index");
 
 const registerUser = async (userInfo) => {
 	try {
-		const { email, password, name, phone, address } = userInfo;
+		const { email, password, name, phone, shipAdr } = userInfo;
+
+		const isRemoved = await User.findOne({ email });
+		console.log(isRemoved);
+		if (isRemoved?.password === "탈퇴한회원") {
+			throw new Error("탈퇴한 이메일로 가입할 수 없습니다.");
+		}
 		if (!formCheck.emailFormCheck(email)) {
 			throw new Error("올바른 이메일을 입력해주세요");
 		}
-		if (password.length < 4) {
+		if (password?.length < 4) {
 			throw new Error("비밀번호는 4자리 이상입니다");
 		}
 		const [isExist, hash] = await Promise.all([
@@ -24,7 +30,7 @@ const registerUser = async (userInfo) => {
 			password: hash,
 			name,
 			phone,
-			address,
+			shipAdr,
 		});
 		return user;
 	} catch (err) {

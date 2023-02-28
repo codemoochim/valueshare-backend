@@ -69,17 +69,6 @@ const addOrder = async (req, res, next) => {
 		next(err);
 	}
 };
-// const addOrder = async (req, res, next) => {
-// 	try {
-// 		const orderData = req.body;
-// 		const newUser = res.locals.user;
-// 		const newUser = res.locals.user;
-// 		const addedOrder = await orderSrvc.createOrder(orderData, newUser);
-// 		res.json({ result: addedOrder });
-// 	} catch (err) {
-// 		next(err);
-// 	}
-// };
 
 // 유저 주문 완료 후 바로 주문 내역 응답
 const brandNewOrderInfo = async (req, res, next) => {

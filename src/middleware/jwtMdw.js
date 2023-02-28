@@ -18,6 +18,7 @@ const generateToken = (user, time, auth) => {
 		expiresIn: time,
 		issuer: "valueshare",
 		audience: `${auth}`,
+		// audience: auth,
 	});
 	return token;
 };

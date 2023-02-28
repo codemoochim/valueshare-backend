@@ -125,16 +125,19 @@ const createProduct = async (location, body) => {
 		// if (!imgUrlArray) {
 		// 	throw new Error("상품의 이미지를 등록해주세요");
 		// }
+		// 브랜드 확인
 		const isBrandExist = await Brand.findOne({ brandName: body?.productBrand });
 		if (!isBrandExist) {
 			throw new Error("해당 브랜드를 먼저 등록해주세요");
 		}
+		// 카테고리 확인
 		const isCategoryExist = await Category.findOne({
 			categoryName: body?.productCategory,
 		});
 		if (!isCategoryExist) {
 			throw new Error("해당 카테고리를 먼저 등록해주세요");
 		}
+		// 상품명 중복 확인
 		const isProductExist = await Product.findOne({
 			productTitle: body?.productTitle,
 		});
@@ -178,7 +181,10 @@ const updateProduct = async (_id, body, location) => {
 		// 사진을 안올리면 body에 productImage '' location x 가 없어서 초기화됨
 		// 사진을 올리면 body에 productImage x 필드 없음 lotcation o 필드가 없고 location 이 있음
 		const updatedProduct = await Product.findById({ _id });
+		console.log(11);
 		console.log(body);
+		console.log(11);
+
 		const retainImage = updatedProduct.productImage;
 		if (location) {
 			const beUpdatedNewImage = location.map((img) => img.location);

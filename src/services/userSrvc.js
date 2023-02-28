@@ -1,16 +1,16 @@
 const { Brand, Category, Product, User, Order } = require("../db/model/index");
-const { emailFormCheck } = require("../utils/formCheck");
+// const { emailFormCheck } = require("../utils/formCheck");
 
 const findUserInfo = async (userId) => {
 	try {
 		const userInfo = await User.findById({ _id: userId });
 		if (!userInfo) {
-			return new Error("회원 정보가 없습니다");
+			throw new Error("회원 정보가 없습니다");
 		}
 		const userOrderHistory = await Order.find({ userId: userInfo });
 		return [userInfo, userOrderHistory];
 	} catch (err) {
-		throw new Error("회원 정보를 찾을 수 없습니다.");
+		throw new Error(err);
 	}
 };
 
@@ -18,31 +18,43 @@ const updateUserEmail = async (userId, body) => {
 	try {
 		const userInfo = await User.findById({ _id: userId });
 		const email = body?.email;
-		if (!emailFormCheck(email)) {
-			throw new Error("올바른 이메일을 입력해주세요");
-		}
+		// if (!emailFormCheck(email)) {
+		// 	throw new Error("올바른 이메일을 입력해주세요");
+		// }
 		userInfo.email = email;
 
 		await userInfo.save();
 		return userInfo;
 	} catch (err) {
-		throw new Error(err + "회원 정보를 찾을 수 없습니다.");
+		throw new Error(err);
 	}
 };
 
 const updateUserAddress = async (userId, body) => {
 	try {
 		const userInfo = await User.findById({ _id: userId });
-
-		const userAdr = body?.address;
-		if (!userAdr) {
+		const { shipAdr, shipNote, name } = body;
+		if (!shipAdr) {
 			throw new Error("주소를 입력하세요");
 		}
-		userInfo.address = userAdr;
+		userInfo.shipAdr = shipAdr;
+		userInfo.shipNote = shipNote;
+		userInfo.name = name;
 		await userInfo.save();
 		return userInfo;
 	} catch (err) {
-		throw new Error(err + "회원 정보를 찾을 수 없습니다.");
+		throw new Error(err);
+	}
+};
+
+const deleteAccount = async (userId) => {
+	try {
+		const userInfo = await User.findById({ _id: userId });
+		userInfo.password = "탈퇴한회원";
+		await userInfo.save();
+		return userInfo;
+	} catch (err) {
+		throw new Error(err);
 	}
 };
 
@@ -50,6 +62,7 @@ module.exports = {
 	findUserInfo,
 	updateUserEmail,
 	updateUserAddress,
+	deleteAccount,
 };
 
 // 비회원이 주문했을 떄 이메일로 유저정보를 생성하는데 디비검사를 안해서,

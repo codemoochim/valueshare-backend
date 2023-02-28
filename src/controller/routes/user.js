@@ -17,5 +17,6 @@ router
 router.get("/mypage/:userId", userCtrl.getMypage);
 router.post("/mypage/:userId/email", userCtrl.editUserEmail);
 router.post("/mypage/:userId/address", userCtrl.editUserAddress);
+router.put("/mypage/:userId", userCtrl.closeAccount);
 
 module.exports = router;

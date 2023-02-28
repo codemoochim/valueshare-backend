@@ -17,9 +17,8 @@ const addProduct = async (req, res, next) => {
 	try {
 		const location = req.files;
 		const body = req.body;
-		console.log(location);
 		const addedProduct = await productSrvc.createProduct(location, body);
-		res.json({ data: addedProduct }); // 나중에 result 로 바꿀 수 있는지 물어보기
+		res.json({ data: addedProduct });
 	} catch (err) {
 		next(err);
 	}
