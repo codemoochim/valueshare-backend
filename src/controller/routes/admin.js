@@ -6,12 +6,9 @@ const productCtrl = require("../productCtrl");
 const categoryCtrl = require("../categoryCtrl");
 const brandCtrl = require("../brandCtrl");
 const orderCtrl = require("../orderCtrl");
-const initSettingCtrl = require("../../../mock/initSettingCtrl");
 
 // /admin
 // 어드민 페이지
-
-router.post("/add", initSettingCtrl.setCtrl);
 
 // 어드민 상품 관리
 // admin/products
