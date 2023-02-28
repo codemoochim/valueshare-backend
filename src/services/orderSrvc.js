@@ -149,9 +149,6 @@ const createOrder = async (orderData) => {
 			});
 			return newOrder;
 		} else {
-			if (emailDBCheck.password === "탈퇴한회원") {
-				throw new Error("탈퇴한 이메일을 이용할 수 없습니다.");
-			}
 			const newOrder = await Order.create({
 				email,
 				name,

@@ -3,11 +3,12 @@ const { Brand, Category, Product, User, Order } = require("../db/model/index");
 
 const findUserInfo = async (userId) => {
 	try {
-		const userInfo = await User.findById({ _id: userId });
+		const userInfo = await User.findById({ _id: userId }, { password: 0 });
 		if (!userInfo) {
 			throw new Error("회원 정보가 없습니다");
 		}
 		const userOrderHistory = await Order.find({ userId: userInfo });
+
 		return [userInfo, userOrderHistory];
 	} catch (err) {
 		throw new Error(err);
@@ -16,7 +17,7 @@ const findUserInfo = async (userId) => {
 
 const updateUserEmail = async (userId, body) => {
 	try {
-		const userInfo = await User.findById({ _id: userId });
+		const userInfo = await User.findById({ _id: userId }, { password: 0 });
 		const email = body?.email;
 		// if (!emailFormCheck(email)) {
 		// 	throw new Error("올바른 이메일을 입력해주세요");
@@ -24,6 +25,7 @@ const updateUserEmail = async (userId, body) => {
 		userInfo.email = email;
 
 		await userInfo.save();
+
 		return userInfo;
 	} catch (err) {
 		throw new Error(err);
@@ -32,7 +34,7 @@ const updateUserEmail = async (userId, body) => {
 
 const updateUserAddress = async (userId, body) => {
 	try {
-		const userInfo = await User.findById({ _id: userId });
+		const userInfo = await User.findById({ _id: userId }, { password: 0 });
 		const { shipAdr, shipNote, name } = body;
 		if (!shipAdr) {
 			throw new Error("주소를 입력하세요");
@@ -40,7 +42,9 @@ const updateUserAddress = async (userId, body) => {
 		userInfo.shipAdr = shipAdr;
 		userInfo.shipNote = shipNote;
 		userInfo.name = name;
+
 		await userInfo.save();
+
 		return userInfo;
 	} catch (err) {
 		throw new Error(err);
@@ -49,10 +53,11 @@ const updateUserAddress = async (userId, body) => {
 
 const deleteAccount = async (userId) => {
 	try {
-		const userInfo = await User.findById({ _id: userId });
-		userInfo.password = "탈퇴한회원";
-		await userInfo.save();
-		return userInfo;
+		const userInfo = await User.findByIdAndDelete({ _id: userId });
+		if (!userInfo) {
+			throw new Error("탈퇴가 정상적으로 이루어지지 않았습니다.");
+		}
+		return "탈퇴처리 되었습니다.";
 	} catch (err) {
 		throw new Error(err);
 	}

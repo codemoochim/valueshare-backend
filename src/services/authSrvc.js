@@ -1,17 +1,12 @@
 const bcrypt = require("bcrypt");
 const formCheck = require("../utils/formCheck");
+const noPwd = require("../utils/noPwd");
 const jwtMdw = require("../middleware/jwtMdw");
 const { Admin, User } = require("../db/model/index");
 
 const registerUser = async (userInfo) => {
 	try {
-		const { email, password, name, phone, shipAdr } = userInfo;
-
-		const isRemoved = await User.findOne({ email });
-		console.log(isRemoved);
-		if (isRemoved?.password === "탈퇴한회원") {
-			throw new Error("탈퇴한 이메일로 가입할 수 없습니다.");
-		}
+		const { email, password, name, phoneNumber, shipAdr } = userInfo;
 		if (!formCheck.emailFormCheck(email)) {
 			throw new Error("올바른 이메일을 입력해주세요");
 		}
@@ -25,14 +20,15 @@ const registerUser = async (userInfo) => {
 		if (isExist) {
 			throw new Error("동일한 이메일이 존재합니다");
 		}
-		const user = await User.create({
+		await User.create({
 			email,
 			password: hash,
 			name,
-			phone,
+			phoneNumber,
 			shipAdr,
 		});
-		return user;
+
+		return "회원가입이 완료되었습니다";
 	} catch (err) {
 		throw new Error(err);
 	}

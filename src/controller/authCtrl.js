@@ -10,7 +10,7 @@ const jwtMdw = require("../middleware/jwtMdw");
 const register = async (req, res, next) => {
 	try {
 		const userInfo = req.body;
-		const user = await authSrvc.registerUser(userInfo);
+		await authSrvc.registerUser(userInfo);
 		// const accessToken = jwtMdw.generateToken(user.email, "1h");
 		// res.cookie("accessToken", accessToken, jwtMdw.cookieOpt);
 		res.json({ message: "회원가입이 완료 되었습니다" });
