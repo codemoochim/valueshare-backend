@@ -22,7 +22,7 @@ const orderSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		phone: {
+		phoneNumber: {
 			// 주문자, 선물하기 연락처 다를 가능성
 			type: String,
 			required: true,
