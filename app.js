@@ -29,6 +29,7 @@ app.use(
 		// optionsSuccessStatus: 200,
 	}),
 );
+
 app.use("/api", indexRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/users", userRouter);

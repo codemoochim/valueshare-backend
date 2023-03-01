@@ -24,7 +24,12 @@ const generateToken = (user, time, auth) => {
 };
 
 const verifyAccessToken = (req, res, next) => {
+	console.log(req.header("Authorization"));
 	const authHeader = req.headers.authorization;
+
+	console.log(121212121212);
+	console.log(authHeader);
+	console.log(121212121212);
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
 		return res.status(401).json({ message: "AccessToken 이 없습니다." });

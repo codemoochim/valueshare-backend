@@ -15,10 +15,8 @@ const handleUser = async (req, res, next) => {
 
 const getMypage = async (req, res, next) => {
 	try {
-		console.log(req.header("Authorization"));
 		const { userId } = req.params;
 		const userInfo = await userSrvc.findUserInfo(userId);
-		console.log(userId);
 		res.json(userInfo);
 	} catch (err) {
 		next(err);

@@ -33,18 +33,18 @@ const findProductList = async () => {
 // 페이지 네이션
 // const page = Number(parameter.page || 1);
 
-// const perPage = Number(parameter.perPage || 100);
+// const perPage = Number(parameter.perPage || 20);
 
 // const [total, productList] = await Promise.all([
 // 	ProductList.countDocuments({}),
 // 	ProductList.find({})
 // 		.populate("productCategory")
 // 		.skip(perPage * (page - 1))
-// 		.limit(20Page),
+// 		.limit(20),
 // ]);
 // const totalPage = Math.ceil(total / perPage);
 
-const findProductListByQuery = async (categories, brand) => {
+const findProductListByQuery = async (categories, brand, page, perPage) => {
 	try {
 		// category는 문자열, 브랜드는 배열
 		if (categories === "all") {
@@ -52,9 +52,9 @@ const findProductListByQuery = async (categories, brand) => {
 				if (!Array.isArray(brand)) {
 					brand = [brand];
 				}
-				console.log("브랜드");
-				console.log(brand);
-				console.log("브랜드");
+				// console.log("브랜드");
+				// console.log(brand);
+				// console.log("브랜드");
 				const brandId = await Promise.all(
 					brand.map(async (i) => {
 						const findProduct = await Brand.findOne({ brandName: i });
@@ -62,9 +62,9 @@ const findProductListByQuery = async (categories, brand) => {
 						return id;
 					}),
 				);
-				console.log("브랜드아디"); // {id, id}
-				console.log(brandId); // {id, id}
-				console.log("브랜드아디"); // {id, id}
+				// console.log("브랜드아디"); // {id, id}
+				// console.log(brandId); // {id, id}
+				// console.log("브랜드아디"); // {id, id}
 				const productResult = await Product.find({
 					productBrand: {
 						$in: brandId,
@@ -72,13 +72,16 @@ const findProductListByQuery = async (categories, brand) => {
 				})
 					.populate("productBrand")
 					.populate("productCategory")
+					.skip(perPage * (page - 1))
 					.limit(20);
+
 				console.log("여기2 all/brand"); // 성공
 				return productResult;
 			}
 			const allProduct = await Product.find({})
 				.populate("productCategory")
 				.populate("productBrand")
+				.skip(perPage * (page - 1))
 				.limit(20);
 			console.log("여기1 all/all"); // 성공
 			return allProduct;
@@ -96,6 +99,7 @@ const findProductListByQuery = async (categories, brand) => {
 		})
 			.populate("productCategory")
 			.populate("productBrand")
+			.skip(perPage * (page - 1))
 			.limit(20);
 		// console.log("파운드프로덕트");
 		// console.log(foundProduct);
@@ -124,6 +128,7 @@ const findProductListByQuery = async (categories, brand) => {
 			})
 				.populate("productBrand")
 				.populate("productCategory")
+				.skip(perPage * (page - 1))
 				.limit(20);
 			console.log("여기3 cat/bran");
 			return productResult;
