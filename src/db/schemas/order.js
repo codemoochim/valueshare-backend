@@ -25,7 +25,7 @@ const orderSchema = new Schema(
 		phoneNumber: {
 			// 주문자, 선물하기 연락처 다를 가능성
 			type: String,
-			required: true,
+			// required: true,
 		},
 		products: [
 			{

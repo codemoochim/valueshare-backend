@@ -3,23 +3,23 @@ const mongoose = require("mongoose");
 const { Brand, Category, Product } = require("../db/model/index");
 
 // 어드민 상품 목록 조회
-const findProductList = async (page, perPage) => {
+const findProductList = async () => {
 	try {
-		const [total, productList] = await Promise.all([
-			Product.countDocuments({}),
-			Product.find({})
-				.populate("productBrand")
-				.populate("productCategory")
-				.skip(perPage * (page - 1))
-				.limit(20),
-		]);
-		const totalPage = Math.ceil(total / perPage);
+		// const [total, productList] = await Promise.all([
+		// 	Product.countDocuments({}),
+		// 	Product.find({})
+		// 		.populate("productBrand")
+		// 		.populate("productCategory")
+		// 		.skip(perPage * (page - 1))
+		// 		.limit(20),
+		// ]);
+		// const totalPage = Math.ceil(total / perPage);
 
-		// const productList = await Product.find({})
-		// 	.populate("productBrand")
-		// 	.populate("productCategory")
-		// 	.limit(20)
-		// 	.sort({ createdAt: -1 });
+		const productList = await Product.find({})
+			.populate("productBrand")
+			.populate("productCategory")
+			.limit(20)
+			.sort({ createdAt: -1 });
 
 		if (!productList) {
 			throw new Error("상품의 목록을 불러올 수 없습니다.");

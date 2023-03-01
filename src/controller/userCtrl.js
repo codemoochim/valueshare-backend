@@ -3,7 +3,7 @@ const userSrvc = require("../services/userSrvc");
 // 회원 ? 정보 수정 : 정보 생성
 const handleUser = async (req, res, next) => {
 	try {
-		const { userId } = req.params;
+		const userId = req.params.userId;
 		console.log(userId);
 		const userInfo = req.body;
 		const result = await userSrvc.handleUserInfo(userId, userInfo);

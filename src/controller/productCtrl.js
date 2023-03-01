@@ -5,9 +5,10 @@ const brandSrvc = require("../services/brandSrvc");
 // 어드민 상품 목록 조회
 const getProductList = async (req, res, next) => {
 	try {
-		const page = Number(req.query.page || 1);
-		const perPage = Number(req.query.perPage || 10);
-		const productList = await productSrvc.findProductList(page, perPage);
+		const productList = await productSrvc.findProductList();
+		// const page = Number(req.query.page || 1);
+		// const perPage = Number(req.query.perPage || 10);
+		// const productList = await productSrvc.findProductList(page, perPage);
 		res.json({ result: productList });
 	} catch (err) {
 		next(err);
