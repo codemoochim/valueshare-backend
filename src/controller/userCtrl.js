@@ -14,13 +14,14 @@ const handleUser = async (req, res, next) => {
 
 const getMypage = async (req, res, next) => {
 	try {
-		// console.log(1111111111);
-		// console.log(req.headers);
-		// console.log(1111111111);
-		// console.log(req.config);
-		// console.log(1111111111);
-		// console.log(req.headers.config);
-		// console.log(1111111111);
+		console.log(req);
+		console.log(1111111111);
+		console.log(req.header);
+		console.log(2222222222);
+		console.log(await req.header("Authorization"));
+		console.log(3333333333);
+		console.log(req.headers.config);
+		console.log(4444444444);
 		const { userId } = req.params;
 		const userInfo = await userSrvc.findUserInfo(userId);
 		console.log(userId);
