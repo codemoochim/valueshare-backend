@@ -20,7 +20,7 @@ router.get("/products", productCtrl.getProductByQuery);
 
 // 회원 ? 정보 수정 : 정보 생성
 // 장바구니 내 배송지 수정 시 유저 정보 생성 혹은 수정
-router.post("/userInfo", userCtrl.handleUser);
+// router.post("/userInfo", userCtrl.handleUser);
 
 /**
  * name

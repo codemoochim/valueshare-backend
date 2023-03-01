@@ -42,7 +42,7 @@ const updateOrderDetail = async (_id, newOrderDetail) => {
 			orderNumber,
 			email,
 			name,
-			phone,
+			phoneNumber,
 			shipStatus,
 			shipAdr,
 			shipNote,
@@ -54,7 +54,7 @@ const updateOrderDetail = async (_id, newOrderDetail) => {
 				orderNumber,
 				email,
 				name,
-				phone,
+				phoneNumber,
 				shipStatus,
 				shipAdr,
 				shipNote,
@@ -105,7 +105,7 @@ const createOrder = async (orderData) => {
 		const {
 			email,
 			name,
-			phone,
+			phoneNumber,
 			shipAdr,
 			shipNote,
 			products,
@@ -118,18 +118,18 @@ const createOrder = async (orderData) => {
 			i.productQuantity = i.quantity;
 		});
 
-		if (!email || !name || !phone || !shipAdr || !shipNote) {
-			throw new Error("필수입력 정보를 확인하세요");
+		if (!email) {
+			throw new Error("주문 결제페이지: 배송지에 이메일을 입력해주세요 ");
 		}
 
 		if (!fromCheck.emailFormCheck(email)) {
-			throw new Error("이메일의 형식을 확인하세요");
+			throw new Error("입력하신 이메일의 형식을 확인하세요");
 		}
 
 		const emailDBCheck = await User.findOne({ email });
 		const brandNewOrederNum = issueOrderNum();
+		// 비회원 신규주문 회원생성
 		if (!emailDBCheck) {
-			// 신규주문 회원생성
 			const newUser = await User.create({
 				email,
 				orderNumber: brandNewOrederNum,
@@ -137,7 +137,7 @@ const createOrder = async (orderData) => {
 			const newOrder = await Order.create({
 				email,
 				name,
-				phone,
+				phoneNumber,
 				shipAdr,
 				shipNote,
 				shipStatus,
@@ -152,7 +152,7 @@ const createOrder = async (orderData) => {
 			const newOrder = await Order.create({
 				email,
 				name,
-				phone,
+				phoneNumber,
 				shipAdr,
 				shipNote,
 				shipStatus,
@@ -165,7 +165,14 @@ const createOrder = async (orderData) => {
 
 			const newOrderNumber = newOrder.orderNumber;
 			emailDBCheck.orderNumber = [...emailDBCheck.orderNumber, newOrderNumber];
+			emailDBCheck.email = email;
+			emailDBCheck.phoneNumber = phoneNumber;
+			emailDBCheck.name = name;
+			emailDBCheck.shipAdr = shipAdr;
+			emailDBCheck.shipNote = shipNote;
+
 			await emailDBCheck.save();
+			console.log("유저의 회원정보 수정");
 			return newOrder;
 		}
 	} catch (err) {
@@ -176,7 +183,7 @@ const createOrder = async (orderData) => {
 // 주문 후 즉시 주문 내역 수정
 const editOrder = async (_id, body) => {
 	try {
-		const { email, name, phone, shipAdr, shipNote } = body;
+		const { email, name, phoneNumber, shipAdr, shipNote } = body;
 		if (!email) {
 			throw new Error("");
 		}
@@ -185,7 +192,7 @@ const editOrder = async (_id, body) => {
 			{
 				email,
 				name,
-				phone,
+				phoneNumber,
 				shipAdr,
 				shipNote,
 			},
@@ -249,7 +256,7 @@ const findOrderDetailForUser = async (orderNumber, email) => {
 // 비회원 검증 후 주문 수정
 const updateOrderDetailForUser = async (orderNumber, editOrderInfo) => {
 	try {
-		const { email, name, phone, shipAdr, shipNote } = editOrderInfo;
+		const { email, name, phoneNumber, shipAdr, shipNote } = editOrderInfo;
 		const noDash = orderNumber.replace(/-/g, "");
 		const yesDash =
 			noDash.slice(0, 4) +
@@ -273,7 +280,7 @@ const updateOrderDetailForUser = async (orderNumber, editOrderInfo) => {
 			{
 				email,
 				name,
-				phone,
+				phoneNumber,
 				shipAdr,
 				shipNote,
 			},

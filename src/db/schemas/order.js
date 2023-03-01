@@ -81,7 +81,7 @@ module.exports = orderSchema;
 // 주문 예시 2
 // {"email": "chulsoo@chulsoo.com",
 // 		"name": "김철수",
-// 		"phone": "010-0000-0000",
+// 		"phoneNumber": "010-0000-0000",
 // 		"products": [
 // 			{
 // 				"productTitle": "츄르1",
