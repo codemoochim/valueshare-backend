@@ -23,8 +23,7 @@ app.use(cookieParser(process.env.SECRET_COOKIE));
 
 app.use(
 	cors({
-		// origin: "*",
-		origin: "http://localhost",
+		origin: "*",
 		credentials: true,
 		// optionsSuccessStatus: 200,
 	}),
