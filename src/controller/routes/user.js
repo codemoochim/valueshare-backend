@@ -23,6 +23,8 @@ const bcrypt = require("bcrypt");
 // 	}
 // });
 
+router.post("/:userId/userInfo", userCtrl.handleUser);
+
 // 유저 비회원 주문관리
 router
 	.route("/orders/:orderNumber")
