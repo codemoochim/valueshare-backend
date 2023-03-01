@@ -2,10 +2,12 @@ const productSrvc = require("../services/productSrvc");
 const categorySrvc = require("../services/categorySrvc");
 const brandSrvc = require("../services/brandSrvc");
 
-// 유저, 어드민 페이지 상품 목록 조회
+// 어드민 상품 목록 조회
 const getProductList = async (req, res, next) => {
 	try {
-		const productList = await productSrvc.findProductList();
+		const page = Number(req.query.page || 1);
+		const perPage = Number(req.query.perPage || 10);
+		const productList = await productSrvc.findProductList(page, perPage);
 		res.json({ result: productList });
 	} catch (err) {
 		next(err);

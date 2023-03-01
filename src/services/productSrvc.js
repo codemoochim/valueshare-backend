@@ -1,16 +1,25 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 
 const { Brand, Category, Product } = require("../db/model/index");
 
-// 유저, 어드민 페이지 상품 목록 조회
-const findProductList = async () => {
+// 어드민 상품 목록 조회
+const findProductList = async (page, perPage) => {
 	try {
-		const productList = await Product.find({})
-			.populate("productBrand")
-			.populate("productCategory")
-			.limit(20)
-			.sort({ createdAt: -1 });
+		const [total, productList] = await Promise.all([
+			Product.countDocuments({}),
+			Product.find({})
+				.populate("productBrand")
+				.populate("productCategory")
+				.skip(perPage * (page - 1))
+				.limit(20),
+		]);
+		const totalPage = Math.ceil(total / perPage);
+
+		// const productList = await Product.find({})
+		// 	.populate("productBrand")
+		// 	.populate("productCategory")
+		// 	.limit(20)
+		// 	.sort({ createdAt: -1 });
 
 		if (!productList) {
 			throw new Error("상품의 목록을 불러올 수 없습니다.");
@@ -20,6 +29,20 @@ const findProductList = async () => {
 		throw new Error(err);
 	}
 };
+
+// 페이지 네이션
+// const page = Number(parameter.page || 1);
+
+// const perPage = Number(parameter.perPage || 100);
+
+// const [total, productList] = await Promise.all([
+// 	ProductList.countDocuments({}),
+// 	ProductList.find({})
+// 		.populate("productCategory")
+// 		.skip(perPage * (page - 1))
+// 		.limit(20Page),
+// ]);
+// const totalPage = Math.ceil(total / perPage);
 
 const findProductListByQuery = async (categories, brand) => {
 	try {
@@ -255,15 +278,3 @@ module.exports = {
 	deleteProduct,
 	findProductListByQuery,
 };
-
-// 페이지 네이션
-// const page = Number(parameter.page || 1);
-// const perPage = Number(parameter.perPage || 100);
-// const [total, productList] = await Promise.all([
-// 	ProductList.countDocuments({}),
-// 	ProductList.find({})
-// 		.populate("productCategory")
-// 		.skip(perPage * (page - 1))
-// 		.limit(20Page),
-// ]);
-// const totalPage = Math.ceil(total / perPage);

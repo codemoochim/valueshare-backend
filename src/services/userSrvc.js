@@ -1,25 +1,25 @@
 const { Brand, Category, Product, User, Order } = require("../db/model/index");
 // const { emailFormCheck } = require("../utils/formCheck");
 
-// const handleUserInfo = async (userInfo) => {
-// 	try {
-// 		const { name, phoneNumber, shipAdr, shipNote, email } = userInfo;
+const handleUserInfo = async (userId, userInfo) => {
+	try {
+		const { name, phoneNumber, shipAdr, shipNote, email } = userInfo;
 
-// 		// 이메일 회원검증
-// 		const memberCheck = await User.findOne({ email });
-// 		// 기존 유저정보 수정
-// 		memberCheck.email = email;
-// 		memberCheck.phoneNumber = phoneNumber;
-// 		memberCheck.name = name;
-// 		memberCheck.shipAdr = shipAdr;
-// 		memberCheck.shipNote = shipNote;
-// 		await memberCheck.save();
-// 		console.log("기존 회원정보 수정");
-// 		return memberCheck;
-// 	} catch (err) {
-// 		throw new Error(err);
-// 	}
-// };
+		// 이메일 회원검증
+		const memberCheck = await User.findById({ _id: userId }, { password: 0 });
+		// 기존 유저정보 수정
+		memberCheck.email = email;
+		memberCheck.phoneNumber = phoneNumber;
+		memberCheck.name = name;
+		memberCheck.shipAdr = shipAdr;
+		memberCheck.shipNote = shipNote;
+		await memberCheck.save();
+		console.log("기존 회원정보 수정");
+		return memberCheck;
+	} catch (err) {
+		throw new Error(err);
+	}
+};
 
 const findUserInfo = async (userId) => {
 	try {
@@ -84,7 +84,7 @@ const deleteAccount = async (userId) => {
 };
 
 module.exports = {
-	// handleUserInfo,
+	handleUserInfo,
 	findUserInfo,
 	updateUserEmail,
 	updateUserAddress,
