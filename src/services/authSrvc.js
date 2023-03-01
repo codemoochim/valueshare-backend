@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt");
 const formCheck = require("../utils/formCheck");
-const noPwd = require("../utils/noPwd");
 const jwtMdw = require("../middleware/jwtMdw");
 const { Admin, User } = require("../db/model/index");
 

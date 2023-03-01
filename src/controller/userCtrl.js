@@ -1,5 +1,17 @@
 const userSrvc = require("../services/userSrvc");
 
+// 회원 ? 정보 수정 : 정보 생성
+const handleUser = async (req, res, next) => {
+	try {
+		const userInfo = req.body;
+		// 주문이 정상적으로 체결되지 않을 부담을 안고 유저생성
+		const result = await userSrvc.handleUserInfo(userInfo);
+		res.json({ result });
+	} catch (err) {
+		next(err);
+	}
+};
+
 const getMypage = async (req, res, next) => {
 	try {
 		// console.log(1111111111);
@@ -51,6 +63,7 @@ const closeAccount = async (req, res, next) => {
 };
 
 module.exports = {
+	handleUser,
 	getMypage,
 	editUserEmail,
 	editUserAddress,

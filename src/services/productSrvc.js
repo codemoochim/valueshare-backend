@@ -9,7 +9,7 @@ const findProductList = async () => {
 		const productList = await Product.find({})
 			.populate("productBrand")
 			.populate("productCategory")
-			.limit(100)
+			.limit(20)
 			.sort({ createdAt: -1 });
 
 		if (!productList) {
@@ -49,14 +49,14 @@ const findProductListByQuery = async (categories, brand) => {
 				})
 					.populate("productBrand")
 					.populate("productCategory")
-					.limit(100);
+					.limit(20);
 				console.log("여기2 all/brand"); // 성공
 				return productResult;
 			}
 			const allProduct = await Product.find({})
 				.populate("productCategory")
 				.populate("productBrand")
-				.limit(100);
+				.limit(20);
 			console.log("여기1 all/all"); // 성공
 			return allProduct;
 		}
@@ -73,7 +73,7 @@ const findProductListByQuery = async (categories, brand) => {
 		})
 			.populate("productCategory")
 			.populate("productBrand")
-			.limit(100);
+			.limit(20);
 		// console.log("파운드프로덕트");
 		// console.log(foundProduct);
 		// console.log("파운드프로덕트");
@@ -101,7 +101,7 @@ const findProductListByQuery = async (categories, brand) => {
 			})
 				.populate("productBrand")
 				.populate("productCategory")
-				.limit(100);
+				.limit(20);
 			console.log("여기3 cat/bran");
 			return productResult;
 		}
@@ -209,7 +209,9 @@ const updateProduct = async (_id, body, location) => {
 						throw new Error("해당 브랜드를 먼저 등록해주세요");
 					}
 					updatedProduct.productBrand = isBrandExist;
-				} else if (key === "productCategory") {
+					// } else if (key === "productCategory") {
+				}
+				if (key === "productCategory") {
 					const isExistCategory = await Category.findOne({
 						categoryName: body[key],
 					});
@@ -262,6 +264,6 @@ module.exports = {
 // 	ProductList.find({})
 // 		.populate("productCategory")
 // 		.skip(perPage * (page - 1))
-// 		.limit(perPage),
+// 		.limit(20Page),
 // ]);
 // const totalPage = Math.ceil(total / perPage);

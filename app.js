@@ -23,15 +23,16 @@ app.use(cookieParser(process.env.SECRET_COOKIE));
 
 app.use(
 	cors({
-		origin: "http://localhost:3000",
+		// origin: "*",
+		origin: "http://localhost",
 		credentials: true,
 		// optionsSuccessStatus: 200,
 	}),
 );
-app.use("/", indexRouter);
-app.use("/admin", adminRouter);
-app.use("/users", userRouter);
-app.use("/auth", authRouter);
+app.use("/api", indexRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 
 app.use((req, res, next) => {
 	next(createError(404));
