@@ -56,8 +56,18 @@ const findProductListByQuery = async (categories, brand, page, perPage) => {
 
 				console.log(total);
 				console.log("여기2 all/brand"); // 성공
-				return productResult;
-				// return [productResult, total];
+
+				const infiniteData = {
+					page: {
+						totalPage,
+						current: page,
+						limit: 20,
+					},
+					products: productResult,
+				};
+				return infiniteData;
+				// return productResult;
+				// return [productResult, totalPage];
 			}
 			const allProduct = await Product.find({}) // all/all
 				.populate("productCategory")
@@ -69,7 +79,18 @@ const findProductListByQuery = async (categories, brand, page, perPage) => {
 			const totalPage = Math.ceil(total / perPage);
 			console.log(total);
 			console.log("여기1 all/all"); // 성공
-			return allProduct;
+
+			const infiniteData = {
+				page: {
+					totalPage,
+					current: page,
+					limit: 20,
+				},
+				products: allProduct,
+			};
+
+			return infiniteData;
+			// return allProduct;
 			// return [allProduct, total];
 		}
 		// categories !== all
@@ -118,14 +139,35 @@ const findProductListByQuery = async (categories, brand, page, perPage) => {
 
 			const totalPage = Math.ceil(total / perPage);
 
-			console.log("여기3 cat/bran");
+			const infiniteData = {
+				page: {
+					totalPage,
+					current: page,
+					limit: 20,
+				},
+				products: productResult,
+			};
 			console.log(total);
-			return productResult;
+			console.log("여기3 cat/bran");
+			return infiniteData;
+			// return productResult;
 			// return [productResult, total];
 		}
+
+		const infiniteData = {
+			page: {
+				totalPage,
+				current: page,
+				limit: 20,
+			},
+			products: foundProduct,
+		};
 		console.log("여기4 cat/all"); // 성공
-		return foundProduct;
-		// return [foundProduct, total];
+		return infiniteData;
+
+		// return { foundProduct, totalPage };
+		// return foundProduct;
+		// return [foundProduct, totalPage];
 	} catch (err) {
 		throw new Error(err);
 	}
