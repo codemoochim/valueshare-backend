@@ -12,6 +12,7 @@ const cookieOpt = {
 	// secure: true, // https
 };
 
+// 토큰 생성
 const generateToken = (user, time, auth) => {
 	const token = jwt.sign({ user }, secret, {
 		algorithm: "HS256",
@@ -23,20 +24,19 @@ const generateToken = (user, time, auth) => {
 	return token;
 };
 
+// accessToken 검증
 const verifyAccessToken = (req, res, next) => {
-	console.log(req.header("Authorization"));
-	const authHeader = req.headers.authorization;
-
-	console.log(121212121212);
-	console.log(authHeader);
-	console.log(121212121212);
+	const header = req.headers.authorization;
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
 		return res.status(401).json({ message: "AccessToken 이 없습니다." });
+	} else {
+		console.log("토큰 있구여~");
 	}
 	try {
 		const payload = jwt.verify(token, secret);
 		req.user = payload;
+
 		next();
 	} catch (err) {
 		if (err.name === "TokenExpiredError") {
@@ -64,14 +64,14 @@ module.exports = {
 // 		return res.status(401).json({ message: "RefreshToken이 없습니다." });
 // 	}
 // 	try {
-// 		const userEmail = await getAsync(refreshToken);
-// 		if (!userEmail) {
+// 		const userId = await getAsync(refreshToken);
+// 		if (!userId) {
 // 			return res
 // 				.status(401)
 // 				.json({ message: "Refresh token 유효하지 않거나 만료됨" });
 // 		}
 
-// 		req.userEmail = userEmail;
+// 		req.userId = userId;
 // 		next();
 // 	} catch (err) {
 // 		return res.status(500).json({ message: "서버에 벌레가 들어왔어요" });

@@ -1,5 +1,6 @@
 const brandSrvc = require("../services/brandSrvc");
 
+// 브랜드 목록 조회
 const getBrandList = async (req, res, next) => {
 	try {
 		const brandList = await brandSrvc.findBrandList();
@@ -9,6 +10,7 @@ const getBrandList = async (req, res, next) => {
 	}
 };
 
+// 브랜드 추가
 const addBrand = async (req, res, next) => {
 	try {
 		const brandNewData = req.body;
@@ -19,6 +21,7 @@ const addBrand = async (req, res, next) => {
 	}
 };
 
+// 브랜드 수정
 const editBrand = async (req, res, next) => {
 	try {
 		const { brandName } = req.params;
@@ -29,6 +32,8 @@ const editBrand = async (req, res, next) => {
 		next(err);
 	}
 };
+
+// 브랜드 삭제
 const removeBrand = async (req, res, next) => {
 	try {
 		const { brandName } = req.params;

@@ -2,16 +2,12 @@ const express = require("express");
 const router = express.Router();
 const imageUploadS3 = require("../../middleware/imageUploadS3");
 
+// const { Admin } = require("../../db/model");
+// const bcrypt = require("bcrypt");
 const productCtrl = require("../productCtrl");
 const categoryCtrl = require("../categoryCtrl");
 const brandCtrl = require("../brandCtrl");
 const orderCtrl = require("../orderCtrl");
-// const initSetting = require("../../../mock/initSettingCtrl");
-
-// /admin
-// 어드민 페이지
-
-// router.patch("/add", initSetting.setCtrl);
 
 // 어드민 상품 관리
 // admin/products
@@ -53,4 +49,19 @@ router
 	.patch(orderCtrl.editOrderDetail)
 	.post(orderCtrl.cancelOrderDetail);
 
+// 어드민 계정 추가
+// router.post("/add", async (req, res, next) => {
+// 	try {
+// 		const { email, password } = req.body;
+// 		const pwd = await bcrypt.hash(password, 12);
+// 		const admin = await Admin.create({
+// 			email,
+// 			password: pwd,
+// 		});
+
+// 		res.json({ admin });
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// });
 module.exports = router;

@@ -1,25 +1,16 @@
-const mongoose = require("mongoose");
-
 const { Brand, Category, Product } = require("../db/model/index");
 
 // 어드민 상품 목록 조회
 const findProductList = async () => {
 	try {
-		// const [total, productList] = await Promise.all([
-		// 	Product.countDocuments({}),
-		// 	Product.find({})
-		// 		.populate("productBrand")
-		// 		.populate("productCategory")
-		// 		.skip(perPage * (page - 1))
-		// 		.limit(20),
-		// ]);
-		// const totalPage = Math.ceil(total / perPage);
-
 		const productList = await Product.find({})
 			.populate("productBrand")
 			.populate("productCategory")
 			.limit(20)
 			.sort({ createdAt: -1 });
+
+		const total = await Product.find({}).countDocuments({});
+		const totalPage = Math.ceil(total / 20);
 
 		if (!productList) {
 			throw new Error("상품의 목록을 불러올 수 없습니다.");
@@ -30,31 +21,15 @@ const findProductList = async () => {
 	}
 };
 
-// 페이지 네이션
-// const page = Number(parameter.page || 1);
-
-// const perPage = Number(parameter.perPage || 20);
-
-// const [total, productList] = await Promise.all([
-// 	ProductList.countDocuments({}),
-// 	ProductList.find({})
-// 		.populate("productCategory")
-// 		.skip(perPage * (page - 1))
-// 		.limit(20),
-// ]);
-// const totalPage = Math.ceil(total / perPage);
-
 const findProductListByQuery = async (categories, brand, page, perPage) => {
 	try {
 		// category는 문자열, 브랜드는 배열
 		if (categories === "all") {
 			if (brand[0] !== "all") {
+				// all/brand
 				if (!Array.isArray(brand)) {
 					brand = [brand];
 				}
-				// console.log("브랜드");
-				// console.log(brand);
-				// console.log("브랜드");
 				const brandId = await Promise.all(
 					brand.map(async (i) => {
 						const findProduct = await Brand.findOne({ brandName: i });
@@ -62,9 +37,6 @@ const findProductListByQuery = async (categories, brand, page, perPage) => {
 						return id;
 					}),
 				);
-				// console.log("브랜드아디"); // {id, id}
-				// console.log(brandId); // {id, id}
-				// console.log("브랜드아디"); // {id, id}
 				const productResult = await Product.find({
 					productBrand: {
 						$in: brandId,
@@ -75,42 +47,53 @@ const findProductListByQuery = async (categories, brand, page, perPage) => {
 					.skip(perPage * (page - 1))
 					.limit(20);
 
+				const total = await Product.find({
+					productBrand: {
+						$in: brandId,
+					},
+				}).countDocuments({});
+				const totalPage = Math.ceil(total / perPage);
+
+				console.log(total);
 				console.log("여기2 all/brand"); // 성공
 				return productResult;
+				// return [productResult, total];
 			}
-			const allProduct = await Product.find({})
+			const allProduct = await Product.find({}) // all/all
 				.populate("productCategory")
 				.populate("productBrand")
 				.skip(perPage * (page - 1))
 				.limit(20);
+
+			const total = await Product.find({}).countDocuments({});
+			const totalPage = Math.ceil(total / perPage);
+			console.log(total);
 			console.log("여기1 all/all"); // 성공
 			return allProduct;
+			// return [allProduct, total];
 		}
 		// categories !== all
-		// console.log("카테고리스 입력");
-		// console.log(categories); // outer
-		// console.log("카테고리스 입력");
 		const categoryId = await Category.findOne({ categoryName: categories });
-		// console.log("카테고리아디");
-		// console.log(categoryId);
-		// console.log("카테고리아디");
 		const foundProduct = await Product.find({
+			// cat/all
 			productCategory: categoryId._id,
 		})
 			.populate("productCategory")
 			.populate("productBrand")
 			.skip(perPage * (page - 1))
 			.limit(20);
-		// console.log("파운드프로덕트");
-		// console.log(foundProduct);
-		// console.log("파운드프로덕트");
+
+		const total = await Product.find({
+			productCategory: categoryId._id,
+		}).countDocuments({});
+		const totalPage = Math.ceil(total / perPage);
+		console.log(total);
+
 		if (brand[0] !== "all") {
+			// cat/brand
 			if (!Array.isArray(brand)) {
 				brand = [brand];
 			}
-			// console.log("브랜드 입력?");
-			// console.log(brand); //[ 'Dior' ]
-			// console.log("브랜드 입력?");
 			const brandId = await Promise.all(
 				brand.map(async (i) => {
 					const findProduct = await Brand.findOne({ brandName: i });
@@ -118,23 +101,31 @@ const findProductListByQuery = async (categories, brand, page, perPage) => {
 					return id;
 				}),
 			);
-			// console.log("브랜드아이디");
-			// console.log(brandId); //[ new ObjectId("63f250dda5cdc0fdb6f13e1a") ]
-			// console.log("브랜드아이디");
+
 			const productResult = await Product.find({
 				productBrand: { $in: brandId },
-				// productCategory: { $in: foundProduct },
 				productCategory: { $in: categoryId._id },
 			})
 				.populate("productBrand")
 				.populate("productCategory")
 				.skip(perPage * (page - 1))
 				.limit(20);
+
+			const total = await Product.find({
+				productBrand: { $in: brandId },
+				productCategory: { $in: categoryId._id },
+			}).countDocuments({});
+
+			const totalPage = Math.ceil(total / perPage);
+
 			console.log("여기3 cat/bran");
+			console.log(total);
 			return productResult;
+			// return [productResult, total];
 		}
 		console.log("여기4 cat/all"); // 성공
 		return foundProduct;
+		// return [foundProduct, total];
 	} catch (err) {
 		throw new Error(err);
 	}
@@ -143,21 +134,14 @@ const findProductListByQuery = async (categories, brand, page, perPage) => {
 // 어드민 상품 추가
 const createProduct = async (location, body) => {
 	try {
-		// if (isNaN(productPrice) || parseInt(productPrice) < 0) {
-		// 	throw new Error("알맞은 가격을 입력해주세요");
-		// }
-		// if (isNaN(productStock) || parseInt(productStock) < 0) {
-		// 	throw new Error("알맞은 수량을 입력해주세요");
-		// }
 		const imgUrlArray = location.map((img) => img.location);
-		// if (!imgUrlArray) {
-		// 	throw new Error("상품의 이미지를 등록해주세요");
-		// }
+
 		// 브랜드 확인
 		const isBrandExist = await Brand.findOne({ brandName: body?.productBrand });
 		if (!isBrandExist) {
 			throw new Error("해당 브랜드를 먼저 등록해주세요");
 		}
+
 		// 카테고리 확인
 		const isCategoryExist = await Category.findOne({
 			categoryName: body?.productCategory,
@@ -165,6 +149,7 @@ const createProduct = async (location, body) => {
 		if (!isCategoryExist) {
 			throw new Error("해당 카테고리를 먼저 등록해주세요");
 		}
+
 		// 상품명 중복 확인
 		const isProductExist = await Product.findOne({
 			productTitle: body?.productTitle,
@@ -172,6 +157,7 @@ const createProduct = async (location, body) => {
 		if (isProductExist) {
 			throw new Error("동일한 상품명이 이미 등록되어 있습니다");
 		}
+
 		const createdProduct1 = new Product();
 		createdProduct1.productTitle = body?.productTitle;
 		createdProduct1.productStock = body?.productStock;
@@ -209,11 +195,8 @@ const updateProduct = async (_id, body, location) => {
 		// 사진을 안올리면 body에 productImage '' location x 가 없어서 초기화됨
 		// 사진을 올리면 body에 productImage x 필드 없음 lotcation o 필드가 없고 location 이 있음
 		const updatedProduct = await Product.findById({ _id });
-		console.log(11);
-		console.log(body);
-		console.log(11);
-
 		const retainImage = updatedProduct.productImage;
+		console.log(location);
 		if (location) {
 			const beUpdatedNewImage = location.map((img) => img.location);
 			updatedProduct.productImage = retainImage.concat(beUpdatedNewImage);
@@ -227,17 +210,12 @@ const updateProduct = async (_id, body, location) => {
 			// 기존 데이터를 그대로 유지시키기 위해서 if문을 걸었음
 			if (body[key] !== "") {
 				// 빈칸이 아니라면은 데이터를 입력했다는 말.
-				//
-				console.log(1);
-				console.log(body.productImage);
-				console.log(1);
 				if (key === "productBrand") {
 					const isBrandExist = await Brand.findOne({ brandName: body[key] });
 					if (!isBrandExist) {
 						throw new Error("해당 브랜드를 먼저 등록해주세요");
 					}
 					updatedProduct.productBrand = isBrandExist;
-					// } else if (key === "productCategory") {
 				}
 				if (key === "productCategory") {
 					const isExistCategory = await Category.findOne({
@@ -249,9 +227,6 @@ const updateProduct = async (_id, body, location) => {
 					updatedProduct.productCategory = isExistCategory;
 				} else {
 					updatedProduct[key] = body[key];
-					console.log(2);
-					console.log(body.productImage);
-					console.log(2);
 				}
 			}
 		}

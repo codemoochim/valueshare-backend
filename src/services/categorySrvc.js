@@ -1,5 +1,6 @@
 const { Category } = require("../db/model/index");
 
+// 카테고리 목록 조회
 const findCategoryList = async () => {
 	try {
 		const categoryList = await Category.find({});
@@ -12,6 +13,7 @@ const findCategoryList = async () => {
 	}
 };
 
+// 카테고리 생성
 const createCategory = async (categoryNewData) => {
 	try {
 		const { categoryName } = categoryNewData;
@@ -31,6 +33,7 @@ const createCategory = async (categoryNewData) => {
 	}
 };
 
+// 카테고리 수정
 const updateCategory = async (categoryName, categoryNewData) => {
 	try {
 		const isExist = await Category.findOne({ categoryName: categoryName });
@@ -45,6 +48,7 @@ const updateCategory = async (categoryName, categoryNewData) => {
 	}
 };
 
+// 카테고리 삭제
 const deleteCategory = async (_id) => {
 	try {
 		const deletedCategory = await Category.findOneAndDelete({ _id });

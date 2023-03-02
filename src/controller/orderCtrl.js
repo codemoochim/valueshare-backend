@@ -58,7 +58,6 @@ const cancelOrderDetail = async (req, res, next) => {
 /********* User ********/
 /***********************/
 /***********************/
-
 // 유저 주문 완료 버튼 - 유저 데이터 생성 - 주문 생성
 const addOrder = async (req, res, next) => {
 	try {

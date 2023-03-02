@@ -3,6 +3,7 @@ const formCheck = require("../utils/formCheck");
 const jwtMdw = require("../middleware/jwtMdw");
 const { Admin, User } = require("../db/model/index");
 
+// 회원가입
 const registerUser = async (userInfo) => {
 	try {
 		const { email, password, name, phoneNumber, shipAdr } = userInfo;
@@ -33,6 +34,7 @@ const registerUser = async (userInfo) => {
 	}
 };
 
+// 로그인, JWT 토큰발급
 const loginUser = async (userInfo) => {
 	try {
 		const { email, password } = userInfo;
@@ -43,7 +45,7 @@ const loginUser = async (userInfo) => {
 				throw new Error("비밀번호를 확인해주세요");
 			}
 
-			const accessToken = jwtMdw.generateToken(isAdmin._id, "1h", true);
+			const accessToken = jwtMdw.generateToken(isAdmin._id, "10m", true);
 			return accessToken;
 		}
 
@@ -57,7 +59,7 @@ const loginUser = async (userInfo) => {
 			throw new Error("비밀번호를 확인해주세요");
 		}
 
-		const accessToken = jwtMdw.generateToken(targetUser._id, "1h", false);
+		const accessToken = jwtMdw.generateToken(targetUser._id, "10m", false);
 
 		return accessToken;
 	} catch (err) {

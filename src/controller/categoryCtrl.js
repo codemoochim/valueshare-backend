@@ -1,5 +1,6 @@
 const categorySrvc = require("../services/categorySrvc");
 
+// 카테고리 목록 조회
 const getCategoryList = async (req, res, next) => {
 	try {
 		const categoryList = await categorySrvc.findCategoryList();
@@ -9,6 +10,7 @@ const getCategoryList = async (req, res, next) => {
 	}
 };
 
+// 카테고리 추가
 const addCategory = async (req, res, next) => {
 	try {
 		const categoryNewData = req.body;
@@ -19,6 +21,7 @@ const addCategory = async (req, res, next) => {
 	}
 };
 
+// 카테고리 수정
 const editCategory = async (req, res, next) => {
 	try {
 		const { categoryName } = req.params;
@@ -32,6 +35,8 @@ const editCategory = async (req, res, next) => {
 		next(err);
 	}
 };
+
+// 카테고리 삭제
 const removeCategory = async (req, res, next) => {
 	try {
 		const _id = req.params.categoryName;

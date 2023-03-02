@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const authCtrl = require("../authCtrl");
-const { jwt: generateToken } = require("../../middleware/jwtMdw");
 
 // /auth/register
 // 회원가입

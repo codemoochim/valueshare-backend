@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const productCtrl = require("../productCtrl");
 const orderCtrl = require("../orderCtrl");
-const userCtrl = require("../userCtrl");
 
 /* 메인페이지 */
 router.get("/", (req, res, next) => {
@@ -18,17 +17,10 @@ router.get("/", (req, res, next) => {
 // 유저 상품 목록 조회
 router.get("/products", productCtrl.getProductByQuery);
 
-// 회원 ? 정보 수정 : 정보 생성
-// 장바구니 내 배송지 수정 시 유저 정보 생성 혹은 수정
-// router.post("/userInfo", userCtrl.handleUser);
+// 유저 상품 상세 조회
+// admin 라우터에 있었는데 인덱스에서도 받아야함
+router.get("/products/:_id", productCtrl.getProduct);
 
-/**
- * name
- * phoneNumber
- * shipAdr
- * shipNote
- * email
- */
 // 유저 주문체결 시 유저 정보 생성과 체크아웃
 router.post("/checkout", orderCtrl.addOrder);
 
