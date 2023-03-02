@@ -45,7 +45,7 @@ const loginUser = async (userInfo) => {
 				throw new Error("비밀번호를 확인해주세요");
 			}
 
-			const accessToken = jwtMdw.generateToken(isAdmin._id, "10m", true);
+			const accessToken = jwtMdw.generateToken(isAdmin._id, "3d", true);
 			return accessToken;
 		}
 
@@ -59,7 +59,7 @@ const loginUser = async (userInfo) => {
 			throw new Error("비밀번호를 확인해주세요");
 		}
 
-		const accessToken = jwtMdw.generateToken(targetUser._id, "10m", false);
+		const accessToken = jwtMdw.generateToken(targetUser._id, "3d", false);
 
 		return accessToken;
 	} catch (err) {
