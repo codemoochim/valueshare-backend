@@ -22,10 +22,10 @@ const orderSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		phone: {
+		phoneNumber: {
 			// 주문자, 선물하기 연락처 다를 가능성
 			type: String,
-			required: true,
+			// required: true,
 		},
 		products: [
 			{
@@ -81,7 +81,7 @@ module.exports = orderSchema;
 // 주문 예시 2
 // {"email": "chulsoo@chulsoo.com",
 // 		"name": "김철수",
-// 		"phone": "010-0000-0000",
+// 		"phoneNumber": "010-0000-0000",
 // 		"products": [
 // 			{
 // 				"productTitle": "츄르1",

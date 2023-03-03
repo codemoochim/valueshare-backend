@@ -28,12 +28,15 @@ app.use(
 		// optionsSuccessStatus: 200,
 	}),
 );
+
 app.use("/api", indexRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 
 app.use((req, res, next) => {
+	const error = new Error(`${req.method} ${req.url} 없습니다`);
+	error.status = 404;
 	next(createError(404));
 });
 

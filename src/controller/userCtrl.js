@@ -1,36 +1,46 @@
 const userSrvc = require("../services/userSrvc");
 
-// 회원 ? 정보 수정 : 정보 생성
+require("dotenv").config();
+// 토큰 테스트
+const jwt = require("jsonwebtoken");
+const jwtMdw = require("../middleware/jwtMdw");
+// 토큰 테스트
+
+// 회원 대상. 주문페이지 회원정보 수정
 const handleUser = async (req, res, next) => {
 	try {
+		const userId = req.params.userId;
 		const userInfo = req.body;
-		// 주문이 정상적으로 체결되지 않을 부담을 안고 유저생성
-		const result = await userSrvc.handleUserInfo(userInfo);
+		const result = await userSrvc.handleUserInfo(userId, userInfo);
 		res.json({ result });
 	} catch (err) {
 		next(err);
 	}
 };
 
+// 회원 마이페이지 조회
 const getMypage = async (req, res, next) => {
 	try {
-		console.log(req);
-		console.log(1111111111);
-		console.log(req.header);
-		console.log(2222222222);
-		console.log(await req.header("Authorization"));
-		console.log(3333333333);
-		console.log(req.headers.config);
-		console.log(4444444444);
+		const header = req.headers.authorization;
+		const token = header && header.split(" ")[1];
+		if (!token) {
+			return res.status(401).json({ message: "AccessToken 이 없습니다." });
+		} else {
+			console.log("토큰 있구여~");
+		}
+		console.log(12121212);
+		const secret = process.env.SECRET_JWT; // dotenv
+		const payload = jwt.verify(token, secret); // jsonwebtoken
 		const { userId } = req.params;
 		const userInfo = await userSrvc.findUserInfo(userId);
-		console.log(userId);
+		// const userInfo = await userSrvc.findUserInfo(userId, userCheck);
 		res.json(userInfo);
 	} catch (err) {
 		next(err);
 	}
 };
 
+// 회원 마이페이지 이메일 수정
 const editUserEmail = async (req, res, next) => {
 	try {
 		const { userId } = req.params;
@@ -42,6 +52,7 @@ const editUserEmail = async (req, res, next) => {
 	}
 };
 
+// 회원 마이페이지 주소 수정
 const editUserAddress = async (req, res, next) => {
 	try {
 		const { userId } = req.params;
@@ -53,6 +64,7 @@ const editUserAddress = async (req, res, next) => {
 	}
 };
 
+// 회원 탈퇴
 const closeAccount = async (req, res, next) => {
 	try {
 		const { userId } = req.params;

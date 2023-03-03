@@ -1,5 +1,6 @@
 const { Brand } = require("../db/model/index");
 
+// 브랜드 목록 조회
 const findBrandList = async () => {
 	try {
 		const brandList = await Brand.find({});
@@ -9,6 +10,7 @@ const findBrandList = async () => {
 	}
 };
 
+// 브랜드 생성추가
 const createBrand = async (brandNewData) => {
 	try {
 		const { brandName } = brandNewData;
@@ -28,6 +30,7 @@ const createBrand = async (brandNewData) => {
 	}
 };
 
+// 브랜드 수정
 const updateBrand = async (brandName, brandNewData) => {
 	try {
 		const isExist = await Brand.findOne({
@@ -44,6 +47,7 @@ const updateBrand = async (brandName, brandNewData) => {
 	}
 };
 
+// 브랜드 삭제
 const deleteBrand = async (brandName) => {
 	try {
 		const result = await Brand.findOneAndDelete({ brandName });

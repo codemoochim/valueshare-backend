@@ -4,8 +4,8 @@ const emailFormCheck = (email) => {
 	);
 };
 
-const phoneFormCheck = (phone) => {
-	return /^\d{3}-\d{4}-\d{4}$/.test(phone);
+const phoneFormCheck = (phoneNumber) => {
+	return /^\d{3}-\d{4}-\d{4}$/.test(phoneNumber);
 };
 
 module.exports = {

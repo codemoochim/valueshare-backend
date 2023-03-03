@@ -3,6 +3,7 @@ const formCheck = require("../utils/formCheck");
 const jwtMdw = require("../middleware/jwtMdw");
 const { Admin, User } = require("../db/model/index");
 
+// 회원가입
 const registerUser = async (userInfo) => {
 	try {
 		const { email, password, name, phoneNumber, shipAdr } = userInfo;
@@ -16,23 +17,27 @@ const registerUser = async (userInfo) => {
 			User.findOne({ email }),
 			bcrypt.hash(password, 12),
 		]);
-		if (isExist) {
-			throw new Error("동일한 이메일이 존재합니다");
+		if (!isExist) {
+			await User.create({
+				email,
+				password: hash,
+				name,
+				phoneNumber,
+				shipAdr,
+			});
+			return "회원가입이 완료되었습니다";
 		}
-		await User.create({
-			email,
-			password: hash,
-			name,
-			phoneNumber,
-			shipAdr,
-		});
+		// 비회원 주문이력 연동시 이메일 인증이 필요한 부분
+		isExist.password = hash;
 
-		return "회원가입이 완료되었습니다";
+		await isExist.save();
+		return "회원가입이 완료되었습니다. 기존 주문이력이 업데이트 되었습니다.";
 	} catch (err) {
 		throw new Error(err);
 	}
 };
 
+// 로그인, JWT 토큰발급
 const loginUser = async (userInfo) => {
 	try {
 		const { email, password } = userInfo;
@@ -43,7 +48,7 @@ const loginUser = async (userInfo) => {
 				throw new Error("비밀번호를 확인해주세요");
 			}
 
-			const accessToken = jwtMdw.generateToken(isAdmin._id, "1h", true);
+			const accessToken = jwtMdw.generateToken(isAdmin._id, "3d", true);
 			return accessToken;
 		}
 
@@ -57,7 +62,7 @@ const loginUser = async (userInfo) => {
 			throw new Error("비밀번호를 확인해주세요");
 		}
 
-		const accessToken = jwtMdw.generateToken(targetUser._id, "1h", false);
+		const accessToken = jwtMdw.generateToken(targetUser._id, "3d", false);
 
 		return accessToken;
 	} catch (err) {

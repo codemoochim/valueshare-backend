@@ -6,12 +6,6 @@ const productCtrl = require("../productCtrl");
 const categoryCtrl = require("../categoryCtrl");
 const brandCtrl = require("../brandCtrl");
 const orderCtrl = require("../orderCtrl");
-// const initSetting = require("../../../mock/initSettingCtrl");
-
-// /admin
-// 어드민 페이지
-
-// router.patch("/add", initSetting.setCtrl);
 
 // 어드민 상품 관리
 // admin/products
@@ -20,7 +14,7 @@ router
 	.get(productCtrl.getProductList)
 	.post(imageUploadS3.array("productImage", 5), productCtrl.addProduct);
 router
-	.route("/products/:_id")
+	.route("/products/:productId")
 	.get(productCtrl.getProduct)
 	.patch(imageUploadS3.array("productImage", 5), productCtrl.editProduct)
 	.delete(productCtrl.removeProduct);
@@ -48,9 +42,8 @@ router
 // /orders
 router.get("/orders", orderCtrl.getOrderList);
 router
-	.route("/orders/:_id")
+	.route("/orders/:orderId")
 	.get(orderCtrl.getOrderDetail)
 	.patch(orderCtrl.editOrderDetail)
 	.post(orderCtrl.cancelOrderDetail);
-
 module.exports = router;

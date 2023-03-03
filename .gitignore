@@ -9,8 +9,3 @@ node_modules/
 .eslintrc.js
 .prettierrc
 .prettierrc.js
-
-# init raw json Data
-
-# test
-index2.html
