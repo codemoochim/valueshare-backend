@@ -1,5 +1,4 @@
-const { Order, User } = require("../db/model/index");
-const fromCheck = require("../utils/formCheck");
+const { Product, Order, User } = require("../db/model/index");
 const issueOrderNum = require("../utils/issueOrderNum");
 
 /***********************/
@@ -22,9 +21,9 @@ const findOrderList = async () => {
 
 // 어드민 주문 상세 조회
 // 유저 주문 완료 후 바로 주문 내역 응답
-const findOrderDetail = async (_id) => {
+const findOrderDetail = async (orderId) => {
 	try {
-		const oneOrder = await Order.findById({ _id });
+		const oneOrder = await Order.findById({ _id: orderId });
 		if (!oneOrder) {
 			throw new Error("해당하는 주문 정보가 없습니다.");
 		}
@@ -36,7 +35,7 @@ const findOrderDetail = async (_id) => {
 };
 
 // 어드민 주문 내역 수정
-const updateOrderDetail = async (_id, newOrderDetail) => {
+const updateOrderDetail = async (orderId, newOrderDetail) => {
 	try {
 		const {
 			orderNumber,
@@ -49,7 +48,7 @@ const updateOrderDetail = async (_id, newOrderDetail) => {
 			cancelNote,
 		} = newOrderDetail;
 		const updatedOrderDetail = await Order.findOneAndUpdate(
-			{ _id },
+			{ _id: orderId },
 			{
 				orderNumber,
 				email,
@@ -72,15 +71,15 @@ const updateOrderDetail = async (_id, newOrderDetail) => {
 };
 
 // 어드민 주문 취소
-const closedOrderDetail = async (_id, body) => {
+const closedOrderDetail = async (orderId, body) => {
 	try {
-		const targetOrder = await Order.findById({ _id });
+		const targetOrder = await Order.findById({ _id: orderId });
 
 		if (!targetOrder) {
 			throw new Error("해당하는 주문 정보가 없습니다.");
 		}
 		const orderClosingResult = await Order.findOneAndUpdate(
-			{ _id },
+			{ _id: orderId },
 			{
 				shipStatus: "주문 취소",
 			},
@@ -106,24 +105,35 @@ const createOrder = async (orderData) => {
 			email,
 			name,
 			phoneNumber,
+			shipStatus,
 			shipAdr,
 			shipNote,
 			products,
 			totalPrice,
-			shipStatus,
 			cancelNote,
 		} = orderData;
-		products.forEach((i) => {
+		let isFailed = false;
+
+		for (const i of products) {
 			i.productBrand = i.productBrand.brandName;
 			i.productQuantity = i.quantity;
-		});
+
+			const targetProduct = await Product.findOne({
+				productTtile: i.productTtile,
+			});
+
+			if (targetProduct.productStock - i.quantity < 0) {
+				isFailed = true;
+			}
+			if (isFailed) {
+				throw new Error("주문 가능한 수량을 초과하였습니다.");
+			}
+			targetProduct.productStock -= i.quantity;
+			await targetProduct.save();
+		}
 
 		if (!email) {
 			throw new Error("주문 결제페이지: 배송지에 이메일을 입력해주세요 ");
-		}
-
-		if (!fromCheck.emailFormCheck(email)) {
-			throw new Error("입력하신 이메일의 형식을 확인하세요");
 		}
 
 		const emailDBCheck = await User.findOne({ email });
@@ -138,87 +148,99 @@ const createOrder = async (orderData) => {
 				email,
 				name,
 				phoneNumber,
+				shipStatus,
 				shipAdr,
 				shipNote,
-				shipStatus,
 				products,
 				totalPrice,
 				// cancelNote,
 				userId: newUser,
 				orderNumber: brandNewOrederNum,
 			});
-			return newOrder;
-		} else {
-			const newOrder = await Order.create({
-				email,
-				name,
-				phoneNumber,
-				shipAdr,
-				shipNote,
-				shipStatus,
-				products,
-				totalPrice,
-				// cancelNote,
-				userId: emailDBCheck._id,
-				orderNumber: brandNewOrederNum,
-			});
 
-			const newOrderNumber = newOrder.orderNumber;
-			emailDBCheck.orderNumber = [...emailDBCheck.orderNumber, newOrderNumber];
-			emailDBCheck.email = email;
-			emailDBCheck.phoneNumber = phoneNumber;
-			emailDBCheck.name = name;
-			emailDBCheck.shipAdr = shipAdr;
-			emailDBCheck.shipNote = shipNote;
-
-			await emailDBCheck.save();
-			console.log("유저의 회원정보 수정");
 			return newOrder;
 		}
+
+		const newOrder = await Order.create({
+			email,
+			name,
+			phoneNumber,
+			shipStatus,
+			shipAdr,
+			shipNote,
+			products,
+			totalPrice,
+			// cancelNote,
+			userId: emailDBCheck._id,
+			orderNumber: brandNewOrederNum,
+		});
+
+		const newOrderNumber = newOrder.orderNumber;
+		emailDBCheck.orderNumber = [...emailDBCheck.orderNumber, newOrderNumber];
+		emailDBCheck.email = email;
+		emailDBCheck.phoneNumber = phoneNumber;
+		emailDBCheck.name = name;
+		emailDBCheck.shipAdr = shipAdr;
+		emailDBCheck.shipNote = shipNote;
+
+		await emailDBCheck.save();
+		return newOrder;
 	} catch (err) {
 		throw new Error(err);
 	}
 };
 
 // 주문 후 즉시 주문 내역 수정
-const editOrder = async (_id, body) => {
+const editOrder = async (orderId, body) => {
 	try {
 		const { email, name, phoneNumber, shipAdr, shipNote } = body;
 		if (!email) {
 			throw new Error("");
 		}
-		const targetOrder = await Order.findOneAndUpdate(
-			{ _id },
-			{
-				email,
-				name,
-				phoneNumber,
-				shipAdr,
-				shipNote,
-			},
-			{ new: true },
-		);
+		const targetOrder = await Order.findById({ _id: orderId });
+		if (targetOrder.shipStatus !== "주문접수") {
+			throw new Error("현재 수정할 수 없습니다.");
+		}
+
+		targetOrder.email = email;
+		targetOrder.name = name;
+		targetOrder.phoneNumber = phoneNumber;
+		targetOrder.shipAdr = shipAdr;
+		targetOrder.shipNote = shipNote;
+		await targetOrder.save();
+
 		return targetOrder;
 	} catch (err) {
-		throw new Error("주문을 수정할 수 없습니다");
+		throw new Error(err);
 	}
 };
 
 // 주문 후 즉시 주문 내역 취소
-const cancelOrder = async (_id, body) => {
+const cancelOrder = async (orderId, body) => {
 	try {
 		const { cancelNote } = body;
-		const targetOrder = await Order.findOneAndUpdate(
-			{ _id },
-			{
-				shipStatus: "주문 취소",
-				cancelNote: cancelNote,
-			},
-			{ new: true },
-		);
+		const targetOrder = await Order.findById({ _id: orderId });
+		if (targetOrder.shipStatus == "배송중") {
+			throw new Error("현재 취소할 수 없습니다.");
+		}
+
+		targetOrder.products.forEach(async (i) => {
+			const targetProduct = await Product.findOne({
+				productTtile: i.productTtile,
+			});
+
+			targetProduct.productStock += i.productQuantity;
+			await targetProduct.save();
+		});
+
+		targetOrder.shipStatus = "주문 취소";
+		targetOrder.cancelNote = cancelNote;
+
+		await targetOrder.save();
+
 		return targetOrder;
 	} catch (err) {
-		throw new Error("주문을 수정할 수 없습니다");
+		throw new Error(err);
 	}
 };
 
@@ -274,24 +296,18 @@ const updateOrderDetailForUser = async (orderNumber, editOrderInfo) => {
 		if (targetOrder.email !== email) {
 			throw new Error("올바른 이메일을 입력해주세요");
 		}
-
-		const updatedOrderDetail = await Order.findOneAndUpdate(
-			{ orderNumber: yesDash },
-			{
-				email,
-				name,
-				phoneNumber,
-				shipAdr,
-				shipNote,
-			},
-			{ new: true },
-		);
-
-		if (!updatedOrderDetail) {
-			throw new Error("주문 정보 업데이트에 오류가 있습니다.");
+		if (targetOrder.shipStatus !== "주문접수") {
+			throw new Error("현재 수정할 수 없습니다.");
 		}
 
-		return updatedOrderDetail;
+		targetOrder.email = email;
+		targetOrder.name = name;
+		targetOrder.phoneNumber = phoneNumber;
+		targetOrder.shipAdr = shipAdr;
+		targetOrder.shipNote = shipNote;
+		await targetOrder.save();
+
+		return targetOrder;
 	} catch (err) {
 		throw new Error(err);
 	}
@@ -311,10 +327,22 @@ const closedOrderDetailForUser = async (orderNumber, body) => {
 			noDash.slice(8);
 		const targetOrder = await Order.findOne({ orderNumber: yesDash });
 
-		if (!targetOrder) {
-			throw new Error("해당하는 주문 정보가 없습니다.");
+		if (targetOrder.shipStatus == "배송중") {
+			throw new Error("현재 취소할 수 없습니다.");
 		}
+
+		targetOrder.products.forEach(async (i) => {
+			const targetProduct = await Product.findOne({
+				productTtile: i.productTtile,
+			});
+
+			targetProduct.productStock += i.productQuantity;
+			await targetProduct.save();
+		});
+
 		targetOrder.shipStatus = "주문 취소";
+		targetOrder.cancelNote = cancelNote;
+
 		await targetOrder.save();
 	} catch (err) {
 		throw new Error(err);

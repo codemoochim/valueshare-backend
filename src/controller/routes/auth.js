@@ -11,7 +11,7 @@ router.post("/register", authCtrl.register);
 router.post("/login", authCtrl.login);
 
 // /auth/logout
-// 로그아웃
-router.get("/logout", authCtrl.logout);
+// 로그아웃 프론트에서 요청 없이 accessToken 삭제로 해결
+// router.get("/logout", authCtrl.logout);
 
 module.exports = router;

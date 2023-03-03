@@ -6,11 +6,10 @@ const jwt = require("jsonwebtoken");
 const jwtMdw = require("../middleware/jwtMdw");
 // 토큰 테스트
 
-// 주문페이지 회원정보 수정
+// 회원 대상. 주문페이지 회원정보 수정
 const handleUser = async (req, res, next) => {
 	try {
 		const userId = req.params.userId;
-		console.log(userId);
 		const userInfo = req.body;
 		const result = await userSrvc.handleUserInfo(userId, userInfo);
 		res.json({ result });
@@ -29,20 +28,12 @@ const getMypage = async (req, res, next) => {
 		} else {
 			console.log("토큰 있구여~");
 		}
-
+		console.log(12121212);
 		const secret = process.env.SECRET_JWT; // dotenv
 		const payload = jwt.verify(token, secret); // jsonwebtoken
-		req.userCheck = payload.aud;
-		req.userId = payload.user;
-		console.log("유저체크");
-		console.log(req.userCheck);
-		console.log("유저체크");
-		console.log("유저아이디");
-		console.log(req.userId);
-		console.log("유저아이디");
-
 		const { userId } = req.params;
 		const userInfo = await userSrvc.findUserInfo(userId);
+		// const userInfo = await userSrvc.findUserInfo(userId, userCheck);
 		res.json(userInfo);
 	} catch (err) {
 		next(err);

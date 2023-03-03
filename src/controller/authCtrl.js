@@ -32,23 +32,27 @@ const login = async (req, res, next) => {
 	}
 };
 
-const logout = async (req, res, next) => {
-	// const accessToken = req.cookies.accessToken;
-	// if (!accessToken) {
-	// 	return res.status(401).send("accessToken 을 찾을 수 없습니다");
-	// }
+// const logout = async (req, res, next) => {
+// 	// const accessToken = req.cookies.accessToken;
+// 	// if (!accessToken) {
+// 	// 	return res.status(401).send("accessToken 을 찾을 수 없습니다");
+// 	// }
 
-	try {
-		const decoded = jwt.verify(accessToken, process.env.SECRET_JWT);
-		console.log(decoded);
-	} catch (err) {
-		return res.status(401).send("유효하지 않은 accessToken 입니다.");
-	}
-	// res.clearCookie("accessToken");
-	res.send("로그아웃을 완료했습니다");
+// 	try {
+// 		const decoded = jwt.verify(accessToken, process.env.SECRET_JWT);
+// 		console.log(decoded);
+// 	} catch (err) {
+// 		return res.status(401).send("유효하지 않은 accessToken 입니다.");
+// 	}
+// 	// res.clearCookie("accessToken");
+// 	res.send("로그아웃을 완료했습니다");
+// };
+
+module.exports = {
+	register,
+	login,
+	// logout
 };
-
-module.exports = { register, login, logout };
 // /*********
 //  *
 //  *  리프레시

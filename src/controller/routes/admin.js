@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const imageUploadS3 = require("../../middleware/imageUploadS3");
 
-// const { Admin } = require("../../db/model");
-// const bcrypt = require("bcrypt");
 const productCtrl = require("../productCtrl");
 const categoryCtrl = require("../categoryCtrl");
 const brandCtrl = require("../brandCtrl");
@@ -16,7 +14,7 @@ router
 	.get(productCtrl.getProductList)
 	.post(imageUploadS3.array("productImage", 5), productCtrl.addProduct);
 router
-	.route("/products/:_id")
+	.route("/products/:productId")
 	.get(productCtrl.getProduct)
 	.patch(imageUploadS3.array("productImage", 5), productCtrl.editProduct)
 	.delete(productCtrl.removeProduct);
@@ -44,24 +42,8 @@ router
 // /orders
 router.get("/orders", orderCtrl.getOrderList);
 router
-	.route("/orders/:_id")
+	.route("/orders/:orderId")
 	.get(orderCtrl.getOrderDetail)
 	.patch(orderCtrl.editOrderDetail)
 	.post(orderCtrl.cancelOrderDetail);
-
-// 어드민 계정 추가
-// router.post("/add", async (req, res, next) => {
-// 	try {
-// 		const { email, password } = req.body;
-// 		const pwd = await bcrypt.hash(password, 12);
-// 		const admin = await Admin.create({
-// 			email,
-// 			password: pwd,
-// 		});
-
-// 		res.json({ admin });
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// });
 module.exports = router;

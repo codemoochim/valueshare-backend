@@ -1,5 +1,5 @@
-const { Brand, Category, Product, User, Order } = require("../db/model/index");
-// const { emailFormCheck } = require("../utils/formCheck");
+const { User, Order } = require("../db/model/index");
+const { emailFormCheck } = require("../utils/formCheck");
 
 const handleUserInfo = async (userId, userInfo) => {
 	try {
@@ -39,14 +39,11 @@ const updateUserEmail = async (userId, body) => {
 	try {
 		const userInfo = await User.findById({ _id: userId }, { password: 0 });
 		const email = body?.email;
-		// if (!emailFormCheck(email)) {
-		// 	throw new Error("올바른 이메일을 입력해주세요");
-		// }
-		userInfo.email = email;
+		// userId.email = email;
 
-		await userInfo.save();
+		await userId.save();
 
-		return userInfo;
+		return userId;
 	} catch (err) {
 		throw new Error(err);
 	}
@@ -90,29 +87,3 @@ module.exports = {
 	updateUserAddress,
 	deleteAccount,
 };
-
-// 비회원이 주문했을 떄 이메일로 유저정보를 생성하는데 디비검사를 안해서,
-// 회원가입할때 비회원으로서 주문했었던 이력이 있으면 그 이메일로는 회원가입을 못함
-// 비회원의 이메일 주문 시 동일한 이메일로 주문했을 때 계정을 생성하지 않고
-// 그 계정에 주문번호를 Array로 던져주는 법으로 해야함
-
-// // 안쓰는 함수 orderSrvc에서 대체
-// const createUser = async (body) => {
-// 	try {
-// 		const email = body.email;
-// 		if (!email) {
-// 			throw new Error("이메일을 입력해주세요");
-// 		}
-// 		if (!fromCheck.emailFormCheck(email)) {
-// 			throw new Error("이메일의 형식을 확인하세요");
-// 		}
-// 		const brandNewOrederNum = issueOrderNum();
-// 		const createdUser = await User.create({
-// 			email,
-// 			orderNumber: brandNewOrederNum,
-// 		});
-// 		return createdUser;
-// 	} catch (err) {
-// 		throw new Error(err);
-// 	}
-// };

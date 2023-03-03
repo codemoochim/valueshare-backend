@@ -1,14 +1,12 @@
-const express = require("express");
 const jwt = require("jsonwebtoken");
 // const redis = require("redis");
-const { promisify } = require("util");
+// const { promisify } = require("util");
 require("dotenv").config();
 const secret = process.env.SECRET_JWT;
 
 const cookieOpt = {
 	maxAge: 1000 * 60 * 60 * 24 * 7, // 7d
 	httpOnly: true,
-	// domain: "localhost:3000",
 	// secure: true, // https
 };
 
@@ -19,7 +17,6 @@ const generateToken = (user, time, auth) => {
 		expiresIn: time,
 		issuer: "valueshare",
 		audience: `${auth}`,
-		// audience: auth,
 	});
 	return token;
 };
@@ -27,7 +24,7 @@ const generateToken = (user, time, auth) => {
 // accessToken 검증
 const verifyAccessToken = (req, res, next) => {
 	const header = req.headers.authorization;
-	const token = authHeader && authHeader.split(" ")[1];
+	const token = header && header.split(" ")[1];
 	if (!token) {
 		return res.status(401).json({ message: "AccessToken 이 없습니다." });
 	} else {
@@ -35,18 +32,40 @@ const verifyAccessToken = (req, res, next) => {
 	}
 	try {
 		const payload = jwt.verify(token, secret);
-		req.user = payload;
+		req.locals.user = payload;
 
 		next();
 	} catch (err) {
 		if (err.name === "TokenExpiredError") {
 			return res.status(419).json({
 				code: 419,
-				message: "토큰이 만료되었습니다",
+				message: "토큰이 만료되었습니다 재로그인 해주세요",
 			});
 		}
 	}
 };
+// const verifyAccessToken = (req, res, next) => {
+// 	const header = req.headers.authorization;
+// 	const token = header && header.split(" ")[1];
+// 	if (!token) {
+// 		return res.status(401).json({ message: "AccessToken 이 없습니다." });
+// 	} else {
+// 		console.log("토큰 있구여~");
+// 	}
+// 	try {
+// 		const payload = jwt.verify(token, secret);
+// 		req.locals.user = payload;
+
+// 		next();
+// 	} catch (err) {
+// 		if (err.name === "TokenExpiredError") {
+// 			return res.status(419).json({
+// 				code: 419,
+// 				message: "토큰이 만료되었습니다 재로그인 해주세요",
+// 			});
+// 		}
+// 	}
+// };
 
 module.exports = {
 	cookieOpt,
@@ -74,7 +93,7 @@ module.exports = {
 // 		req.userId = userId;
 // 		next();
 // 	} catch (err) {
-// 		return res.status(500).json({ message: "서버에 벌레가 들어왔어요" });
+// 		return res.status(500).json({ message: "토큰에 문제가 있습니다" });
 // 	}
 // };
 

@@ -40,7 +40,8 @@ const updateCategory = async (categoryName, categoryNewData) => {
 		if (isExist.categoryName === categoryNewData.categoryName) {
 			throw new Error("동일한 카테고리가 이미 존재합니다.");
 		}
-		isExist.categoryName = categoryNewData.categoryName;
+		const newCate = categoryNewData.categoryName;
+		isExist.categoryName = newCate;
 		await isExist.save();
 		return isExist;
 	} catch (err) {
