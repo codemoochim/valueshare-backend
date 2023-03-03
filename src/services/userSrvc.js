@@ -35,13 +35,12 @@ const findUserInfo = async (userId) => {
 	}
 };
 
-const updateUserEmail = async (userId, body) => {
+const updateUserEmail = async (userId, userEmail) => {
 	try {
 		const userInfo = await User.findById({ _id: userId }, { password: 0 });
-		const email = body?.email;
-		// userId.email = email;
+		userInfo.email = userEmail;
 
-		await userId.save();
+		await userInfo.save();
 
 		return userId;
 	} catch (err) {
@@ -52,13 +51,14 @@ const updateUserEmail = async (userId, body) => {
 const updateUserAddress = async (userId, body) => {
 	try {
 		const userInfo = await User.findById({ _id: userId }, { password: 0 });
-		const { shipAdr, shipNote, name } = body;
+		const { shipAdr, shipNote, name, phoneNumber } = body;
 		if (!shipAdr) {
 			throw new Error("주소를 입력하세요");
 		}
 		userInfo.shipAdr = shipAdr;
 		userInfo.shipNote = shipNote;
 		userInfo.name = name;
+		userInfo.phoneNumber = phoneNumber;
 
 		await userInfo.save();
 

@@ -23,16 +23,20 @@ const generateToken = (user, time, auth) => {
 
 // accessToken 검증
 const verifyAccessToken = (req, res, next) => {
-	const header = req.headers.authorization;
-	const token = header && header.split(" ")[1];
-	if (!token) {
-		return res.status(401).json({ message: "AccessToken 이 없습니다." });
-	} else {
-		console.log("토큰 있구여~");
-	}
 	try {
-		const payload = jwt.verify(token, secret);
-		req.locals.user = payload;
+		const header = req.headers.authorization;
+		const token = header && header.split(" ")[1];
+		if (!token) {
+			return res.status(401).json({ message: "AccessToken 이 없습니다." });
+		}
+		console.log("토큰 있구여~");
+
+		const secret = process.env.SECRET_JWT; // dotenv
+		const payload = jwt.verify(token, secret); // jsonwebtoken
+		req.userOid = payload.user;
+		console.log("유저아이디");
+		console.log(req.userOid);
+		console.log("유저아이디");
 
 		next();
 	} catch (err) {
