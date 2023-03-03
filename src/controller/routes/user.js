@@ -12,23 +12,31 @@ router
 	.put(orderCtrl.cancelOrderDetailForUser);
 
 // 회원 결제페이지 배송지 수정시 회원정보 변경
-router.post("/:userId/userInfo", jwtMdw.verifyAccessToken, userCtrl.handleUser);
+router.post(
+	"/:userId/userInfo",
+	// jwtMdw.verifyAccessToken,
+	userCtrl.handleUser,
+);
 
 // 회원 마이페이지
-router.get("/mypage/:userId", jwtMdw.verifyAccessToken, userCtrl.getMypage);
+router.get(
+	"/mypage/:userId",
+	//  jwtMdw.verifyAccessToken,
+	userCtrl.getMypage,
+);
 router.post(
 	"/mypage/:userId/email",
-	jwtMdw.verifyAccessToken,
+	// jwtMdw.verifyAccessToken,
 	userCtrl.editUserEmail,
 );
 router.post(
 	"/mypage/:userId/address",
-	jwtMdw.verifyAccessToken,
+	// jwtMdw.verifyAccessToken,
 	userCtrl.editUserAddress,
 );
 router.delete(
 	"/mypage/:userId",
-	jwtMdw.verifyAccessToken,
+	// jwtMdw.verifyAccessToken,
 	userCtrl.closeAccount,
 );
 
