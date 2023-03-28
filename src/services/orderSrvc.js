@@ -105,32 +105,17 @@ const createOrder = async (orderData) => {
 			email,
 			name,
 			phoneNumber,
-			shipStatus,
 			shipAdr,
 			shipNote,
 			products,
 			totalPrice,
+			shipStatus,
 			cancelNote,
 		} = orderData;
-		let isFailed = false;
-
-		for (const i of products) {
+		products.forEach((i) => {
 			i.productBrand = i.productBrand.brandName;
 			i.productQuantity = i.quantity;
-
-			const targetProduct = await Product.findOne({
-				productTtile: i.productTtile,
-			});
-
-			if (targetProduct.productStock - i.quantity < 0) {
-				isFailed = true;
-			}
-			if (isFailed) {
-				throw new Error("주문 가능한 수량을 초과하였습니다.");
-			}
-			targetProduct.productStock -= i.quantity;
-			await targetProduct.save();
-		}
+		});
 
 		if (!email) {
 			throw new Error("주문 결제페이지: 배송지에 이메일을 입력해주세요 ");

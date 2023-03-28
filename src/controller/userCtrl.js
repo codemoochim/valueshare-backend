@@ -3,9 +3,9 @@ const userSrvc = require("../services/userSrvc");
 // 회원 대상. 주문페이지 회원정보 수정
 const handleUser = async (req, res, next) => {
 	try {
-		// const userId = req.params.userId;
-		const userId = req.locals.userOid;
-		console.log(userId);
+		const userId = req.params.userId;
+		// const userId = req.locals.userOid;
+		// console.log(userId);
 		const userInfo = req.body;
 		const result = await userSrvc.handleUserInfo(userId, userInfo);
 		res.json({ result });
@@ -17,9 +17,9 @@ const handleUser = async (req, res, next) => {
 // 회원 마이페이지 조회
 const getMypage = async (req, res, next) => {
 	try {
-		console.log("드렁왔나ㅏ?");
-		// const { userId } = req.params;
-		const userId = req.userOid;
+		// console.log("드렁왔나ㅏ?");
+		const { userId } = req.params;
+		// const userId = req.userOid;
 		console.log(userId);
 		const userInfo = await userSrvc.findUserInfo(userId);
 		res.json(userInfo);
@@ -31,8 +31,8 @@ const getMypage = async (req, res, next) => {
 // 회원 마이페이지 이메일 수정
 const editUserEmail = async (req, res, next) => {
 	try {
-		// const { userId } = req.params;
-		const userId = req.userOid;
+		const { userId } = req.params;
+		// const userId = req.userOid;
 		const userEmail = req.body.email;
 		const newUserInfo = await userSrvc.updateUserEmail(userId, userEmail);
 		res.json(newUserInfo);
@@ -44,8 +44,8 @@ const editUserEmail = async (req, res, next) => {
 // 회원 마이페이지 주소 수정
 const editUserAddress = async (req, res, next) => {
 	try {
-		// const { userId } = req.params;
-		const userId = req.userOid;
+		const { userId } = req.params;
+		// const userId = req.userOid;
 		const body = req.body;
 		const newUserInfo = await userSrvc.updateUserAddress(userId, body);
 		res.json({ newUserInfo });
@@ -57,8 +57,8 @@ const editUserAddress = async (req, res, next) => {
 // 회원 탈퇴
 const closeAccount = async (req, res, next) => {
 	try {
-		// const { userId } = req.params;
-		const userId = req.userOid;
+		const { userId } = req.params;
+		// const userId = req.userOid;
 		const result = await userSrvc.deleteAccount(userId);
 		res.json({ message: result });
 	} catch (err) {
