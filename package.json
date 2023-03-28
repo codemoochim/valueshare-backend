@@ -33,6 +33,7 @@
 		"passport": "^0.6.0",
 		"passport-local": "^1.0.0",
 		"redis": "^4.6.5",
+		"typescript": "^5.0.2",
 		"util": "^0.12.5",
 		"uuid": "^9.0.0"
 	},
