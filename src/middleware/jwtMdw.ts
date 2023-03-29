@@ -1,7 +1,10 @@
-const jwt = require("jsonwebtoken");
+import { sign, verify } from "jsonwebtoken";
 // const redis = require("redis");
 // const { promisify } = require("util");
-require("dotenv").config();
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const secret = process.env.SECRET_JWT;
 
 const cookieOpt = {
@@ -12,7 +15,7 @@ const cookieOpt = {
 
 // 토큰 생성
 const generateToken = (user, time, auth) => {
-	const token = jwt.sign({ user }, secret, {
+	const token = sign({ user }, secret, {
 		algorithm: "HS256",
 		expiresIn: time,
 		issuer: "valueshare",
@@ -31,8 +34,8 @@ const verifyAccessToken = (req, res, next) => {
 		}
 		console.log("토큰 있구여~");
 
-		const secret = process.env.SECRET_JWT; // dotenv
-		const payload = jwt.verify(token, secret); // jsonwebtoken
+		// const secret = process.env.SECRET_JWT; // dotenv
+		const payload = verify(token, secret); // jsonwebtoken
 		req.userOid = payload.user;
 		console.log("유저아이디");
 		console.log(req.userOid);
@@ -71,7 +74,7 @@ const verifyAccessToken = (req, res, next) => {
 // 	}
 // };
 
-module.exports = {
+export default {
 	cookieOpt,
 	generateToken,
 	verifyAccessToken,

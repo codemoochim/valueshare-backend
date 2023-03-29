@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const authSrvc = require("../services/authSrvc");
-const jwtMdw = require("../middleware/jwtMdw");
+// import jwt from "jsonwebtoken";
+// import jwtMdw from "../middleware/jwtMdw";
+import authSrvc from "../services/authSrvc";
 
 const register = async (req, res, next) => {
 	try {
@@ -48,7 +48,7 @@ const login = async (req, res, next) => {
 // 	res.send("로그아웃을 완료했습니다");
 // };
 
-module.exports = {
+export default {
 	register,
 	login,
 	// logout

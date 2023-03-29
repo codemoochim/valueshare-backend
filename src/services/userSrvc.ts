@@ -1,5 +1,5 @@
-const { User, Order } = require("../db/model/index");
-const { emailFormCheck } = require("../utils/formCheck");
+import { User, Order } from "../db/model/index";
+// import { emailFormCheck } from "../utils/formCheck";
 
 const handleUserInfo = async (userId, userInfo) => {
 	try {
@@ -80,7 +80,7 @@ const deleteAccount = async (userId) => {
 	}
 };
 
-module.exports = {
+export default {
 	handleUserInfo,
 	findUserInfo,
 	updateUserEmail,

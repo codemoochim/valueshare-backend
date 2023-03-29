@@ -1,9 +1,16 @@
-const productSrvc = require("../services/productSrvc");
+import {
+	findProductList,
+	createProduct,
+	updateProduct,
+	deleteProduct,
+	findProduct,
+	findProductListByQuery,
+} from "../services/productSrvc";
 
 // 어드민 상품 목록 조회
 const getProductList = async (req, res, next) => {
 	try {
-		const productList = await productSrvc.findProductList();
+		const productList = await findProductList();
 		res.json({ result: productList });
 	} catch (err) {
 		next(err);
@@ -14,8 +21,8 @@ const getProductList = async (req, res, next) => {
 const addProduct = async (req, res, next) => {
 	try {
 		const location = req.files;
-		const body = req.body;
-		const addedProduct = await productSrvc.createProduct(location, body);
+		const { body } = req;
+		const addedProduct = await createProduct(location, body);
 		res.json({ data: addedProduct });
 	} catch (err) {
 		next(err);
@@ -26,13 +33,9 @@ const addProduct = async (req, res, next) => {
 const editProduct = async (req, res, next) => {
 	try {
 		const { productId } = req.params;
-		const body = req.body;
+		const { body } = req;
 		const location = req.files;
-		const editedProduct = await productSrvc.updateProduct(
-			productId,
-			body,
-			location,
-		);
+		const editedProduct = await updateProduct(productId, body, location);
 		res.json({ result: editedProduct });
 	} catch (err) {
 		next(err);
@@ -43,7 +46,7 @@ const editProduct = async (req, res, next) => {
 const removeProduct = async (req, res, next) => {
 	try {
 		const { productId } = req.params;
-		await productSrvc.deleteProduct(productId);
+		await deleteProduct(productId);
 		res.json({ message: "상품 삭제가 완료되었습니다." });
 	} catch (err) {
 		next(err);
@@ -54,7 +57,7 @@ const removeProduct = async (req, res, next) => {
 const getProduct = async (req, res, next) => {
 	try {
 		const { productId } = req.params;
-		const foundProduct = await productSrvc.findProduct(productId);
+		const foundProduct = await findProduct(productId);
 		res.json({ result: foundProduct });
 	} catch (err) {
 		next(err);
@@ -72,7 +75,7 @@ const getProductByQuery = async (req, res, next) => {
 		const page = Number(req.query.page || 1);
 		const perPage = Number(req.query.perPage || 20);
 
-		const foundProdcut = await productSrvc.findProductListByQuery(
+		const foundProdcut = await findProductListByQuery(
 			categories,
 			brand,
 			page,
@@ -84,7 +87,7 @@ const getProductByQuery = async (req, res, next) => {
 	}
 };
 
-module.exports = {
+export default {
 	getProductList,
 	addProduct,
 	getProduct,

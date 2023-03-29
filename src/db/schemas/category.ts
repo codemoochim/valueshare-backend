@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+
 const { Schema } = mongoose;
 const categorySchema = new Schema({
 	categoryName: {
@@ -8,4 +9,4 @@ const categorySchema = new Schema({
 	},
 });
 
-module.exports = categorySchema;
+export default categorySchema;

@@ -19,4 +19,11 @@ module.exports = {
 	rules: {
 		"no-nested-ternary": 0,
 	},
+	settings: {
+		"import/resolver": {
+			node: {
+				extentions: [".js", ".ts"],
+			},
+		},
+	},
 };

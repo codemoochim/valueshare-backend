@@ -1,9 +1,10 @@
-const multer = require("multer");
-const { S3Client } = require("@aws-sdk/client-s3");
-const multerS3 = require("multer-s3");
-const { v4: uuid } = require("uuid");
-const dotenv = require("dotenv");
-dotenv.config();
+import multer from "multer";
+import { S3Client } from "@aws-sdk/client-s3";
+import multerS3 from "multer-s3";
+import { v4 as uuid } from "uuid";
+import { config } from "dotenv";
+
+config();
 // aws s3 account
 const s3 = new S3Client({
 	credentials: {
@@ -29,4 +30,4 @@ const imageUploadS3 = multer({
 	limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-module.exports = imageUploadS3;
+export default imageUploadS3;

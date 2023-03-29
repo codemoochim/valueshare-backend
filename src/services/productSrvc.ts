@@ -1,4 +1,4 @@
-const { Brand, Category, Product } = require("../db/model/index");
+import { Brand, Category, Product } from "../db/model/index";
 
 // 어드민 상품 목록 조회
 const findProductList = async () => {
@@ -243,7 +243,7 @@ const deleteProduct = async (productId) => {
 	}
 };
 
-module.exports = {
+export default {
 	findProductList,
 	createProduct,
 	findProduct,

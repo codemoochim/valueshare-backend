@@ -1,24 +1,30 @@
-// const createError = require("http-errors");
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const morgan = require("morgan");
-const cors = require("cors");
-const dotenv = require("dotenv");
-dotenv.config();
+import express, {
+	json,
+	urlencoded,
+	Request,
+	Response,
+	NextFunction,
+} from "express";
+import cookieParser from "cookie-parser";
+import morgan from "morgan";
+import cors from "cors";
+import dotenv from "dotenv";
 
-const indexRouter = require("./src/controller/routes/index");
-const adminRouter = require("./src/controller/routes/admin");
-const userRouter = require("./src/controller/routes/user");
-const authRouter = require("./src/controller/routes/auth");
-const mongooseConnect = require("./src/index");
+import indexRouter from "./src/controller/routes/index";
+import adminRouter from "./src/controller/routes/admin";
+import userRouter from "./src/controller/routes/user";
+import authRouter from "./src/controller/routes/auth";
+import mongooseConnect from "./src/index";
+
+dotenv.config();
 
 const app = express();
 mongooseConnect();
 
 app.use(morgan("dev"));
 // 바디 파서 역할
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(json());
+app.use(urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SECRET_COOKIE));
 
 app.use(
@@ -37,11 +43,11 @@ app.use("/api/auth", authRouter);
 app.use((req, res, next) => {
 	const error = new Error(`${req.method} ${req.url} 없습니다`);
 	error.status = 404;
-	next(createError(404));
+	next(error);
 });
 
 // 오류처리 미들웨어
-app.use((err, req, res, next) => {
+app.use((err, req: Request, res: Response, next: NextFunction) => {
 	res.locals.message = err.message;
 	// res.locals.error = req.app.get("env") === "development" ? err : {};
 
@@ -50,4 +56,4 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(process.env.PORT || "5000");
-module.exports = app;
+export default app;

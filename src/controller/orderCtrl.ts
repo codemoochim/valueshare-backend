@@ -1,14 +1,20 @@
-const orderSrvc = require("../services/orderSrvc");
+import {
+	findOrderList,
+	findOrderDetail,
+	updateOrderDetail,
+	closedOrderDetail,
+	createOrder,
+	cancelOrder,
+	editOrder,
+	findOrderDetailForUser,
+	updateOrderDetailForUser,
+	closedOrderDetailForUser,
+} from "../services/orderSrvc";
 
-/***********************/
-/***********************/
-/******** Admin ********/
-/***********************/
-/***********************/
 // 어드민 주문 목록 조회
 const getOrderList = async (req, res, next) => {
 	try {
-		const orderList = await orderSrvc.findOrderList();
+		const orderList = await findOrderList();
 		res.json({ result: orderList });
 	} catch (err) {
 		next(err);
@@ -19,7 +25,7 @@ const getOrderList = async (req, res, next) => {
 const getOrderDetail = async (req, res, next) => {
 	try {
 		const { orderId } = req.params;
-		const orderDetail = await orderSrvc.findOrderDetail(orderId);
+		const orderDetail = await findOrderDetail(orderId);
 		res.json({ result: orderDetail });
 	} catch (err) {
 		next(err);
@@ -31,10 +37,7 @@ const editOrderDetail = async (req, res, next) => {
 	try {
 		const { orderId } = req.params;
 		const editOrderInfo = req.body;
-		const editedOrderDetail = await orderSrvc.updateOrderDetail(
-			orderId,
-			editOrderInfo,
-		);
+		const editedOrderDetail = await updateOrderDetail(orderId, editOrderInfo);
 		res.json({ result: editedOrderDetail });
 	} catch (err) {
 		next(err);
@@ -45,24 +48,19 @@ const editOrderDetail = async (req, res, next) => {
 const cancelOrderDetail = async (req, res, next) => {
 	try {
 		const { orderId } = req.params;
-		const body = req.body;
-		await orderSrvc.closedOrderDetail(orderId, body);
+		// const { body } = req;
+		await closedOrderDetail(orderId);
 		res.json({ message: "주문 취소가 완료되었습니다." });
 	} catch (err) {
 		next(err);
 	}
 };
 
-/***********************/
-/***********************/
-/********* User ********/
-/***********************/
-/***********************/
 // 유저 주문 완료 버튼 - 유저 데이터 생성 - 주문 생성
 const addOrder = async (req, res, next) => {
 	try {
 		const orderData = req.body;
-		const addedOrder = await orderSrvc.createOrder(orderData);
+		const addedOrder = await createOrder(orderData);
 		res.json({ result: addedOrder });
 	} catch (err) {
 		next(err);
@@ -73,7 +71,7 @@ const addOrder = async (req, res, next) => {
 const brandNewOrderInfo = async (req, res, next) => {
 	try {
 		const { orderId } = req.params;
-		const orderDetail = await orderSrvc.findOrderDetail(orderId);
+		const orderDetail = await findOrderDetail(orderId);
 		res.json(orderDetail);
 	} catch (err) {
 		next(err);
@@ -84,13 +82,13 @@ const brandNewOrderInfo = async (req, res, next) => {
 const editOrderRightASec = async (req, res, next) => {
 	try {
 		const { orderId } = req.params;
-		const body = req.body;
+		const { body } = req;
 		if (body.cancelNote || body.cancelNote === "") {
 			// if (body.cancelNote) {
-			const cancelOrderResult = await orderSrvc.cancelOrder(orderId, body);
+			const cancelOrderResult = await cancelOrder(orderId, body);
 			res.json({ result: cancelOrderResult });
 		} else {
-			const editOrderResult = await orderSrvc.editOrder(orderId, body);
+			const editOrderResult = await editOrder(orderId, body);
 			res.json({ result: editOrderResult });
 		}
 	} catch (err) {
@@ -103,10 +101,7 @@ const getOrderDetailForUser = async (req, res, next) => {
 	try {
 		const { orderNumber } = req.params;
 		const { email } = req.body;
-		const orderDetail = await orderSrvc.findOrderDetailForUser(
-			orderNumber,
-			email,
-		);
+		const orderDetail = await findOrderDetailForUser(orderNumber, email);
 		res.json({ result: orderDetail });
 	} catch (err) {
 		next(err);
@@ -118,7 +113,7 @@ const editOrderDetailForUser = async (req, res, next) => {
 	try {
 		const { orderNumber } = req.params;
 		const editOrderInfo = req.body;
-		const editedOrderDetail = await orderSrvc.updateOrderDetailForUser(
+		const editedOrderDetail = await updateOrderDetailForUser(
 			orderNumber,
 			editOrderInfo,
 		);
@@ -132,15 +127,15 @@ const editOrderDetailForUser = async (req, res, next) => {
 const cancelOrderDetailForUser = async (req, res, next) => {
 	try {
 		const { orderNumber } = req.params;
-		const body = req.body;
-		await orderSrvc.closedOrderDetailForUser(orderNumber, body);
+		const { body } = req;
+		await closedOrderDetailForUser(orderNumber, body);
 		res.json({ message: "주문 취소가 완료되었습니다." });
 	} catch (err) {
 		next(err);
 	}
 };
 
-module.exports = {
+export default {
 	addOrder,
 	brandNewOrderInfo,
 	getOrderList,

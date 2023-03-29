@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const imageUploadS3 = require("../../middleware/imageUploadS3");
+import imageUploadS3 from "../../middleware/imageUploadS3.js";
 
 const productCtrl = require("../productCtrl");
 const categoryCtrl = require("../categoryCtrl");
@@ -46,4 +46,5 @@ router
 	.get(orderCtrl.getOrderDetail)
 	.patch(orderCtrl.editOrderDetail)
 	.post(orderCtrl.cancelOrderDetail);
-module.exports = router;
+
+export default router;

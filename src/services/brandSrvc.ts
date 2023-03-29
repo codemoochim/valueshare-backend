@@ -1,4 +1,4 @@
-const { Brand } = require("../db/model/index");
+import { Brand } from "../db/model/index";
 
 // 브랜드 목록 조회
 const findBrandList = async () => {
@@ -34,7 +34,7 @@ const createBrand = async (brandNewData) => {
 const updateBrand = async (brandName, brandNewData) => {
 	try {
 		const isExist = await Brand.findOne({
-			brandName: brandName,
+			brandName,
 		});
 		if (isExist.brandName === brandNewData.brandName) {
 			throw new Error("동일한 브랜드가 이미 존재합니다.");
@@ -59,7 +59,7 @@ const deleteBrand = async (brandName) => {
 		throw new Error(err);
 	}
 };
-module.exports = {
+export default {
 	findBrandList,
 	createBrand,
 	updateBrand,

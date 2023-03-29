@@ -1,4 +1,5 @@
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
+
 function issueOrderNum() {
 	const newOrderNumber = dayjs(Date.now()).format("YYYY-MM-DD");
 	const random = () => {
@@ -7,4 +8,4 @@ function issueOrderNum() {
 	};
 	return `${newOrderNumber}-${random()}`;
 }
-module.exports = issueOrderNum;
+export default issueOrderNum;

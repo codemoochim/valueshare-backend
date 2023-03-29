@@ -1,4 +1,4 @@
-const { Category } = require("../db/model/index");
+import { Category } from "../db/model/index";
 
 // 카테고리 목록 조회
 const findCategoryList = async () => {
@@ -63,7 +63,7 @@ const deleteCategory = async (_id) => {
 		throw new Error(err);
 	}
 };
-module.exports = {
+export default {
 	findCategoryList,
 	createCategory,
 	updateCategory,

@@ -1,43 +1,56 @@
-const express = require("express");
-const router = express.Router();
-const orderCtrl = require("../orderCtrl");
-const userCtrl = require("../userCtrl");
-const jwtMdw = require("../../middleware/jwtMdw");
+import { Router } from "express";
+
+import {
+	getOrderDetailForUser,
+	editOrderDetailForUser,
+	cancelOrderDetailForUser,
+} from "../orderCtrl";
+
+import {
+	handleUser,
+	getMypage,
+	editUserEmail,
+	editUserAddress,
+	closeAccount,
+} from "../userCtrl";
+
+// import jwtMdw from "../../middleware/jwtMdw";
+const router = Router();
 
 // 비회원 유저 주문관리
 router
 	.route("/orders/:orderNumber")
-	.post(orderCtrl.getOrderDetailForUser)
-	.patch(orderCtrl.editOrderDetailForUser)
-	.put(orderCtrl.cancelOrderDetailForUser);
+	.post(getOrderDetailForUser)
+	.patch(editOrderDetailForUser)
+	.put(cancelOrderDetailForUser);
 
 // 회원 결제페이지 배송지 수정시 회원정보 변경
 router.post(
 	"/:userId/userInfo",
 	// jwtMdw.verifyAccessToken,
-	userCtrl.handleUser,
+	handleUser,
 );
 
 // 회원 마이페이지
 router.get(
 	"/mypage/:userId",
 	//  jwtMdw.verifyAccessToken,
-	userCtrl.getMypage,
+	getMypage,
 );
 router.post(
 	"/mypage/:userId/email",
 	// jwtMdw.verifyAccessToken,
-	userCtrl.editUserEmail,
+	editUserEmail,
 );
 router.post(
 	"/mypage/:userId/address",
 	// jwtMdw.verifyAccessToken,
-	userCtrl.editUserAddress,
+	editUserAddress,
 );
 router.delete(
 	"/mypage/:userId",
 	// jwtMdw.verifyAccessToken,
-	userCtrl.closeAccount,
+	closeAccount,
 );
 
-module.exports = router;
+export default router;

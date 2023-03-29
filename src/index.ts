@@ -1,17 +1,17 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+import { set, connect as _connect, connection } from "mongoose";
+import { config } from "dotenv";
 
-dotenv.config();
+config();
 
 const connect = () => {
 	if (process.env.NODE_ENV !== "production") {
-		mongoose.set("debug", true);
+		set("debug", true);
 	}
 };
 //
 const { MongoDB_Root, MongoDB_Pwd, MongoDB_dbName } = process.env;
-mongoose.set("strictQuery", false);
-mongoose.connect(
+set("strictQuery", false);
+_connect(
 	`mongodb+srv://${MongoDB_Root}:${MongoDB_Pwd}@${MongoDB_dbName}.ywzx8pk.mongodb.net/test`,
 	{
 		dbName: `${MongoDB_dbName}`,
@@ -27,17 +27,17 @@ mongoose.connect(
 	},
 );
 
-mongoose.connection.on("connected", () => {
+connection.on("connected", () => {
 	console.log("몽구스가 연결되었습니다.");
 });
-mongoose.connection.on("disconnected", () => {
+connection.on("disconnected", () => {
 	console.log("몽구스가 연결이 끊겼습니다.");
 });
-mongoose.connection.on("reconnected", () => {
+connection.on("reconnected", () => {
 	console.log("몽구스에 재연결 시도합니다.");
 });
-mongoose.connection.on("reconnectFailed", () => {
+connection.on("reconnectFailed", () => {
 	console.log("몽구스가 재연결에 실패했습니다.");
 });
 
-module.exports = connect;
+export default connect;

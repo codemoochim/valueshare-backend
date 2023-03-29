@@ -1,13 +1,19 @@
-const userSrvc = require("../services/userSrvc");
+import {
+	handleUserInfo,
+	findUserInfo,
+	updateUserEmail,
+	updateUserAddress,
+	deleteAccount,
+} from "../services/userSrvc";
 
 // 회원 대상. 주문페이지 회원정보 수정
 const handleUser = async (req, res, next) => {
 	try {
-		const userId = req.params.userId;
+		const { userId } = req.params;
 		// const userId = req.locals.userOid;
 		// console.log(userId);
 		const userInfo = req.body;
-		const result = await userSrvc.handleUserInfo(userId, userInfo);
+		const result = await handleUserInfo(userId, userInfo);
 		res.json({ result });
 	} catch (err) {
 		next(err);
@@ -21,7 +27,7 @@ const getMypage = async (req, res, next) => {
 		const { userId } = req.params;
 		// const userId = req.userOid;
 		console.log(userId);
-		const userInfo = await userSrvc.findUserInfo(userId);
+		const userInfo = await findUserInfo(userId);
 		res.json(userInfo);
 	} catch (err) {
 		next(err);
@@ -34,7 +40,7 @@ const editUserEmail = async (req, res, next) => {
 		const { userId } = req.params;
 		// const userId = req.userOid;
 		const userEmail = req.body.email;
-		const newUserInfo = await userSrvc.updateUserEmail(userId, userEmail);
+		const newUserInfo = await updateUserEmail(userId, userEmail);
 		res.json(newUserInfo);
 	} catch (err) {
 		next(err);
@@ -46,8 +52,8 @@ const editUserAddress = async (req, res, next) => {
 	try {
 		const { userId } = req.params;
 		// const userId = req.userOid;
-		const body = req.body;
-		const newUserInfo = await userSrvc.updateUserAddress(userId, body);
+		const { body } = req;
+		const newUserInfo = await updateUserAddress(userId, body);
 		res.json({ newUserInfo });
 	} catch (err) {
 		next(err);
@@ -59,14 +65,14 @@ const closeAccount = async (req, res, next) => {
 	try {
 		const { userId } = req.params;
 		// const userId = req.userOid;
-		const result = await userSrvc.deleteAccount(userId);
+		const result = await deleteAccount(userId);
 		res.json({ message: result });
 	} catch (err) {
 		next(err);
 	}
 };
 
-module.exports = {
+export default {
 	handleUser,
 	getMypage,
 	editUserEmail,
@@ -74,7 +80,7 @@ module.exports = {
 	closeAccount,
 };
 
-//안쓰는 함수 orderCtrl 에서 대체
+// 안쓰는 함수 orderCtrl 에서 대체
 // const addUserWhenOrder = async (req, res, next) => {
 // 	try {
 // 		const body = req.body;

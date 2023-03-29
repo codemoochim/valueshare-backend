@@ -1,13 +1,13 @@
-const bcrypt = require("bcrypt");
-const formCheck = require("../utils/formCheck");
-const jwtMdw = require("../middleware/jwtMdw");
-const { Admin, User } = require("../db/model/index");
+import { hash as _hash, compare } from "bcrypt";
+import { emailFormCheck } from "../utils/formCheck";
+import jwtMdw from "../middleware/jwtMdw";
+import { Admin, User } from "../db/model/index";
 
 // 회원가입
 const registerUser = async (userInfo) => {
 	try {
 		const { email, password, name, phoneNumber, shipAdr } = userInfo;
-		if (!formCheck.emailFormCheck(email)) {
+		if (!emailFormCheck(email)) {
 			throw new Error("올바른 이메일을 입력해주세요");
 		}
 		if (password?.length < 4) {
@@ -15,7 +15,7 @@ const registerUser = async (userInfo) => {
 		}
 		const [isExist, hash] = await Promise.all([
 			User.findOne({ email }),
-			bcrypt.hash(password, 12),
+			_hash(password, 12),
 		]);
 		if (!isExist) {
 			await User.create({
@@ -43,7 +43,7 @@ const loginUser = async (userInfo) => {
 		const { email, password } = userInfo;
 		const isAdmin = await Admin.findOne({ email });
 		if (isAdmin) {
-			const checkAdminPwd = await bcrypt.compare(password, isAdmin.password);
+			const checkAdminPwd = await compare(password, isAdmin.password);
 			if (!checkAdminPwd) {
 				throw new Error("비밀번호를 확인해주세요");
 			}
@@ -57,7 +57,7 @@ const loginUser = async (userInfo) => {
 		if (!targetUser) {
 			throw new Error("이메일을 확인해주세요");
 		}
-		const checkPwd = await bcrypt.compare(password, targetUser.password);
+		const checkPwd = await compare(password, targetUser.password);
 		if (!checkPwd) {
 			throw new Error("비밀번호를 확인해주세요");
 		}
@@ -69,7 +69,7 @@ const loginUser = async (userInfo) => {
 		throw new Error(err);
 	}
 };
-module.exports = {
+export default {
 	registerUser,
 	loginUser,
 };

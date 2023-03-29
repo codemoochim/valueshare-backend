@@ -1,12 +1,6 @@
-//코드 변경
-const { Product, Order, User } = require("../db/model/index");
-const issueOrderNum = require("../utils/issueOrderNum");
+import { Product, Order, User } from "../db/model/index";
+import issueOrderNum from "../utils/issueOrderNum";
 
-/***********************/
-/***********************/
-/******** Admin ********/
-/***********************/
-/***********************/
 // 어드민 주문 목록 조회
 const findOrderList = async () => {
 	try {
@@ -72,7 +66,7 @@ const updateOrderDetail = async (orderId, newOrderDetail) => {
 };
 
 // 어드민 주문 취소
-const closedOrderDetail = async (orderId, body) => {
+const closedOrderDetail = async (orderId) => {
 	try {
 		const targetOrder = await Order.findById({ _id: orderId });
 
@@ -93,12 +87,6 @@ const closedOrderDetail = async (orderId, body) => {
 	}
 };
 
-/***********************/
-/***********************/
-/********* User ********/
-/***********************/
-/***********************/
-
 // 유저 주문 내역 생성
 const createOrder = async (orderData) => {
 	try {
@@ -111,7 +99,6 @@ const createOrder = async (orderData) => {
 			products,
 			totalPrice,
 			shipStatus,
-			cancelNote,
 		} = orderData;
 		products.forEach((i) => {
 			i.productBrand = i.productBrand.brandName;
@@ -206,7 +193,7 @@ const cancelOrder = async (orderId, body) => {
 	try {
 		const { cancelNote } = body;
 		const targetOrder = await Order.findById({ _id: orderId });
-		if (targetOrder.shipStatus == "배송중") {
+		if (targetOrder.shipStatus === "배송중") {
 			throw new Error("현재 취소할 수 없습니다.");
 		}
 
@@ -230,24 +217,15 @@ const cancelOrder = async (orderId, body) => {
 	}
 };
 
-/***********************/
-/***********************/
-/***** 비회원 주문조회 *****/
-/***********************/
-/***********************/
-
 // 비회원 주문내역 보기 조회
 const findOrderDetailForUser = async (orderNumber, email) => {
 	try {
 		const noDash = orderNumber.replace(/-/g, "");
-		const yesDash =
-			noDash.slice(0, 4) +
-			"-" +
-			noDash.slice(4, 6) +
-			"-" +
-			noDash.slice(6, 8) +
-			"-" +
-			noDash.slice(8);
+		const yesDash = `
+			${noDash.slice(0, 4)}-
+			${noDash.slice(4, 6)}-
+			${noDash.slice(6, 8)}-
+			${noDash.slice(8)};`;
 		const oneOrder = await Order.findOne({ orderNumber: yesDash });
 		if (!oneOrder) {
 			throw new Error("해당하는 주문 정보가 없습니다.");
@@ -266,14 +244,11 @@ const updateOrderDetailForUser = async (orderNumber, editOrderInfo) => {
 	try {
 		const { email, name, phoneNumber, shipAdr, shipNote } = editOrderInfo;
 		const noDash = orderNumber.replace(/-/g, "");
-		const yesDash =
-			noDash.slice(0, 4) +
-			"-" +
-			noDash.slice(4, 6) +
-			"-" +
-			noDash.slice(6, 8) +
-			"-" +
-			noDash.slice(8);
+		const yesDash = `
+		${noDash.slice(0, 4)}-
+		${noDash.slice(4, 6)}-
+		${noDash.slice(6, 8)}-
+		${noDash.slice(8)};`;
 		const targetOrder = await Order.findOne({ orderNumber: yesDash });
 
 		if (!targetOrder) {
@@ -303,17 +278,14 @@ const updateOrderDetailForUser = async (orderNumber, editOrderInfo) => {
 const closedOrderDetailForUser = async (orderNumber, body) => {
 	try {
 		const noDash = orderNumber.replace(/-/g, "");
-		const yesDash =
-			noDash.slice(0, 4) +
-			"-" +
-			noDash.slice(4, 6) +
-			"-" +
-			noDash.slice(6, 8) +
-			"-" +
-			noDash.slice(8);
+		const yesDash = `
+		${noDash.slice(0, 4)}-
+		${noDash.slice(4, 6)}-
+		${noDash.slice(6, 8)}-
+		${noDash.slice(8)};`;
 		const targetOrder = await Order.findOne({ orderNumber: yesDash });
 
-		if (targetOrder.shipStatus == "배송중") {
+		if (targetOrder.shipStatus === "배송중") {
 			throw new Error("현재 취소할 수 없습니다.");
 		}
 
@@ -335,7 +307,7 @@ const closedOrderDetailForUser = async (orderNumber, body) => {
 	}
 };
 
-module.exports = {
+export default {
 	createOrder,
 	findOrderList,
 	findOrderDetail,
