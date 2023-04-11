@@ -1,7 +1,5 @@
 # default
 node_modules/
-.vscode
 
 # node
 .env
-bin/
