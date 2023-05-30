@@ -1,10 +1,9 @@
-const createError = require("http-errors");
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const cors = require("cors");
-const dotenv = require("dotenv");
-dotenv.config();
 
 const indexRouter = require("./src/controller/routes/index");
 const adminRouter = require("./src/controller/routes/admin");
@@ -22,11 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SECRET_COOKIE));
 
 app.use(
-	cors({
-		origin: "*",
-		credentials: true,
-		// optionsSuccessStatus: 200,
-	}),
+  cors({
+    origin: "*",
+    credentials: true,
+  }),
 );
 
 app.use("/api", indexRouter);
@@ -35,18 +33,19 @@ app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 
 app.use((req, res, next) => {
-	const error = new Error(`${req.method} ${req.url} 없습니다`);
-	error.status = 404;
-	next(createError(404));
+  const error = new Error(`${req.method} ${req.url} 없습니다`);
+  error.status = 404;
+  next(error);
 });
 
 // 오류처리 미들웨어
 app.use((err, req, res, next) => {
-	res.locals.message = err.message;
-	// res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.status(err.status || 500);
+  res.send(err.message);
+});
 
-	res.status(err.status || 500);
-	res.send(err.message);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`[Express]: ${process.env.PORT}번으로 연결되었습니다.`);
 });
 
 module.exports = app;

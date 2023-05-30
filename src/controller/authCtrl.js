@@ -3,33 +3,33 @@ const authSrvc = require("../services/authSrvc");
 const jwtMdw = require("../middleware/jwtMdw");
 
 const register = async (req, res, next) => {
-	try {
-		const userInfo = req.body;
-		await authSrvc.registerUser(userInfo);
-		// const accessToken = jwtMdw.generateToken(user.email, "1h");
-		// res.cookie("accessToken", accessToken, jwtMdw.cookieOpt);
+  try {
+    const userInfo = req.body;
+    await authSrvc.registerUser(userInfo);
+    // const accessToken = jwtMdw.generateToken(user.email, "1h");
+    // res.cookie("accessToken", accessToken, jwtMdw.cookieOpt);
 
-		res.json({ message: "회원가입이 완료 되었습니다" });
-	} catch (err) {
-		next(err);
-	}
+    res.json({ message: "회원가입이 완료 되었습니다" });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const login = async (req, res, next) => {
-	try {
-		const userInfo = req.body;
-		const user = await authSrvc.loginUser(userInfo);
-		const header = req.headers.authorization;
-		const token = header && header.split(" ")[1];
-		if (token) {
-			throw new Error("이미 로그인 했습니다");
-		}
-		// 쿠키
-		// res.cookie("accessToken", accessToken, jwtMdw.cookieOpt);
-		res.json({ user });
-	} catch (err) {
-		next(err);
-	}
+  try {
+    const userInfo = req.body;
+    const user = await authSrvc.loginUser(userInfo);
+    const header = req.headers.authorization;
+    const token = header && header.split(" ")[1];
+    if (token) {
+      throw new Error("이미 로그인 했습니다");
+    }
+    // 쿠키
+    // res.cookie("accessToken", accessToken, jwtMdw.cookieOpt);
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
 };
 
 // const logout = async (req, res, next) => {
@@ -40,7 +40,6 @@ const login = async (req, res, next) => {
 
 // 	try {
 // 		const decoded = jwt.verify(accessToken, process.env.SECRET_JWT);
-// 		console.log(decoded);
 // 	} catch (err) {
 // 		return res.status(401).send("유효하지 않은 accessToken 입니다.");
 // 	}
@@ -49,9 +48,9 @@ const login = async (req, res, next) => {
 // };
 
 module.exports = {
-	register,
-	login,
-	// logout
+  register,
+  login,
+  // logout
 };
 // /*********
 //  *

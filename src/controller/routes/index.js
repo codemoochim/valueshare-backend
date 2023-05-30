@@ -7,9 +7,7 @@ const orderCtrl = require("../orderCtrl");
 router.get("/", (req, res, next) => {
 	res.send(
 		`
-		<h1>Hello Team No.1</h1> 
-		<h2>Shout out to 정선민</h2>
-		<h2>Shout out to 김여진</h2>
+		<h1>Hello ValueShare</h1> 
 		`,
 	);
 });
